@@ -348,36 +348,13 @@ To test the application on Streamlit Cloud:
 
 ---
 
-## 12. Novus (Pendo) Model Context Protocol (MCP) Server Integration
+## 12. Novus (Pendo) Product Analytics & MCP Integration
 
-Connect your AI coding tools (Claude Code, Cursor, Windsurf, VS Code) to **Novus** using the **Model Context Protocol (MCP)** to query product analytics, explore detected pages/features, review AI-generated signals, and access the product wiki directly.
+Backblaze GenMedia Studio integrates with **Novus (Pendo)** to capture product telemetry, visitor feature engagement, and AI pipeline signals in real-time.
 
-### 🌐 MCP Server URL
-`https://novus-api.pendo.io/mcp`
-
-### ⚙️ MCP Client Setup Instructions
-
-#### Standard stdio Transport via `mcp-remote`:
-```bash
-# Command
-npx
-
-# Arguments
--y mcp-remote https://novus-api.pendo.io/mcp
-```
-
-#### Native Streamable HTTP Transport (Claude Code / Cursor):
-For clients supporting Streamable HTTP transport natively, add the endpoint directly:
-```json
-{
-  "mcpServers": {
-    "novus": {
-      "url": "https://novus-api.pendo.io/mcp",
-      "transport": "streamable-http"
-    }
-  }
-}
-```
+- **MCP Endpoint**: `https://novus-api.pendo.io/mcp`
+- **Transport**: Streamable HTTP / OAuth 2.1
+- **Tracked Features**: Manga Generation, Light Novel Audio Dramatization, Subtitle Alignments, Agent Correction Loops, ComfyUI Workflows, B2 Vault Archival, and C2PA Authenticity Audits.
 
 ---
 
@@ -390,4 +367,5 @@ For clients supporting Streamable HTTP transport natively, add the endpoint dire
 ---
 
 *Built with passion for the Backblaze Generative AI Media Hackathon 2026.*
+
 
