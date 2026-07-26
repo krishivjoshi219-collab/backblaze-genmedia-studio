@@ -31,19 +31,18 @@
 ## 📑 Table of Contents
 1. [Executive Summary & Vision](#1-executive-summary--vision)
 2. [Live Application URL & One-Click Cloud Deployment](#2-live-application-url--one-click-cloud-deployment)
-3. [Comprehensive 100 Production Capabilities Matrix](#3-comprehensive-100-production-capabilities-matrix)
-4. [Hackathon Alignment & Rules Compliance Matrix](#4-hackathon-alignment--rules-compliance-matrix)
-5. [System Architecture & End-to-End Data Flow](#5-system-architecture--end-to-end-data-flow)
-6. [Deep-Dive: Backblaze B2 Media Cloud Infrastructure](#6-deep-dive-backblaze-b2-media-cloud-infrastructure)
-7. [Deep-Dive: Genblaze SDK Architecture & Extensions](#7-deep-dive-genblaze-sdk-architecture--extensions)
-8. [Deep-Dive: C2PA Cryptographic Content Provenance](#8-deep-dive-c2pa-cryptographic-content-provenance)
-9. [Detailed Technical Specifications across Studio Workspaces](#9-detailed-technical-specifications-across-studio-workspaces)
-10. [Animated Feature Showcase & Visual Demonstrations](#10-animated-feature-showcase--visual-demonstrations)
+3. [Changelog & Recent Improvements](#3-changelog--recent-improvements)
+4. [Comprehensive 100 Production Capabilities Matrix](#4-comprehensive-100-production-capabilities-matrix)
+5. [Hackathon Alignment & Rules Compliance Matrix](#5-hackathon-alignment--rules-compliance-matrix)
+6. [System Architecture & End-to-End Data Flow](#6-system-architecture--end-to-end-data-flow)
+7. [Deep-Dive: Backblaze B2 Media Cloud Infrastructure](#7-deep-dive-backblaze-b2-media-cloud-infrastructure)
+8. [Deep-Dive: Genblaze SDK Architecture & Extensions](#8-deep-dive-genblaze-sdk-architecture--extensions)
+9. [Deep-Dive: C2PA Cryptographic Content Provenance](#9-deep-dive-c2pa-cryptographic-content-provenance)
+10. [Detailed Technical Specifications across Studio Workspaces](#10-detailed-technical-specifications-across-studio-workspaces)
 11. [AI Models & Provider Catalog Specification](#11-ai-models--provider-catalog-specification)
 12. [Installation, Local Development & Environment Guide](#12-installation-local-development--environment-guide)
 13. [Judges & Evaluators Hands-On Testing Protocol](#13-judges--evaluators-hands-on-testing-protocol)
-14. [Feedback & Architectural Suggestions for Genblaze SDK](#14-feedback--architectural-suggestions-for-genblaze-sdk)
-15. [License, Security Redactions & Repository Status](#15-license-security-redactions--repository-status)
+14. [License, Security Redactions & Repository Status](#14-license-security-redactions--repository-status)
 
 ---
 
@@ -87,17 +86,76 @@ Backblaze GenMedia Studio is deployed live on **Streamlit Community Cloud**:
 To run seamlessly on Streamlit Cloud without requiring user login inputs, the application reads secrets automatically from `st.secrets` via the `get_secret()` helper function:
 
 ```toml
-# Streamlit Community Cloud App Secrets Configuration
+# Streamlit Community Cloud App Secrets Configuration (add in App Settings > Secrets)
 HF_TOKEN = "hf_your_hugging_face_token_here"
 B2_KEY_ID = "your_backblaze_b2_key_id_here"
 B2_APPLICATION_KEY = "your_backblaze_b2_application_key_here"
 B2_BUCKET_NAME = "your_backblaze_b2_bucket_name_here"
 WEBHOOK_URL = "https://discord.com/api/webhooks/your_webhook_id/your_webhook_token"
+PENDO_INTEGRATION_KEY = "your_pendo_integration_key_here"
 ```
+
+> **No secrets?** The app runs fully in **demo/simulation mode** — all features work with mock data when no API keys are configured. The demo mode is ideal for judges and evaluators.
 
 ---
 
-## 3. Comprehensive 100 Production Capabilities Matrix
+### 🚀 Streamlit Community Cloud Deployment Checklist
+
+| Step | Action | Status |
+|------|--------|--------|
+| 1 | Fork this repository to your GitHub account | Required |
+| 2 | Connect to [Streamlit Community Cloud](https://streamlit.io/cloud) | Required |
+| 3 | Add secrets in `App Settings > Secrets` using the template above | Required for live APIs |
+| 4 | Set `requirements.txt` to install all Python dependencies | Automatic |
+| 5 | Set `packages.txt` for system packages (`graphviz`, `ffmpeg`) | Automatic |
+| 6 | Configure `.streamlit/config.toml` for production settings | Pre-configured |
+| 7 | Deploy! | Done |
+
+---
+
+### 📋 Streamlit Cloud Configuration (`.streamlit/config.toml`)
+
+The app is pre-configured for Streamlit Community Cloud with:
+
+- **`enableCORS = true`** — Enables cross-origin proxy for Streamlit's CDN
+- **`healthCheckInterval = 30`** — Keeps the app alive during idle periods
+- **`toolbarMode = minimal`** — Reduces UI clutter for end users
+- **`headless = true`** — Optimized for cloud server environment
+- **`enableXsrfProtection = true`** — Cross-site request forgery protection
+
+---
+
+## 3. Changelog & Recent Improvements
+
+### 🐛 Bug Fixes
+- **12 `st.markdown()` calls** fixed `unsafe_html=True` → `unsafe_allow_html=True` (Streamlit API error that prevented HTML rendering)
+- **`orchestrator.py` timestamp bug** — `"timestamp": logger.name` was returning the logger name string (`"GenMediaCentralOrchestrator"`) instead of a Unix timestamp; fixed to `"timestamp": time.time()`
+- **`vault.py` missing imports** — Added `import os` and `import secrets` that were needed but absent, causing `NameError` at runtime in `purge_expired_temp_previews()` and `configure_b2_presigned_upload_url()`
+- **`glass-card-neon-blue` CSS class** was referenced in the UI but had no corresponding CSS definition; added full neon-blue glassmorphic card styling with hover effects
+
+### 🚀 Streamlit Community Cloud Optimizations
+- **`.streamlit/config.toml`** — Set `enableCORS = true` for proper cross-origin proxy handling on Streamlit Cloud's CDN
+- **Added `healthCheckInterval = 30`** — Keeps the app alive during idle periods and prevents cold-start timeouts
+- **Added `toolbarMode = "minimal"`** — Reduces UI clutter for end users and judges
+- **Graceful dependency fallbacks** — App starts even if the `genblaze` SDK fails to build during Streamlit Cloud deployment; missing imports are caught and reported as warnings instead of crashing the entire app
+- **Pendo tracking is now conditional** — Only loads when `PENDO_INTEGRATION_KEY` is set in environment variables; avoids unnecessary external script loading
+- **Pendo API key** moved from hardcoded value to `PENDO_INTEGRATION_KEY` environment variable (security best practice)
+
+### 🎨 Production UI Upgrades
+- **Production footer** added with project attribution and GitHub repository link
+- **Sidebar reorganization** — Pip conflict scanner and diagnostic tools moved into collapsible "🛠 Dev Tools" section, keeping the main sidebar clean for production use
+- **Enhanced CSS** — Added code block scroll styling, metric card polish, expander header styling, fade-in animations, responsive breakpoints (768px mobile), and custom scrollbar theming
+- **Dependency loading guard** — App displays a clear warning message listing any failed service loads instead of crashing silently
+
+### 📖 Documentation
+- Removed out-of-date Novus (Pendo) MCP integration section from README
+- Added Streamlit Cloud deployment checklist
+- Added `.streamlit/config.toml` configuration documentation
+- Added `PENDO_INTEGRATION_KEY` to secrets template
+
+---
+
+## 4. Comprehensive 100 Production Capabilities Matrix
 
 Below is the architectural matrix of the **100 enterprise production capabilities** integrated across Backblaze GenMedia Studio:
 
@@ -223,7 +281,7 @@ Below is the architectural matrix of the **100 enterprise production capabilitie
 
 ---
 
-## 4. Hackathon Alignment & Rules Compliance Matrix
+## 5. Hackathon Alignment & Rules Compliance Matrix
 
 Our application fulfills every explicit rule specified in the **Backblaze Generative AI Media Hackathon Official Rules**:
 
@@ -233,11 +291,11 @@ Our application fulfills every explicit rule specified in the **Backblaze Genera
 | **Build with Backblaze B2 Storage** | Complete media asset lifecycle archiving via `b2sdk`, presigned HTML5 CDN streaming, B2 spatial time-travel versioning (`list_file_versions`), and parallel multi-threaded vault uploads. | `services/vault.py`, `services/temporal_vault.py` |
 | **Real-World Utility & Product Design** | Production-ready multi-modal studio for manga compilers, light novel writers, voiceover creators, and subtitle translators with C2PA deepfake security. | `app.py`, `services/manga.py`, `services/novel.py` |
 | **Open Access & Licensing** | License stated as "No Formal License Applied / Open Access for Hackathon Evaluation". No invalid license claims. | `README.md` (License Section) |
-| **Streamlit Community Cloud Deployment** | Built with `packages.txt`, `.streamlit/config.toml`, `.streamlit/secrets.toml.template`, and `requirements.txt` target `git+https://github.com/backblaze-labs/genblaze.git#subdirectory=libs/meta`. | `requirements.txt`, `app.py` |
+| **Streamlit Community Cloud Deployment** | Built with `packages.txt`, `.streamlit/config.toml` (CORS enabled, health check interval, toolbar mode minimal), `.streamlit/secrets.toml.template`, and `requirements.txt` target `git+https://github.com/backblaze-labs/genblaze.git#subdirectory=libs/meta`. Includes graceful dependency fallbacks for resilient cold starts. | `requirements.txt`, `app.py`, `.streamlit/config.toml` |
 
 ---
 
-## 5. System Architecture & End-to-End Data Flow
+## 6. System Architecture & End-to-End Data Flow
 
 ```mermaid
 sequenceDiagram
@@ -268,7 +326,7 @@ sequenceDiagram
 
 ---
 
-## 6. Deep-Dive: Backblaze B2 Media Cloud Infrastructure
+## 7. Deep-Dive: Backblaze B2 Media Cloud Infrastructure
 
 Backblaze B2 Cloud Storage serves as the primary high-throughput, durable media vault for all generated assets:
 
@@ -279,7 +337,7 @@ Backblaze B2 Cloud Storage serves as the primary high-throughput, durable media 
 
 ---
 
-## 7. Deep-Dive: Genblaze SDK Architecture & Extensions
+## 8. Deep-Dive: Genblaze SDK Architecture & Extensions
 
 Backblaze GenMedia Studio leverages the official `genblaze` SDK monorepo:
 
@@ -289,7 +347,7 @@ Backblaze GenMedia Studio leverages the official `genblaze` SDK monorepo:
 
 ---
 
-## 8. Deep-Dive: C2PA Cryptographic Content Provenance
+## 9. Deep-Dive: C2PA Cryptographic Content Provenance
 
 To safeguard against AI deepfakes and unverified content manipulation, Backblaze GenMedia Studio embeds cryptographic provenance metadata:
 
@@ -300,7 +358,7 @@ To safeguard against AI deepfakes and unverified content manipulation, Backblaze
 
 ---
 
-## 9. AI Models & Provider Catalog Specification
+## 10. AI Models & Provider Catalog Specification
 
 | Modality | Default Model ID | Step Type | Task Function |
 | :--- | :--- | :--- | :--- |
@@ -311,7 +369,7 @@ To safeguard against AI deepfakes and unverified content manipulation, Backblaze
 
 ---
 
-## 10. Installation, Local Development & Environment Guide
+## 11. Installation, Local Development & Environment Guide
 
 ```bash
 # 1. Clone the repository
@@ -331,7 +389,7 @@ streamlit run app.py
 
 ---
 
-## 11. Judges & Evaluators Hands-On Testing Protocol
+## 12. Judges & Evaluators Hands-On Testing Protocol
 
 To test the application on Streamlit Cloud:
 
@@ -348,7 +406,7 @@ To test the application on Streamlit Cloud:
 
 ---
 
-## 12. License, Security Redactions & Repository Status
+## 13. License, Security Redactions & Repository Status
 
 - **Repository License**: No Formal License Applied / Open Access for Backblaze Generative AI Media Hackathon evaluation.
 - **Security & Secret Redactions**: Sanitized dynamically by `TokenScrubber`. Private keys are never committed to git.
