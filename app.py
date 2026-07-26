@@ -703,18 +703,20 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# Define Main Application Tabs
-tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs(
+# Define Main Application Workspaces
+tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8 = st.tabs(
     [
-        "🎨 Manga Panel Workspace",
+        "🎨 Manga & Comic Studio",
         "📖 Light Novel Factory",
-        "🎙️ Whisper Subtitle Studio",
-        "🤖 Agent Continuity Studio",
+        "🎙️ Whisper Subtitle Hub",
+        "🤖 Agent Continuity Loop",
         "🗄️ Backblaze B2 Vault",
-        "⚡ Advanced Features & Security Suite",
-        "🔒 See Code",
+        "🛡️ Security & Provenance",
+        "📊 Analytics & System Health",
+        "🔒 Code Inspector",
     ]
 )
+
 
 
 # ==================== TAB 1: MANGA GENERATION WORKSPACE ====================
@@ -2569,71 +2571,19 @@ with tab5:
                             else:
                                 st.error(f"❌ {msg_wh}")
 
-            st.markdown("</div>", unsafe_allow_html=True)
+            st.markdown("</div>", unsafe_html=True)
 
-# ==================== TAB 6: ADVANCED FEATURES & SECURITY SUITE ====================
+# ==================== TAB 6: SECURITY & PROVENANCE CENTER ====================
 with tab6:
-    st.markdown('<div class="section-header">⚡ Advanced Studio Features & Security Suite</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-header">🛡️ Security, Provenance & Governance Suite</div>', unsafe_html=True)
 
-    col_f1, col_f2 = st.columns([1, 1])
+    col_sec1, col_sec2 = st.columns([1, 1])
 
-    with col_f1:
-        st.subheader("🎨 Feature 11: Manga Colorizer Studio")
-        color_style = st.selectbox("Color Style Aesthetic", ["Cyberpunk Vibrant Neon", "Classic Watercolor", "Vintage Retro Anime", "Dark Fantasy Noir"])
-        if st.button("✨ Colorize Active Manga Panel", key="btn_colorize_manga"):
-            tok = get_active_token()
-            with st.spinner("Executing Genblaze Style Transfer..."):
-                ok_c, res_c = colorize_manga_panel(tok, st.session_state.get("manga_filename", "manga_panel.png"), color_style)
-                if ok_c:
-                    st.success(f"Panel colorized with {color_style} aesthetic!")
-                else:
-                    st.warning(f"Colorization status: {res_c}")
-
-        st.markdown("---")
-        st.subheader("🎙️ Feature 12: Light Novel Audio Dramatizer")
-        novel_script = st.text_area("Script for Audio Dramatization", value=st.session_state.get("light_novel_en", "Sora looked at the ancient runes and realized the code was compiled."))
-        if st.button("🎧 Synthesize Audio Dramatization", key="btn_audio_dramatize"):
-            tok = get_active_token()
-            with st.spinner("Synthesizing ambient audio track..."):
-                ok_a, msg_a, aud_p = generate_audio_dramatization(tok, novel_script)
-                if ok_a:
-                    st.success(msg_a)
-                    if aud_p and os.path.exists(aud_p):
-                        st.audio(aud_p)
-                else:
-                    st.error(msg_a)
-
-        st.markdown("---")
-        st.subheader("📝 Feature 13: Multi-Format Subtitles Exporter & Pace Optimizer (Feature 29)")
-        raw_tr = st.session_state.get("whisper_transcript", "Sora discovers the ancient magic circles are compiled code.")
-        raw_srt = st.session_state.get("whisper_srt", "1\n00:00:00,000 --> 00:00:05,000\nSora discovers the ancient magic circles are compiled code.")
-        sub_formats = export_multiformat_subtitles(raw_tr, raw_srt)
-        st.download_button("📥 Download WebVTT (.vtt)", data=sub_formats["vtt"], file_name="subtitles.vtt", mime="text/vtt")
-        st.download_button("📥 Download SSA/ASS (.ass)", data=sub_formats["ass"], file_name="subtitles.ass", mime="text/plain")
-        st.download_button("📥 Download Subtitle JSON", data=sub_formats["json"], file_name="subtitles.json", mime="application/json")
-        if st.button("⏱️ Audit Subtitle Reading Pace (Feature 29)"):
-            ok_p, msg_p, pace_metrics = optimize_subtitle_timing(raw_srt)
-            st.json(pace_metrics)
-
-        st.markdown("---")
-        st.subheader("🔍 Feature 26: Manga Speech Bubble OCR Extractor")
-        if st.button("🔤 Extract Dialogue Text via OCR"):
-            ok_ocr, bubbles = extract_manga_bubble_ocr("manga_panel.png")
-            st.write("**Extracted Dialogue Bubbles:**")
-            st.json(bubbles)
-
-    with col_f2:
-        st.subheader("👤 Feature 27: Anime Character Anchor Profile")
-        c_name = st.text_input("Character Name", value="Sora")
-        c_hair = st.text_input("Hair Color", value="Silver Blue")
-        c_outfit = st.text_input("Outfit Style", value="Mage Robes with Cyber Glyphs")
-        if st.button("👤 Generate Character Consistency Profile"):
-            profile = create_character_anchor_profile(c_name, c_hair, c_outfit, "Crimson Red")
-            st.json(profile)
-
-        st.markdown("---")
-        st.subheader("🔍 Feature 16: C2PA Deepfake Tampering Detector")
-        if st.button("🛡️ Run C2PA Tamper Audit", key="btn_tamper_audit"):
+    with col_sec1:
+        st.markdown('<div class="glass-card-neon-purple">', unsafe_html=True)
+        st.subheader("🔍 C2PA Cryptographic Tampering Audit")
+        st.write("Scans media headers to detect metadata stripping, deepfake alteration, or pixel tampering.")
+        if st.button("🛡️ Audit C2PA Authenticity Signature", key="btn_tamper_audit_suite"):
             if st.session_state.get("manga_image"):
                 ok_t, msg_t, meta_t = detect_c2pa_tampering(st.session_state["manga_image"])
                 if ok_t:
@@ -2642,44 +2592,87 @@ with tab6:
                     st.warning(msg_t)
                 st.json(meta_t)
             else:
-                st.info("Generate a manga panel first to audit its C2PA signature!")
+                st.info("Generate or upload a media asset to audit its C2PA provenance signature!")
+        st.markdown('</div>', unsafe_html=True)
 
-        st.markdown("---")
-        st.subheader("📜 Feature 18: C2PA Certificate Generator")
-        if st.button("📜 Generate Certificate of Authenticity", key="btn_cert_gen"):
+        st.markdown("<br>", unsafe_html=True)
+
+        st.markdown('<div class="glass-card-neon-blue">', unsafe_html=True)
+        st.subheader("📜 Certificate of Authenticity Generator")
+        st.write("Produces a downloadable cryptographic certificate verifying model ID, prompt spec, SHA-256 hash, and B2 Vault link.")
+        if st.button("📜 Generate Authenticity Certificate", key="btn_cert_gen_suite"):
             prov_eng = ProvenanceEngine()
-            manifest = prov_eng.create_manifest(prompt="Cyberpunk mage", seed=42, model_id="FLUX.1-schnell")
+            manifest = prov_eng.create_manifest(prompt="Cyberpunk detective scene", seed=42, model_id="FLUX.1-schnell")
             cert_text = generate_provenance_certificate_text(manifest, st.session_state.get("last_presigned_url", ""))
             st.code(cert_text, language="text")
-            st.download_button("📥 Download Certificate (.txt)", data=cert_text, file_name="c2pa_certificate.txt")
+            st.download_button("📥 Download Certificate (.txt)", data=cert_text, file_name="c2pa_authenticity_certificate.txt")
+        st.markdown('</div>', unsafe_html=True)
 
-        st.markdown("---")
-        st.subheader("👥 Feature 17 & 38: RBAC Workspaces & API Scope Audit")
+    with col_sec2:
+        st.markdown('<div class="glass-card-neon-pink">', unsafe_html=True)
+        st.subheader("👥 Multi-User Team Workspaces (RBAC)")
+        st.write("Granular access control policies managing Admin, Creator, and Viewer roles across the studio.")
         workspace_mgr = TeamWorkspaceManager()
         workspace_mgr.add_member("judge@devpost.com", "Admin")
         workspace_mgr.add_member("creator@genmedia.studio", "Creator")
-        st.json({"workspace_members": workspace_mgr.members})
-        scope_res = audit_token_scopes(get_active_token(), b2_id)
-        st.write("**API Scope Audit (Feature 38):**", scope_res["scope_status"])
+        st.json({"active_team_members": workspace_mgr.members})
+        st.markdown('</div>', unsafe_html=True)
 
-    st.markdown("---")
-    st.subheader("📊 Feature 7 & 20: B2 Vault Health & Analytics Dashboard")
+        st.markdown("<br>", unsafe_html=True)
+
+        st.markdown('<div class="glass-card-neon-purple">', unsafe_html=True)
+        st.subheader("🌐 API Permission Scraper & Scope Auditor")
+        st.write("Audits Hugging Face and Backblaze B2 token permissions prior to running large batch pipelines.")
+        scope_res = audit_token_scopes(get_active_token(), b2_id)
+        st.markdown(f"**Permission Scope Status**: `{scope_res['scope_status']}`")
+        st.json(scope_res)
+        st.markdown('</div>', unsafe_html=True)
+
+# ==================== TAB 7: ANALYTICS & SYSTEM HEALTH ====================
+with tab7:
+    st.markdown('<div class="section-header">📊 Studio Analytics & Vault Health Telemetry</div>', unsafe_html=True)
+
     col_stat1, col_stat2, col_stat3, col_stat4 = st.columns(4)
     col_stat1.metric("Total Generations", st.session_state.get("tries_used", 0))
     col_stat2.metric("C2PA Authenticity Rate", "100%")
-    col_stat3.metric("B2 Vault Storage Used", "1.2 MB")
+    col_stat3.metric("B2 Vault Storage", "1.2 MB")
     col_stat4.metric("Pipeline Latency", "1.2s")
-    if b2_configured and st.button("🏥 Run B2 Vault Health Audit (Feature 7)"):
-        ok_vh, msg_vh, metrics_vh = get_b2_vault_health_metrics(b2_id, b2_key, b2_bucket)
-        if ok_vh:
-            st.json(metrics_vh)
 
+    st.markdown("<br>", unsafe_html=True)
 
-# ==================== TAB 7: SECURE SEE CODE ====================
-with tab7:
+    col_dash1, col_dash2 = st.columns([1, 1])
+
+    with col_dash1:
+        st.markdown('<div class="glass-card-neon-blue">', unsafe_html=True)
+        st.subheader("🏥 Backblaze B2 Vault Health Diagnostics")
+        st.write("Scans total storage consumption, file counts, and average asset sizes across B2 buckets.")
+        if b2_configured:
+            if st.button("🏥 Audit Vault Health Metrics", key="btn_audit_vault_health"):
+                ok_vh, msg_vh, metrics_vh = get_b2_vault_health_metrics(b2_id, b2_key, b2_bucket)
+                if ok_vh:
+                    st.json(metrics_vh)
+                else:
+                    st.error(msg_vh)
+        else:
+            st.info("Configure Backblaze B2 Vault credentials in the sidebar to run health audits.")
+        st.markdown('</div>', unsafe_html=True)
+
+    with col_dash2:
+        st.markdown('<div class="glass-card-neon-purple">', unsafe_html=True)
+        st.subheader("💰 Real-Time API Quota & Storage Estimator")
+        st.write("Calculates estimated inference API cost, token consumption, and B2 storage allocation.")
+        img_c = st.number_input("Manga Panels", min_value=1, value=5, key="dash_img_c")
+        aud_sec = st.number_input("Audio Duration (sec)", min_value=0, value=30, key="dash_aud_sec")
+        costs = calculate_generation_quota_cost(image_count=img_c, text_tokens=1000, audio_seconds=aud_sec)
+        st.markdown(f"**Est. API Cost**: `${costs['total_cost_usd']:.4f}` USD")
+        st.markdown(f"**Est. B2 Storage**: `{costs['estimated_b2_mb']:.2f}` MB")
+        st.markdown('</div>', unsafe_html=True)
+
+# ==================== TAB 8: SECURE CODE INSPECTOR ====================
+with tab8:
     st.markdown(
         '<div class="section-header">🔒 Secure Code Inspector</div>',
-        unsafe_allow_html=True,
+        unsafe_html=True,
     )
     st.write(
         "Displays `app.py` in real-time, dynamically sanitizing all private auth keys and access credentials."
@@ -2698,4 +2691,3 @@ with tab7:
 
     except Exception as read_err:
         st.error(f"Could not read source code dynamically: {read_err}")
-
