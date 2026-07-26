@@ -95,24 +95,26 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+pendo_api_key = os.environ.get("PENDO_INTEGRATION_KEY", "")
+
 # ----------------- Novus by Pendo SDK -----------------
-components.html("""
-<script>
+if pendo_api_key:
+    pendo_html = """<script>
 (function(apiKey){
     (function(p,e,n,d,o){var v,w,x,y,z;o=p[d]=p[d]||{};o._q=o._q||[];
     v=['initialize','identify','updateOptions','pageLoad','track', 'trackAgent'];for(w=0,x=v.length;w<x;++w)(function(m){
     o[m]=o[m]||function(){o._q[m===v[0]?'unshift':'push']([m].concat([].slice.call(arguments,0)));};})(v[w]);
     y=e.createElement(n);y.async=!0;y.src='https://cdn.pendo.io/agent/static/'+apiKey+'/pendo.js';
     z=e.getElementsByTagName(n)[0];z.parentNode.insertBefore(y,z);})(window,document,'script','pendo');
-})('767e2c0a-a8df-4303-a5ad-664cc9bd10be');
+})('""" + pendo_api_key + """');
 
 pendo.initialize({
     visitor: {
         id: ''
     }
 });
-</script>
-""", height=0)
+</script>"""
+    components.html(pendo_html, height=0)
 
 # ----------------- 🔐 DYNAMIC SECURITY SANDBOX & SCRUBBER SETUP -----------------
 # 1. Cryptographic Rate Limit Sandbox
@@ -345,6 +347,22 @@ st.markdown(
     box-shadow: 0 12px 40px 0 rgba(255, 51, 102, 0.4), 0 0 25px rgba(255, 51, 102, 0.25) !important;
 }
 
+.glass-card-neon-blue {
+    background: rgba(25, 20, 45, 0.35);
+    border: 1.5px solid rgba(56, 189, 248, 0.35) !important;
+    border-radius: 20px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4), 0 0 15px rgba(56, 189, 248, 0.15) !important;
+    backdrop-filter: blur(16px);
+    transition: all 0.3s ease;
+}
+.glass-card-neon-blue:hover {
+    transform: translateY(-3px);
+    border-color: #38bdf8 !important;
+    box-shadow: 0 12px 40px 0 rgba(56, 189, 248, 0.4), 0 0 25px rgba(56, 189, 248, 0.25) !important;
+}
+
 /* Responsive CSS Grid Comparison Layouts */
 .comparison-grid {
     display: grid;
@@ -521,6 +539,48 @@ button[kind="secondary"]:hover {
     color: #ffffff !important;
     border-bottom: 3px solid #ff3366 !important;
 }
+
+/* Code blocks: proper scrolling and dark theme */
+pre, .stCodeBlock {
+    border-radius: 12px !important;
+    border: 1px solid rgba(160, 51, 255, 0.2) !important;
+    background: rgba(10, 8, 20, 0.8) !important;
+    overflow-x: auto !important;
+}
+pre code, .stCodeBlock code {
+    font-family: 'JetBrains Mono', 'Fira Code', monospace !important;
+    font-size: 0.82rem !important;
+}
+
+/* Metric cards enhancement */
+.stMetric {
+    background: rgba(25, 20, 45, 0.3) !important;
+    border: 1px solid rgba(160, 51, 255, 0.1) !important;
+    border-radius: 12px !important;
+    padding: 1rem !important;
+}
+
+/* Expander header styling */
+.streamlit-expanderHeader {
+    background: rgba(25, 20, 45, 0.3) !important;
+    border: 1px solid rgba(160, 51, 255, 0.1) !important;
+    border-radius: 10px !important;
+}
+
+/* Fade-in animation for content */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive breakpoints */
+@media (max-width: 768px) {
+    .header-title { font-size: 2.2rem !important; }
+    .header-subtitle { font-size: 1rem !important; }
+    .header-container { padding: 1.5rem 1rem !important; }
+    .comparison-grid { grid-template-columns: 1fr !important; }
+    .stTabs [data-baseweb="tab-panel"] { padding: 1.5rem 1rem !important; }
+}
 </style>
 """,
     unsafe_allow_html=True,
@@ -661,14 +721,14 @@ if healthy_count == total_count:
 else:
     st.sidebar.warning(f"⚠️ Dependency Alert ({healthy_count}/{total_count} loaded)")
 
-with st.sidebar.expander("System package diagnostics"):
+with st.sidebar.expander("System package diagnostics", expanded=False):
     for pkg in health_report:
         color = "green" if pkg["status"] == "Healthy" else "red"
         st.markdown(
             f"**{pkg['package']}**: :{color}[{pkg['status']}] (v{pkg['version']})"
         )
 
-    st.markdown("---")
+with st.sidebar.expander("🛠 Dev Tools", expanded=False):
     st.markdown("**Pip Conflict Scanner**")
     dump = st.text_area(
         "Paste terminal logs to diagnose",
@@ -2914,16 +2974,16 @@ with tab6:
                             else:
                                 st.error(f"❌ {msg_wh}")
 
-            st.markdown("</div>", unsafe_html=True)
+            st.markdown("</div>", unsafe_allow_html=True)
 
 # ==================== TAB 7: SECURITY & PROVENANCE CENTER ====================
 with tab7:
-    st.markdown('<div class="section-header">🛡️ Security, Provenance & Governance Suite</div>', unsafe_html=True)
+    st.markdown('<div class="section-header">🛡️ Security, Provenance & Governance Suite</div>', unsafe_allow_html=True)
 
     col_sec1, col_sec2 = st.columns([1, 1])
 
     with col_sec1:
-        st.markdown('<div class="glass-card-neon-purple">', unsafe_html=True)
+        st.markdown('<div class="glass-card-neon-purple">', unsafe_allow_html=True)
         st.subheader("🔍 C2PA Cryptographic Tampering Audit")
         st.write("Scans media headers to detect metadata stripping, deepfake alteration, or pixel tampering.")
         if st.button("🛡️ Audit C2PA Authenticity Signature", key="btn_tamper_audit_suite"):
@@ -2936,11 +2996,11 @@ with tab7:
                 st.json(meta_t)
             else:
                 st.info("Generate or upload a media asset to audit its C2PA provenance signature!")
-        st.markdown('</div>', unsafe_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
 
-        st.markdown("<br>", unsafe_html=True)
+        st.markdown("<br>", unsafe_allow_html=True)
 
-        st.markdown('<div class="glass-card-neon-blue">', unsafe_html=True)
+        st.markdown('<div class="glass-card-neon-blue">', unsafe_allow_html=True)
         st.subheader("📜 Certificate of Authenticity Generator")
         st.write("Produces a downloadable cryptographic certificate verifying model ID, prompt spec, SHA-256 hash, and B2 Vault link.")
         if st.button("📜 Generate Authenticity Certificate", key="btn_cert_gen_suite"):
@@ -2949,31 +3009,31 @@ with tab7:
             cert_text = generate_provenance_certificate_text(manifest, st.session_state.get("last_presigned_url", ""))
             st.code(cert_text, language="text")
             st.download_button("📥 Download Certificate (.txt)", data=cert_text, file_name="c2pa_authenticity_certificate.txt")
-        st.markdown('</div>', unsafe_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
 
     with col_sec2:
-        st.markdown('<div class="glass-card-neon-pink">', unsafe_html=True)
+        st.markdown('<div class="glass-card-neon-pink">', unsafe_allow_html=True)
         st.subheader("👥 Multi-User Team Workspaces (RBAC)")
         st.write("Granular access control policies managing Admin, Creator, and Viewer roles across the studio.")
         workspace_mgr = TeamWorkspaceManager()
         workspace_mgr.add_member("judge@devpost.com", "Admin")
         workspace_mgr.add_member("creator@genmedia.studio", "Creator")
         st.json({"active_team_members": workspace_mgr.members})
-        st.markdown('</div>', unsafe_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
 
-        st.markdown("<br>", unsafe_html=True)
+        st.markdown("<br>", unsafe_allow_html=True)
 
-        st.markdown('<div class="glass-card-neon-purple">', unsafe_html=True)
+        st.markdown('<div class="glass-card-neon-purple">', unsafe_allow_html=True)
         st.subheader("🌐 API Permission Scraper & Scope Auditor")
         st.write("Audits Hugging Face and Backblaze B2 token permissions prior to running large batch pipelines.")
         scope_res = audit_token_scopes(get_active_token(), b2_id)
         st.markdown(f"**Permission Scope Status**: `{scope_res['scope_status']}`")
         st.json(scope_res)
-        st.markdown('</div>', unsafe_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
 
 # ==================== TAB 8: ANALYTICS & SYSTEM HEALTH ====================
 with tab8:
-    st.markdown('<div class="section-header">📊 Studio Analytics & Vault Health Telemetry</div>', unsafe_html=True)
+    st.markdown('<div class="section-header">📊 Studio Analytics & Vault Health Telemetry</div>', unsafe_allow_html=True)
 
     col_stat1, col_stat2, col_stat3, col_stat4 = st.columns(4)
     col_stat1.metric("Total Generations", st.session_state.get("tries_used", 0))
@@ -2981,12 +3041,12 @@ with tab8:
     col_stat3.metric("B2 Vault Storage", "1.2 MB")
     col_stat4.metric("Pipeline Latency", "1.2s")
 
-    st.markdown("<br>", unsafe_html=True)
+    st.markdown("<br>", unsafe_allow_html=True)
 
     col_dash1, col_dash2 = st.columns([1, 1])
 
     with col_dash1:
-        st.markdown('<div class="glass-card-neon-blue">', unsafe_html=True)
+        st.markdown('<div class="glass-card-neon-blue">', unsafe_allow_html=True)
         st.subheader("🏥 Backblaze B2 Vault Health Diagnostics")
         st.write("Scans total storage consumption, file counts, and average asset sizes across B2 buckets.")
         if b2_configured:
@@ -2998,61 +3058,24 @@ with tab8:
                     st.error(msg_vh)
         else:
             st.info("Configure Backblaze B2 Vault credentials in the sidebar to run health audits.")
-            st.subheader("💰 Real-Time API Quota & Storage Estimator")
-            st.write("Calculates estimated inference API cost, token consumption, and B2 storage allocation.")
-            img_c = st.number_input("Manga Panels", min_value=1, value=5, key="dash_img_c")
-            aud_sec = st.number_input("Audio Duration (sec)", min_value=0, value=30, key="dash_aud_sec")
-            costs = calculate_generation_quota_cost(image_count=img_c, text_tokens=1000, audio_seconds=aud_sec)
-            st.markdown(f"**Est. API Cost**: `${costs['total_cost_usd']:.4f}` USD")
-            st.markdown(f"**Est. B2 Storage**: `{costs['estimated_b2_mb']:.2f}` MB")
-            st.markdown('</div>', unsafe_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
 
-    st.markdown("<br>", unsafe_allow_html=True)
-
-    # Novus (Pendo) Product Analytics & Signals Hub
-    st.markdown('<div class="glass-card-neon-pink">', unsafe_allow_html=True)
-    st.subheader("🌐 Novus (Pendo) Product Analytics & AI Signals Hub")
-    st.markdown("Query product usage metrics, detected studio pages, visitor sessions, and AI-generated signals via Model Context Protocol (MCP).")
-
-    novus_col1, novus_col2 = st.columns([1, 1])
-
-    with novus_col1:
-        st.markdown("**Server Connection Status:** `🟢 Connected (OAuth 2.1 / Streamable HTTP)`")
-        st.markdown("**Novus MCP Endpoint:** `https://novus-api.pendo.io/mcp`")
-        st.markdown("**Active Visitor ID:** `" + str(st.session_state.get("pendo_visitor_id", "visitor-anon")) + "`")
-
-        st.markdown("**Detected Studio Pages & Feature Distribution:**")
-        st.json({
-            "pages": [
-                {"name": "Manga & Comic Studio", "views": 142, "share": "48%"},
-                {"name": "Light Novel Factory", "views": 71, "share": "24%"},
-                {"name": "Whisper Subtitle Hub", "views": 44, "share": "15%"},
-                {"name": "ComfyUI Workflow Engine", "views": 39, "share": "13%"}
-            ]
-        })
-
-    with novus_col2:
-        st.markdown("**AI Signals & Diagnostic Metrics:**")
-        st.json({
-            "signals": {
-                "visual_continuity_score": 0.84,
-                "c2pa_authenticity_rate": "100%",
-                "b2_dedup_efficiency": "38.2%",
-                "rate_limit_conversion": "BYOK Active"
-            }
-        })
-
-        if st.button("📡 Dispatch Novus Telemetry Event", key="btn_dispatch_novus_event"):
-            pendo_track("user_explored_novus_analytics", {"timestamp": time.time()}, visitor_id=st.session_state.get("pendo_visitor_id", "visitor-anon"))
-            st.success("Dispatched telemetry track event to Novus / Pendo API!")
-
-    st.markdown("</div>", unsafe_html=True)
+    with col_dash2:
+        st.markdown('<div class="glass-card-neon-purple">', unsafe_allow_html=True)
+        st.subheader("💰 Real-Time API Quota & Storage Estimator")
+        st.write("Calculates estimated inference API cost, token consumption, and B2 storage allocation.")
+        img_c = st.number_input("Manga Panels", min_value=1, value=5, key="dash_img_c")
+        aud_sec = st.number_input("Audio Duration (sec)", min_value=0, value=30, key="dash_aud_sec")
+        costs = calculate_generation_quota_cost(image_count=img_c, text_tokens=1000, audio_seconds=aud_sec)
+        st.markdown(f"**Est. API Cost**: `${costs['total_cost_usd']:.4f}` USD")
+        st.markdown(f"**Est. B2 Storage**: `{costs['estimated_b2_mb']:.2f}` MB")
+        st.markdown('</div>', unsafe_allow_html=True)
 
 # ==================== TAB 9: SECURE CODE INSPECTOR ====================
 with tab9:
     st.markdown(
         '<div class="section-header">🔒 Secure Code Inspector</div>',
-        unsafe_html=True,
+        unsafe_allow_html=True,
     )
     st.write(
         "Displays `app.py` in real-time, dynamically sanitizing all private auth keys and access credentials."
@@ -3071,3 +3094,18 @@ with tab9:
 
     except Exception as read_err:
         st.error(f"Could not read source code dynamically: {read_err}")
+
+# ==================== PRODUCTION FOOTER ====================
+st.markdown("---")
+st.markdown(
+    """
+    <div style="text-align: center; padding: 2rem 1rem; border-top: 1px solid rgba(160, 51, 255, 0.15); margin-top: 2rem;">
+        <p style="color: #64748b; font-size: 0.85rem; margin: 0;">
+            <strong>Backblaze GenMedia Studio</strong> · Powered by Genblaze SDK + Backblaze B2 + C2PA Provenance<br>
+            Built for the Backblaze Generative AI Media Hackathon 2026 ·
+            <a href="https://github.com/krishivjoshi219-collab/backblaze-genmedia-studio" style="color: #a033ff;">GitHub Repository</a>
+        </p>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)

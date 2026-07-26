@@ -348,17 +348,7 @@ To test the application on Streamlit Cloud:
 
 ---
 
-## 12. Novus (Pendo) Product Analytics & MCP Integration
-
-Backblaze GenMedia Studio integrates with **Novus (Pendo)** to capture product telemetry, visitor feature engagement, and AI pipeline signals in real-time.
-
-- **MCP Endpoint**: `https://novus-api.pendo.io/mcp`
-- **Transport**: Streamable HTTP / OAuth 2.1
-- **Tracked Features**: Manga Generation, Light Novel Audio Dramatization, Subtitle Alignments, Agent Correction Loops, ComfyUI Workflows, B2 Vault Archival, and C2PA Authenticity Audits.
-
----
-
-## 13. License, Security Redactions & Repository Status
+## 12. License, Security Redactions & Repository Status
 
 - **Repository License**: No Formal License Applied / Open Access for Backblaze Generative AI Media Hackathon evaluation.
 - **Security & Secret Redactions**: Sanitized dynamically by `TokenScrubber`. Private keys are never committed to git.
@@ -367,5 +357,6 @@ Backblaze GenMedia Studio integrates with **Novus (Pendo)** to capture product t
 ---
 
 *Built with passion for the Backblaze Generative AI Media Hackathon 2026.*
+
 
 

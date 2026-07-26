@@ -4,6 +4,7 @@ import uuid
 import logging
 import io
 import threading
+import html
 from dataclasses import dataclass, field
 from enum import Enum, IntEnum
 from typing import List, Dict, Tuple, Optional, Any
@@ -128,12 +129,35 @@ class CentralOrchestrator:
         FEATURE 10: Genblaze Real-Time Event-Driven Telemetry Tracker.
         Computes sub-step latency, success metrics, and asset payload telemetry.
         """
+        steps = []
+        if isinstance(pipeline_res, dict):
+            steps = pipeline_res.get("steps", [])
+            completed = pipeline_res.get("completed_steps", len(steps))
+        elif isinstance(pipeline_res, list):
+            steps = pipeline_res
+            completed = len(steps)
+        elif hasattr(pipeline_res, "run") and hasattr(getattr(pipeline_res, "run"), "steps"):
+            steps = pipeline_res.run.steps
+            failed = pipeline_res.failed_steps() if hasattr(pipeline_res, "failed_steps") else []
+            completed = max(0, len(steps) - len(failed))
+        elif hasattr(pipeline_res, "steps"):
+            steps = pipeline_res.steps
+            completed = len(steps)
+        else:
+            steps = []
+            completed = 0
+
+        total_steps = len(steps) if steps is not None else 0
+        completed_steps = completed if completed is not None else 0
+        failed_steps = max(0, total_steps - completed_steps)
+        success_rate = (completed_steps / total_steps * 100.0) if total_steps > 0 else 0.0
+
         return {
-            "total_steps": len(steps),
-            "completed_steps": completed,
-            "failed_steps": len(steps) - completed,
-            "success_rate_percent": (completed / len(steps) * 100.0) if steps else 0.0,
-            "timestamp": logger.name
+            "total_steps": total_steps,
+            "completed_steps": completed_steps,
+            "failed_steps": failed_steps,
+            "success_rate_percent": success_rate,
+            "timestamp": time.time()
         }
 
     def tune_genblaze_sampling_parameters(self, temperature: float = 0.7, top_p: float = 0.9) -> dict:
@@ -396,6 +420,8 @@ def import_workflow_schema(json_str: str) -> list:
     Imports, validates, and checks DAG cycle integrity of a .genblaze.json schema string.
     Returns topologically sorted node list.
     """
+    if not isinstance(json_str, str):
+        raise ValueError(f"Invalid JSON string format: expected str, got {type(json_str).__name__}")
     try:
         data = json.loads(json_str)
     except Exception as e:
@@ -413,9 +439,15 @@ def import_workflow_schema(json_str: str) -> list:
     for n in nodes:
         if not isinstance(n, dict) or "id" not in n or "type" not in n:
             raise ValueError("Node definition missing mandatory 'id' or 'type'.")
-        if n["id"] in node_ids:
-            raise ValueError(f"Duplicate node ID found: '{n['id']}'")
-        node_ids.add(n["id"])
+        n_id = n["id"]
+        try:
+            hash(n_id)
+        except TypeError:
+            raise ValueError(f"Node ID must be a hashable type, got unhashable type '{type(n_id).__name__}'")
+            
+        if n_id in node_ids:
+            raise ValueError(f"Duplicate node ID found: '{n_id}'")
+        node_ids.add(n_id)
         
     # Check DAG reference validity and circular dependencies
     is_valid, msg, sorted_nodes = _validate_dag_integrity(nodes)
@@ -429,24 +461,48 @@ def _validate_dag_integrity(nodes: list) -> Tuple[bool, str, list]:
     """
     Validates topological DAG ordering and circular dependency detection using Kahn's algorithm.
     """
-    node_map = {n["id"]: n for n in nodes}
-    in_degree = {n["id"]: 0 for n in nodes}
-    adj_list = {n["id"]: [] for n in nodes}
+    node_map = {}
+    for n in nodes:
+        if isinstance(n, dict) and "id" in n:
+            n_id = n["id"]
+            try:
+                hash(n_id)
+                node_map[n_id] = n
+            except TypeError:
+                pass
+
+    in_degree = {n_id: 0 for n_id in node_map}
+    adj_list = {n_id: [] for n_id in node_map}
     
     for n in nodes:
-        node_id = n["id"]
+        if not isinstance(n, dict):
+            continue
+        node_id = n.get("id")
+        try:
+            hash(node_id)
+        except TypeError:
+            continue
+
+        if node_id not in node_map:
+            continue
+
         inputs = n.get("inputs", {})
         if isinstance(inputs, dict):
             for in_key, in_val in inputs.items():
                 ref_id = None
                 if isinstance(in_val, dict) and "node_id" in in_val:
                     ref_id = in_val["node_id"]
-                elif isinstance(in_val, (list, tuple)) and len(in_val) > 0 and isinstance(in_val[0], str):
+                elif isinstance(in_val, (list, tuple)) and len(in_val) > 0:
                     ref_id = in_val[0]
-                elif isinstance(in_val, str) and in_val in node_map:
+                elif isinstance(in_val, (str, int)):
                     ref_id = in_val
                     
-                if ref_id:
+                if ref_id is not None:
+                    try:
+                        hash(ref_id)
+                    except TypeError:
+                        return False, f"Node '{node_id}' references non-existent input node '{ref_id}'", []
+                    
                     if ref_id not in node_map:
                         return False, f"Node '{node_id}' references non-existent input node '{ref_id}'", []
                     adj_list[ref_id].append(node_id)
@@ -463,7 +519,7 @@ def _validate_dag_integrity(nodes: list) -> Tuple[bool, str, list]:
             if in_degree[neighbor] == 0:
                 queue.append(neighbor)
                 
-    if len(sorted_ids) != len(nodes):
+    if len(sorted_ids) != len(node_map):
         return False, "Circular dependency (cycle) detected in workflow DAG!", []
         
     return True, "Valid DAG", [node_map[n_id] for n_id in sorted_ids]
@@ -496,27 +552,34 @@ def render_workflow_dag_graph(nodes: list, rankdir: str = "LR") -> graphviz.Digr
     DEFAULT_STYLE = {"bg": "#1F2937", "border": "#9CA3AF", "header_bg": "#374151", "header_txt": "#F9FAFB"}
 
     for node in nodes:
-        n_id = node.get("id", "unknown")
-        n_type = node.get("type", "CustomNode")
-        n_title = node.get("title", n_id)
+        if not isinstance(node, dict):
+            continue
+        raw_id = node.get("id", "unknown")
+        n_id = str(raw_id)
+        raw_type = node.get("type", "CustomNode")
+        n_type_esc = html.escape(str(raw_type))
+        raw_title = node.get("title", raw_id)
+        n_title_esc = html.escape(str(raw_title))
         params = node.get("params") or node.get("properties") or {}
         
-        style = CATEGORY_STYLES.get(n_type, DEFAULT_STYLE)
+        style = CATEGORY_STYLES.get(str(raw_type), DEFAULT_STYLE)
         
         param_items = []
         if isinstance(params, dict):
             for k, v in list(params.items())[:2]:
-                v_str = str(v).replace("<", "&lt;").replace(">", "&gt;")
+                k_esc = html.escape(str(k))
+                v_str = str(v)
                 if len(v_str) > 20:
                     v_str = v_str[:20] + "..."
-                param_items.append(f"<FONT POINT-SIZE='9' COLOR='#94A3B8'>{k}: {v_str}</FONT>")
+                v_esc = html.escape(v_str)
+                param_items.append(f"<FONT POINT-SIZE='9' COLOR='#94A3B8'>{k_esc}: {v_esc}</FONT>")
         
         param_str = "<br/>".join(param_items)
         if not param_str:
             param_str = "<FONT POINT-SIZE='9' COLOR='#94A3B8'>No params</FONT>"
             
         html_label = f'''<<TABLE BORDER="1" CELLBORDER="0" CELLSPACING="2" CELLPADDING="4" BGCOLOR="{style['bg']}" COLOR="{style['border']}">
-          <TR><TD BGCOLOR="{style['header_bg']}" COLSPAN="2"><FONT COLOR="{style['header_txt']}"><B>{n_title}</B> ({n_type})</FONT></TD></TR>
+          <TR><TD BGCOLOR="{style['header_bg']}" COLSPAN="2"><FONT COLOR="{style['header_txt']}"><B>{n_title_esc}</B> ({n_type_esc})</FONT></TD></TR>
           <TR><TD ALIGN="LEFT" COLSPAN="2">{param_str}</TD></TR>
         </TABLE>>'''
         
@@ -527,14 +590,14 @@ def render_workflow_dag_graph(nodes: list, rankdir: str = "LR") -> graphviz.Digr
             for in_key, in_val in inputs.items():
                 ref_id = None
                 if isinstance(in_val, dict) and "node_id" in in_val:
-                    ref_id = in_val["node_id"]
-                elif isinstance(in_val, (list, tuple)) and len(in_val) > 0 and isinstance(in_val[0], str):
-                    ref_id = in_val[0]
-                elif isinstance(in_val, str) and any(n.get("id") == in_val for n in nodes):
-                    ref_id = in_val
+                    ref_id = str(in_val["node_id"])
+                elif isinstance(in_val, (list, tuple)) and len(in_val) > 0 and in_val[0] is not None:
+                    ref_id = str(in_val[0])
+                elif isinstance(in_val, (str, int)) and any(isinstance(n, dict) and str(n.get("id")) == str(in_val) for n in nodes):
+                    ref_id = str(in_val)
                     
                 if ref_id:
-                    dot.edge(ref_id, n_id, label=in_key)
+                    dot.edge(ref_id, n_id, label=str(in_key))
                 
     return dot
 
@@ -593,10 +656,15 @@ class BatchTask:
         self.status_log.append(f"[{timestamp}] {message}")
 
     def to_dict(self) -> dict:
+        try:
+            priority_val = int(self.priority)
+        except (ValueError, TypeError):
+            priority_val = 2
+
         return {
             "task_id": self.task_id,
             "name": self.name,
-            "priority": self.priority if isinstance(self.priority, int) else int(self.priority),
+            "priority": priority_val,
             "task_type": self.task_type,
             "payload": self.payload,
             "status": self.status.value if isinstance(self.status, Enum) else str(self.status),
@@ -665,6 +733,10 @@ class AsyncBatchQueue:
             return task.task_id
 
     def get_status(self, task_id: str) -> Optional[dict]:
+        try:
+            hash(task_id)
+        except TypeError:
+            return None
         with self._lock:
             task = self.tasks.get(task_id)
             if not task:
@@ -672,6 +744,12 @@ class AsyncBatchQueue:
             return task.to_dict()
 
     def process_next(self) -> Optional[dict]:
+        def _safe_priority(t: BatchTask) -> int:
+            try:
+                return int(t.priority)
+            except (ValueError, TypeError):
+                return 2
+
         with self._lock:
             pending_tasks = [
                 t for t in self.tasks.values()
@@ -680,7 +758,7 @@ class AsyncBatchQueue:
             if not pending_tasks:
                 return None
             
-            pending_tasks.sort(key=lambda t: (t.priority if isinstance(t.priority, int) else 2, t.created_at))
+            pending_tasks.sort(key=lambda t: (_safe_priority(t), t.created_at))
             target_task = pending_tasks[0]
 
         self._execute_task(target_task)
@@ -696,6 +774,10 @@ class AsyncBatchQueue:
         return results
 
     def cancel_task(self, task_id: str) -> bool:
+        try:
+            hash(task_id)
+        except TypeError:
+            return False
         with self._lock:
             task = self.tasks.get(task_id)
             if not task:
