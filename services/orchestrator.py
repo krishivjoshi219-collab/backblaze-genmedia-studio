@@ -12,7 +12,10 @@ from concurrent.futures import ThreadPoolExecutor
 import graphviz
 
 from services.hf_provider import HuggingFaceProvider
-from genblaze import Pipeline, Modality, StepType
+try:
+    from genblaze import Pipeline, Modality, StepType
+except ImportError:
+    Pipeline = Modality = StepType = None
 
 logger = logging.getLogger("GenMediaCentralOrchestrator")
 

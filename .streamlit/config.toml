@@ -7,9 +7,13 @@ font = "sans serif"
 
 [server]
 headless = true
-enableCORS = false
+enableCORS = true
 enableXsrfProtection = true
 maxUploadSize = 200
+healthCheckInterval = 30
 
 [browser]
 gatherUsageStats = false
+
+[client]
+toolbarMode = "minimal"

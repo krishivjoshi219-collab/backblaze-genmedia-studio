@@ -8,79 +8,143 @@ import uuid
 import logging
 from PIL import Image
 
+DEPENDENCY_ISSUES = []
+
+def _safe_import_genblaze():
+    try:
+        from genblaze import Pipeline, Modality, StepType, ThresholdEvaluator, EvaluationResult
+        return True, Pipeline, Modality, StepType, ThresholdEvaluator, EvaluationResult
+    except ImportError as e:
+        DEPENDENCY_ISSUES.append(f"genblaze SDK not available: {e}")
+        return False, None, None, None, None, None
+
+_genblaze_ok, _Pipeline, _Modality, _StepType, _ThresholdEvaluator, _EvaluationResult = _safe_import_genblaze()
+
 # Import Modular Services
-from services.manga import (
-    compile_manga_panel,
-    colorize_manga_panel,
-    synthesize_storyboard_reel_html,
-    extract_manga_bubble_ocr,
-    create_character_anchor_profile,
-    generate_custom_manga_grid,
-)
-from services.novel import (
-    write_japanese_novel_scene,
-    translate_novel_text,
-    generate_audio_dramatization,
-    compile_epub_ebook_manifest,
-    synthesize_multispeaker_voiceover,
-)
-from services.whisper import (
-    transcribe_audio,
-    export_multiformat_subtitles,
-    optimize_subtitle_timing,
-)
-from services.vault import (
-    test_b2_connection,
-    archive_to_b2,
-    get_presigned_streaming_url,
-    dispatch_webhook_notification,
-    create_and_upload_storyboard_zip,
-    deduplicate_and_archive_to_b2,
-    configure_b2_lifecycle_policy,
-    upload_large_b2_media_chunked,
-    tag_and_index_b2_asset,
-    export_b2_s3_migration_manifest,
-    configure_b2_cors_policy,
-    get_b2_vault_health_metrics,
-    create_bulk_b2_vault_zip,
-    diff_b2_file_revisions,
-    simulate_b2_glacier_archival,
-)
-from services.diagnostics import check_system_package_health, SentinelGuard, ScoutParser
-from services.agent_studio import (
-    run_agent_loop,
-    parallel_upload_vault,
-    interpolate_scene_prompts,
-    benchmark_pipeline_runs,
-)
-from services.security import (
-    SecureBalanceSandbox,
-    TokenScrubber,
-    ProvenanceEngine,
-    detect_c2pa_tampering,
-    TeamWorkspaceManager,
-    generate_provenance_certificate_text,
-    calculate_generation_quota_cost,
-    embed_steganographic_signature,
-    rotate_c2pa_signing_keys,
-    audit_token_scopes,
-    record_security_audit_log,
-    evaluate_geofencing_policy,
-)
-from services.temporal_vault import list_historical_versions, download_historical_file
-from services.lineage import render_lineage_ui, build_lineage_graph
-from services.pendo_tracking import pendo_track
-from services.orchestrator import (
-    CentralOrchestrator,
-    export_workflow_schema,
-    import_workflow_schema,
-    render_workflow_dag_graph,
-    create_default_comfy_workflow_nodes,
-    TaskStatus,
-    TaskPriority,
-    BatchTask,
-    AsyncBatchQueue,
-)
+try:
+    from services.manga import (
+        compile_manga_panel,
+        colorize_manga_panel,
+        synthesize_storyboard_reel_html,
+        extract_manga_bubble_ocr,
+        create_character_anchor_profile,
+        generate_custom_manga_grid,
+    )
+except Exception as e:
+    DEPENDENCY_ISSUES.append(f"manga service load failed: {e}")
+
+try:
+    from services.novel import (
+        write_japanese_novel_scene,
+        translate_novel_text,
+        generate_audio_dramatization,
+        compile_epub_ebook_manifest,
+        synthesize_multispeaker_voiceover,
+    )
+except Exception as e:
+    DEPENDENCY_ISSUES.append(f"novel service load failed: {e}")
+
+try:
+    from services.whisper import (
+        transcribe_audio,
+        export_multiformat_subtitles,
+        optimize_subtitle_timing,
+    )
+except Exception as e:
+    DEPENDENCY_ISSUES.append(f"whisper service load failed: {e}")
+
+try:
+    from services.vault import (
+        test_b2_connection,
+        archive_to_b2,
+        get_presigned_streaming_url,
+        dispatch_webhook_notification,
+        create_and_upload_storyboard_zip,
+        deduplicate_and_archive_to_b2,
+        configure_b2_lifecycle_policy,
+        upload_large_b2_media_chunked,
+        tag_and_index_b2_asset,
+        export_b2_s3_migration_manifest,
+        configure_b2_cors_policy,
+        get_b2_vault_health_metrics,
+        create_bulk_b2_vault_zip,
+        diff_b2_file_revisions,
+        simulate_b2_glacier_archival,
+    )
+except Exception as e:
+    DEPENDENCY_ISSUES.append(f"vault service load failed: {e}")
+
+try:
+    from services.diagnostics import check_system_package_health, SentinelGuard, ScoutParser
+except Exception as e:
+    DEPENDENCY_ISSUES.append(f"diagnostics service load failed: {e}")
+    check_system_package_health = None
+    SentinelGuard = None
+    ScoutParser = None
+
+try:
+    from services.agent_studio import (
+        run_agent_loop,
+        parallel_upload_vault,
+        interpolate_scene_prompts,
+        benchmark_pipeline_runs,
+    )
+except Exception as e:
+    DEPENDENCY_ISSUES.append(f"agent_studio service load failed: {e}")
+
+try:
+    from services.security import (
+        SecureBalanceSandbox,
+        TokenScrubber,
+        ProvenanceEngine,
+        detect_c2pa_tampering,
+        TeamWorkspaceManager,
+        generate_provenance_certificate_text,
+        calculate_generation_quota_cost,
+        embed_steganographic_signature,
+        rotate_c2pa_signing_keys,
+        audit_token_scopes,
+        record_security_audit_log,
+        evaluate_geofencing_policy,
+    )
+except Exception as e:
+    DEPENDENCY_ISSUES.append(f"security service load failed: {e}")
+
+try:
+    from services.temporal_vault import list_historical_versions, download_historical_file
+except Exception as e:
+    DEPENDENCY_ISSUES.append(f"temporal_vault service load failed: {e}")
+
+try:
+    from services.lineage import render_lineage_ui, build_lineage_graph
+except Exception as e:
+    DEPENDENCY_ISSUES.append(f"lineage service load failed: {e}")
+
+try:
+    from services.pendo_tracking import pendo_track
+except Exception as e:
+    DEPENDENCY_ISSUES.append(f"pendo_tracking service load failed: {e}")
+
+try:
+    from services.orchestrator import (
+        CentralOrchestrator,
+        export_workflow_schema,
+        import_workflow_schema,
+        render_workflow_dag_graph,
+        create_default_comfy_workflow_nodes,
+        TaskStatus,
+        TaskPriority,
+        BatchTask,
+        AsyncBatchQueue,
+    )
+except Exception as e:
+    DEPENDENCY_ISSUES.append(f"orchestrator service load failed: {e}")
+
+if DEPENDENCY_ISSUES:
+    st.warning(
+        f"⚠️ Some services could not be loaded: {len(DEPENDENCY_ISSUES)} issue(s). "
+        "The app may have limited functionality. Check your dependency installation."
+    )
 
 
 
