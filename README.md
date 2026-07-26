@@ -348,7 +348,40 @@ To test the application on Streamlit Cloud:
 
 ---
 
-## 12. License, Security Redactions & Repository Status
+## 12. Novus (Pendo) Model Context Protocol (MCP) Server Integration
+
+Connect your AI coding tools (Claude Code, Cursor, Windsurf, VS Code) to **Novus** using the **Model Context Protocol (MCP)** to query product analytics, explore detected pages/features, review AI-generated signals, and access the product wiki directly.
+
+### 🌐 MCP Server URL
+`https://novus-api.pendo.io/mcp`
+
+### ⚙️ MCP Client Setup Instructions
+
+#### Standard stdio Transport via `mcp-remote`:
+```bash
+# Command
+npx
+
+# Arguments
+-y mcp-remote https://novus-api.pendo.io/mcp
+```
+
+#### Native Streamable HTTP Transport (Claude Code / Cursor):
+For clients supporting Streamable HTTP transport natively, add the endpoint directly:
+```json
+{
+  "mcpServers": {
+    "novus": {
+      "url": "https://novus-api.pendo.io/mcp",
+      "transport": "streamable-http"
+    }
+  }
+}
+```
+
+---
+
+## 13. License, Security Redactions & Repository Status
 
 - **Repository License**: No Formal License Applied / Open Access for Backblaze Generative AI Media Hackathon evaluation.
 - **Security & Secret Redactions**: Sanitized dynamically by `TokenScrubber`. Private keys are never committed to git.
@@ -357,3 +390,4 @@ To test the application on Streamlit Cloud:
 ---
 
 *Built with passion for the Backblaze Generative AI Media Hackathon 2026.*
+

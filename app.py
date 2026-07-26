@@ -70,6 +70,17 @@ from services.security import (
 from services.temporal_vault import list_historical_versions, download_historical_file
 from services.lineage import render_lineage_ui, build_lineage_graph
 from services.pendo_tracking import pendo_track
+from services.orchestrator import (
+    CentralOrchestrator,
+    export_workflow_schema,
+    import_workflow_schema,
+    render_workflow_dag_graph,
+    create_default_comfy_workflow_nodes,
+    TaskStatus,
+    TaskPriority,
+    BatchTask,
+    AsyncBatchQueue,
+)
 
 
 
@@ -215,6 +226,23 @@ if "whisper_srt" not in st.session_state:
     st.session_state["whisper_srt"] = ""
 if "whisper_filename" not in st.session_state:
     st.session_state["whisper_filename"] = "subtitles.srt"
+
+# Initialize ComfyUI Workflow Studio Session States
+if "comfy_nodes" not in st.session_state:
+    st.session_state["comfy_nodes"] = create_default_comfy_workflow_nodes()
+if "comfy_active_node_id" not in st.session_state:
+    st.session_state["comfy_active_node_id"] = "node_1"
+if "comfy_workflow_name" not in st.session_state:
+    st.session_state["comfy_workflow_name"] = "ComfyUI_FLUX_Workflow"
+if "comfy_batch_queue" not in st.session_state:
+    st.session_state["comfy_batch_queue"] = AsyncBatchQueue(
+        orchestrator=None,
+        b2_id=st.session_state.get("b2_key_id"),
+        b2_key=st.session_state.get("b2_application_key"),
+        b2_bucket=st.session_state.get("b2_bucket_name")
+    )
+if "comfy_queue_counter" not in st.session_state:
+    st.session_state["comfy_queue_counter"] = 1
 
 # Custom Premium DESIGN SYSTEM CSS Injection
 st.markdown(
@@ -704,12 +732,13 @@ st.markdown(
 )
 
 # Define Main Application Workspaces
-tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8 = st.tabs(
+tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9 = st.tabs(
     [
         "🎨 Manga & Comic Studio",
         "📖 Light Novel Factory",
         "🎙️ Whisper Subtitle Hub",
         "🤖 Agent Continuity Loop",
+        "⚡ ComfyUI Workflow Studio",
         "🗄️ Backblaze B2 Vault",
         "🛡️ Security & Provenance",
         "📊 Analytics & System Health",
@@ -1740,8 +1769,322 @@ with tab4:
                 "No Storyboard generation executed yet. Customize panels and run the Agent Loop to render!"
             )
 
-# ==================== TAB 5: BACKBLAZE B2 VAULT ARCHIVE ====================
+# ==================== TAB 5: COMFYUI WORKFLOW STUDIO & BATCH QUEUE ====================
 with tab5:
+    st.markdown(
+        '<div class="section-header">⚡ ComfyUI Workflow Studio & Async Batch Queue</div>',
+        unsafe_allow_html=True,
+    )
+
+    # Top Action Bar: Workflow Name, Preset Selector, Export & Import
+    top_col1, top_col2, top_col3 = st.columns([2, 2, 2])
+
+    with top_col1:
+        st.session_state["comfy_workflow_name"] = st.text_input(
+            "Workflow Name",
+            value=st.session_state.get("comfy_workflow_name", "ComfyUI_FLUX_Workflow"),
+            key="comfy_name_input",
+        )
+
+    with top_col2:
+        preset_choice = st.selectbox(
+            "Load Workflow Preset",
+            options=["FLUX.1 Txt2Img Standard", "Multi-Prompt LLM Chain", "Minimal Test DAG"],
+            key="comfy_preset_select",
+        )
+        if st.button("🔄 Reset to Preset", key="reset_preset_btn", use_container_width=True):
+            if preset_choice == "FLUX.1 Txt2Img Standard":
+                st.session_state["comfy_nodes"] = create_default_comfy_workflow_nodes()
+            elif preset_choice == "Multi-Prompt LLM Chain":
+                st.session_state["comfy_nodes"] = [
+                    {
+                        "id": "node_prompt_1",
+                        "type": "PromptInput",
+                        "title": "Base Concept Prompt",
+                        "inputs": {},
+                        "outputs": ["prompt_text"],
+                        "params": {"prompt": "A futuristic metropolis at twilight, cyberpunk style"},
+                        "properties": {"prompt": "A futuristic metropolis at twilight, cyberpunk style"}
+                    },
+                    {
+                        "id": "node_expand_1",
+                        "type": "TextGenerate",
+                        "title": "LLM Prompt Expander",
+                        "inputs": {"prompt": {"node_id": "node_prompt_1", "output": "prompt_text"}},
+                        "outputs": ["expanded_text"],
+                        "params": {"model": "Qwen/Qwen2.5-7B-Instruct", "modality": "text"},
+                        "properties": {"model": "Qwen/Qwen2.5-7B-Instruct", "modality": "text"}
+                    },
+                    {
+                        "id": "node_gen_1",
+                        "type": "ImageGenerate",
+                        "title": "FLUX Image Generator",
+                        "inputs": {"prompt": {"node_id": "node_expand_1", "output": "expanded_text"}},
+                        "outputs": ["image_bytes"],
+                        "params": {"model": "black-forest-labs/FLUX.1-schnell", "modality": "image", "seed": 42},
+                        "properties": {"model": "black-forest-labs/FLUX.1-schnell", "modality": "image", "seed": 42}
+                    },
+                    {
+                        "id": "node_vault_1",
+                        "type": "VaultSave",
+                        "title": "Backblaze B2 Archival",
+                        "inputs": {"asset": {"node_id": "node_gen_1", "output": "image_bytes"}},
+                        "outputs": ["vault_url"],
+                        "params": {"file_name": "metropolis_cyberpunk.png"},
+                        "properties": {"file_name": "metropolis_cyberpunk.png"}
+                    }
+                ]
+            else:
+                st.session_state["comfy_nodes"] = [
+                    {
+                        "id": "node_1",
+                        "type": "PromptInput",
+                        "title": "Test Prompt",
+                        "inputs": {},
+                        "outputs": ["prompt_text"],
+                        "params": {"prompt": "Simple test prompt"},
+                        "properties": {"prompt": "Simple test prompt"}
+                    },
+                    {
+                        "id": "node_2",
+                        "type": "ImageGenerate",
+                        "title": "Test Generator",
+                        "inputs": {"prompt": {"node_id": "node_1", "output": "prompt_text"}},
+                        "outputs": ["image_bytes"],
+                        "params": {"model": "black-forest-labs/FLUX.1-schnell"},
+                        "properties": {"model": "black-forest-labs/FLUX.1-schnell"}
+                    }
+                ]
+            if st.session_state["comfy_nodes"] and st.session_state["comfy_nodes"][0].get("id"):
+                st.session_state["comfy_active_node_id"] = st.session_state["comfy_nodes"][0]["id"]
+            st.success("Loaded workflow preset successfully!")
+            st.rerun()
+
+    with top_col3:
+        try:
+            export_json = export_workflow_schema(st.session_state["comfy_nodes"])
+        except Exception as e:
+            export_json = "{}"
+        st.download_button(
+            label="📥 Export .genblaze.json",
+            data=export_json,
+            file_name=f"{st.session_state.get('comfy_workflow_name', 'ComfyUI_FLUX_Workflow')}.genblaze.json",
+            mime="application/json",
+            key="export_comfy_json_btn",
+            use_container_width=True,
+        )
+
+    # Import Expander
+    with st.expander("📂 Import Workflow Schema (.genblaze.json)", expanded=False):
+        uploaded_file = st.file_uploader(
+            "Choose a .genblaze.json workflow file",
+            type=["json"],
+            key="comfy_import_uploader",
+        )
+        if uploaded_file is not None:
+            try:
+                content = uploaded_file.read().decode("utf-8")
+                imported_nodes = import_workflow_schema(content)
+                if imported_nodes:
+                    st.session_state["comfy_nodes"] = imported_nodes
+                    if imported_nodes and imported_nodes[0].get("id"):
+                        st.session_state["comfy_active_node_id"] = imported_nodes[0]["id"]
+                    st.success(f"✅ Successfully imported and validated {len(imported_nodes)} nodes (DAG Cycle Check Passed!)")
+                    st.rerun()
+                else:
+                    st.error("Failed to parse valid node DAG from uploaded JSON.")
+            except Exception as ex:
+                st.error(f"DAG Import Validation Error: {ex}")
+
+    st.markdown("---")
+
+    # Split Workspace: Visual Graphviz Renderer (Left) vs Node Inspector (Right)
+    col_dag, col_inspector = st.columns([7, 5])
+
+    with col_dag:
+        st.subheader("🖼️ Visual Workflow DAG Topology")
+        try:
+            dag_graph = render_workflow_dag_graph(st.session_state["comfy_nodes"])
+            st.graphviz_chart(dag_graph, use_container_width=True)
+        except Exception as graph_err:
+            st.warning(f"Visual rendering notice: {graph_err}")
+
+        st.markdown("**Click to Inspect / Edit Node Parameters:**")
+        nodes_count = len(st.session_state["comfy_nodes"])
+        if nodes_count > 0:
+            chip_cols = st.columns(min(nodes_count, 6))
+            for idx, node in enumerate(st.session_state["comfy_nodes"]):
+                col_idx = idx % len(chip_cols)
+                node_id = node.get("id", f"node_{idx}")
+                is_active = (node_id == st.session_state.get("comfy_active_node_id"))
+                btn_label = f"{'🟢' if is_active else '⚪'} {node.get('title', node.get('type', 'Node'))}"
+                if chip_cols[col_idx].button(btn_label, key=f"chip_{node_id}", use_container_width=True):
+                    st.session_state["comfy_active_node_id"] = node_id
+                    st.rerun()
+
+    with col_inspector:
+        st.subheader("⚙️ Node Parameter Editor & Inspector")
+        active_id = st.session_state.get("comfy_active_node_id", "node_1")
+        active_node = next((n for n in st.session_state["comfy_nodes"] if n.get("id") == active_id), None)
+
+        if active_node:
+            st.info(f"Editing Node: **{active_node.get('id')}** ({active_node.get('type')})")
+            
+            node_title = st.text_input("Node Title", value=active_node.get("title", active_node.get("type")), key="edit_node_title_in")
+            active_node["title"] = node_title
+            
+            params = active_node.get("params")
+            if params is None:
+                params = active_node.get("properties", {})
+                active_node["params"] = params
+
+            n_type = active_node.get("type")
+            if n_type in ("PromptInput", "CLIP Text Encode"):
+                prompt_val = st.text_area("Prompt Text", value=str(params.get("prompt", "")), height=100, key="edit_prompt_in")
+                params["prompt"] = prompt_val
+                active_node["properties"] = params
+            elif n_type in ("ImageGenerate", "KSampler", "Load Checkpoint"):
+                model_val = st.text_input("Model Identifier", value=str(params.get("model", "black-forest-labs/FLUX.1-schnell")), key="edit_model_in")
+                params["model"] = model_val
+                seed_val = st.number_input("Seed", value=int(params.get("seed", 42)), key="edit_seed_in")
+                params["seed"] = seed_val
+                steps_val = st.slider("Steps", min_value=1, max_value=100, value=int(params.get("steps", 20)), key="edit_steps_in")
+                params["steps"] = steps_val
+                cfg_val = st.slider("CFG Scale", min_value=1.0, max_value=20.0, value=float(params.get("cfg", 7.0)), key="edit_cfg_in")
+                params["cfg"] = cfg_val
+                active_node["properties"] = params
+            elif n_type in ("VaultSave", "Save Image"):
+                fname_val = st.text_input("Vault Target Filename", value=str(params.get("file_name", "output.png")), key="edit_fname_in")
+                params["file_name"] = fname_val
+                active_node["properties"] = params
+            else:
+                st.write("Node Parameters:", params)
+
+            st.success("Node configuration active in session.")
+        else:
+            st.warning("No node selected. Click a node chip on the left to edit parameters.")
+
+    st.markdown("---")
+
+    # Execution & Batch Queue Dispatch Controls
+    st.subheader("🚀 Batch Execution & Dispatcher")
+    exec_col1, exec_col2, exec_col3 = st.columns([2, 2, 2])
+
+    with exec_col1:
+        batch_size = st.slider("Batch Runs Count", min_value=1, max_value=10, value=1, key="comfy_batch_slider")
+    with exec_col2:
+        priority_str = st.select_slider("Queue Priority", options=["LOW", "NORMAL", "HIGH", "CRITICAL"], value="NORMAL", key="comfy_priority_select")
+    with exec_col3:
+        auto_vault_sync = st.checkbox("Auto-Archive to Backblaze B2 Vault", value=True, key="comfy_autovault_chk")
+
+    trig_col1, trig_col2 = st.columns([1, 1])
+    with trig_col1:
+        if st.button("⚡ Execute Workflow Synchronously", key="exec_now_btn", use_container_width=True):
+            if is_intact:
+                with st.spinner("Executing ComfyUI Workflow DAG..."):
+                    secure_increment_tries()
+                    orchestrator = CentralOrchestrator(api_token=get_active_token())
+                    ok, msg, res = orchestrator.execute_workflow_dag(st.session_state["comfy_nodes"])
+                    if ok:
+                        st.success(f"DAG Execution Succeeded! {msg}")
+                        st.json(res)
+                    else:
+                        st.error(f"DAG Execution Failed: {msg}")
+            else:
+                st.error("Security integrity violation detected.")
+
+    with trig_col2:
+        if st.button("🚀 Enqueue Batch Jobs", key="enqueue_batch_btn", use_container_width=True):
+            queue_mgr: AsyncBatchQueue = st.session_state["comfy_batch_queue"]
+            queue_mgr.b2_id = st.session_state.get("b2_key_id")
+            queue_mgr.b2_key = st.session_state.get("b2_application_key")
+            queue_mgr.b2_bucket = st.session_state.get("b2_bucket_name")
+            if get_active_token():
+                queue_mgr.orchestrator = CentralOrchestrator(api_token=get_active_token())
+
+            p_map = {"LOW": 3, "NORMAL": 2, "HIGH": 1, "CRITICAL": 0}
+            p_val = p_map.get(priority_str, 2)
+
+            for i in range(batch_size):
+                t_id = f"JOB-{st.session_state['comfy_queue_counter']:04d}"
+                st.session_state['comfy_queue_counter'] += 1
+                queue_mgr.enqueue(
+                    task_type="comfy_workflow",
+                    payload={"nodes": st.session_state["comfy_nodes"]},
+                    priority=p_val,
+                    name=f"{st.session_state.get('comfy_workflow_name', 'ComfyUI Workflow')} Run #{i+1}",
+                    auto_vault=auto_vault_sync,
+                    task_id=t_id
+                )
+            st.success(f"Enqueued {batch_size} job(s) to Async Batch Queue!")
+            st.rerun()
+
+    st.markdown("---")
+
+    # Async Batch Queue Monitoring Dashboard
+    st.subheader("📊 Async Batch Execution Queue Monitor")
+    
+    queue_mgr: AsyncBatchQueue = st.session_state["comfy_batch_queue"]
+    metrics = queue_mgr.get_queue_metrics()
+    
+    m1, m2, m3, m4 = st.columns(4)
+    m1.metric("Total Jobs", metrics["total_tasks"])
+    m2.metric("Queued / Pending", metrics["pending_count"])
+    m3.metric("Running", metrics["running_count"])
+    m4.metric("Completed", metrics["completed_count"])
+
+    all_tasks = queue_mgr.list_tasks()
+    if not all_tasks:
+        st.info("Batch Queue is currently empty. Enqueue jobs above to monitor execution.")
+    else:
+        for job in all_tasks:
+            with st.container():
+                status_icon = "🟢" if job["status"] == "completed" else ("🟡" if job["status"] == "running" else ("🔴" if job["status"] == "failed" else "⏳"))
+                st.markdown(f"**Job ID: {job['task_id']}** | Name: `{job['name']}` | Priority: `{job['priority']}` | Status: {status_icon} **{job['status'].upper()}**")
+                st.progress(float(job["progress"]) / 100.0)
+                
+                b2_status = job.get("b2_vault_status", {})
+                if b2_status.get("archived") and b2_status.get("presigned_url"):
+                    st.markdown(f"📦 [Stream Asset Direct from B2 Vault CDN]({b2_status['presigned_url']})")
+                elif b2_status.get("error"):
+                    st.caption(f"Vault Status: {b2_status['error']}")
+                    
+                with st.expander(f"Task Logs & Telemetry ({job['task_id']})", expanded=False):
+                    for log_msg in job.get("status_log", []):
+                        st.text(log_msg)
+                    if job.get("error"):
+                        st.error(f"Task Error: {job['error']}")
+
+        q_btn1, q_btn2 = st.columns([1, 1])
+        with q_btn1:
+            if st.button("▶️ Process Next Queued Job", key="proc_next_job_btn", use_container_width=True):
+                queue_mgr.b2_id = st.session_state.get("b2_key_id")
+                queue_mgr.b2_key = st.session_state.get("b2_application_key")
+                queue_mgr.b2_bucket = st.session_state.get("b2_bucket_name")
+                if get_active_token():
+                    queue_mgr.orchestrator = CentralOrchestrator(api_token=get_active_token())
+
+                res = queue_mgr.process_next()
+                if res:
+                    st.success(f"Processed job '{res['task_id']}' -> Status: {res['status']}")
+                else:
+                    st.info("No queued jobs pending in queue.")
+                st.rerun()
+
+        with q_btn2:
+            if st.button("⚡ Process All Queued Jobs", key="proc_all_jobs_btn", use_container_width=True):
+                queue_mgr.b2_id = st.session_state.get("b2_key_id")
+                queue_mgr.b2_key = st.session_state.get("b2_application_key")
+                queue_mgr.b2_bucket = st.session_state.get("b2_bucket_name")
+                if get_active_token():
+                    queue_mgr.orchestrator = CentralOrchestrator(api_token=get_active_token())
+
+                results = queue_mgr.process_all()
+                st.success(f"Processed {len(results)} job(s)!")
+                st.rerun()
+
+# ==================== TAB 6: BACKBLAZE B2 VAULT ARCHIVE ====================
+with tab6:
     st.markdown(
         '<div class="section-header">🗄️ Backblaze B2 Vault Archive & Spatial Time Travel</div>',
         unsafe_allow_html=True,
@@ -2573,8 +2916,8 @@ with tab5:
 
             st.markdown("</div>", unsafe_html=True)
 
-# ==================== TAB 6: SECURITY & PROVENANCE CENTER ====================
-with tab6:
+# ==================== TAB 7: SECURITY & PROVENANCE CENTER ====================
+with tab7:
     st.markdown('<div class="section-header">🛡️ Security, Provenance & Governance Suite</div>', unsafe_html=True)
 
     col_sec1, col_sec2 = st.columns([1, 1])
@@ -2628,8 +2971,8 @@ with tab6:
         st.json(scope_res)
         st.markdown('</div>', unsafe_html=True)
 
-# ==================== TAB 7: ANALYTICS & SYSTEM HEALTH ====================
-with tab7:
+# ==================== TAB 8: ANALYTICS & SYSTEM HEALTH ====================
+with tab8:
     st.markdown('<div class="section-header">📊 Studio Analytics & Vault Health Telemetry</div>', unsafe_html=True)
 
     col_stat1, col_stat2, col_stat3, col_stat4 = st.columns(4)
@@ -2668,8 +3011,8 @@ with tab7:
         st.markdown(f"**Est. B2 Storage**: `{costs['estimated_b2_mb']:.2f}` MB")
         st.markdown('</div>', unsafe_html=True)
 
-# ==================== TAB 8: SECURE CODE INSPECTOR ====================
-with tab8:
+# ==================== TAB 9: SECURE CODE INSPECTOR ====================
+with tab9:
     st.markdown(
         '<div class="section-header">🔒 Secure Code Inspector</div>',
         unsafe_html=True,
