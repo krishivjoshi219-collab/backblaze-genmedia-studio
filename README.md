@@ -2,7 +2,11 @@
 
 # 🌌 Backblaze GenMedia Studio
 
-<img src="https://readme-typing-svg.demolab.com?font=Space+Grotesk&weight=800&size=28&pause=1000&color=FF3366&center=true&vCenter=true&width=700&lines=Multi-Modal+Generative+Media+Studio;Powered+by+Genblaze+SDK+%26+Backblaze+B2;C2PA+Cryptographic+Content+Provenance;Streamlit+Community+Cloud+Deployable" alt="Typing Banner" />
+<img src="https://readme-typing-svg.demolab.com?font=Space+Grotesk&weight=800&size=28&pause=1000&color=FF3366&center=true&vCenter=true&width=700&lines=Multi-Modal+Generative+Media+Studio;Powered+by+Genblaze+SDK+%26+Backblaze+B2;C2PA+Cryptographic+Content+Provenance;Streamlit+Community+Cloud+Deployable" alt="Typing Banner Main" />
+
+<br />
+
+<img src="https://readme-typing-svg.demolab.com?font=Outfit&weight=600&size=18&pause=1500&color=00C6FF&center=true&vCenter=true&width=700&lines=%E2%9A%A1+Automatic+Streamlit+Cloud+Secrets+Handling;%F0%9F%92%BE+Presigned+HTML5+B2+Media+CDN+Streaming;%F0%9F%A4%96+ThresholdEvaluator+Self-Correction+Loops" alt="Typing Banner Sub" />
 
 **Next-Generation Multi-Modal Generative Media Orchestration, C2PA Cryptographic Provenance & Backblaze B2 Media Cloud**
 
@@ -62,17 +66,30 @@ Modern digital media generation—encompassing manga creation, graphic novel ass
 **Backblaze GenMedia Studio** solves these challenges by combining **Genblaze SDK** multi-step pipeline orchestration with **Backblaze B2 Cloud Storage**, **Streamlit Community Cloud Deployment**, and **C2PA Cryptographic Provenance Verification** inside an intuitive Streamlit studio application.
 
 ```mermaid
-graph TD
-    A[👤 User Prompt & Storyboard Spec] --> B[⚡ Genblaze Pipeline Orchestrator]
-    B --> C[🎨 Multi-Modal Generation: FLUX.1 / Qwen2.5 / Whisper / MusicGen]
-    C --> D{🤖 Genblaze ThresholdEvaluator}
-    D -- Score < 0.75 (Failed) --> E[🔄 Auto-Refine Prompts & Stabilizer Seeds]
-    E --> B
-    D -- Score >= 0.75 (Passed) --> F[🔐 C2PA Cryptographic Signatures HMAC-SHA256]
-    F --> G[💾 Backblaze B2 Cloud Storage Vault]
-    G --> H[🚀 Presigned HTML5 CDN Stream & Storyboard Zip Archive]
-    G --> I[🌳 Graphviz Ancestry Lineage Graph]
+sequenceDiagram
+    autonumber
+    actor User as 👤 Creator / Judge
+    participant App as 🌌 Streamlit App
+    participant Genblaze as ⚡ Genblaze Pipeline
+    participant HF as 🤖 Hugging Face API
+    participant C2PA as 🔐 C2PA Provenance
+    participant B2 as 💾 Backblaze B2 Vault
+
+    User->>App: Submits Storyboard Concept & Prompt Spec
+    App->>Genblaze: Initializing Multi-Step Pipeline (Image + Audio)
+    Genblaze->>HF: Executes FLUX.1 & MusicGen Models
+    HF-->>Genblaze: Returns Generated Panels & Audio Tracks
+    Genblaze->>Genblaze: ThresholdEvaluator Consistency Audit
+    alt Score < 0.75
+        Genblaze->>Genblaze: Auto-refine prompts with visual stabilizers & retry
+    end
+    Genblaze->>C2PA: Inject HMAC-SHA256 Signatures & Manifest
+    C2PA-->>App: Cryptographically Signed Media Assets
+    App->>B2: Parallel Multi-Threaded Vault Archive (b2sdk)
+    B2-->>App: Returns Authenticated Presigned CDN Stream URLs
+    App-->>User: Displays Interactive Canvas, B2 Player & Graphviz Lineage Tree
 ```
+
 
 ---
 
