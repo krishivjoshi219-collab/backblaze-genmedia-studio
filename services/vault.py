@@ -371,10 +371,24 @@ def tag_and_index_b2_asset(b2_id: str, b2_key: str, b2_bucket: str, search_query
         logger.error(f"B2 asset tagging search failed: {e}")
         return False, str(e), []
 
+def export_b2_s3_migration_manifest(b2_id: str, b2_key: str, b2_bucket: str) -> tuple[bool, str, str]:
+    """
+    FEATURE 5: B2 Cloud Migration & S3 Interoperability Exporter.
+    Generates S3-compatible endpoints and B2 migration manifests for production infrastructure.
+    """
+    try:
+        manifest = {
+            "provider": "Backblaze B2 Cloud Storage",
+            "s3_compatible_endpoint": "https://s3.us-west-004.backblazeb2.com",
+            "bucket_name": b2_bucket,
+            "export_timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+            "instructions": "Use S3-compatible client tools (AWS CLI, Rclone, Cyberduck) with B2 Key ID and Secret Key."
+        }
         return True, "S3 Migration Manifest Generated Successfully", json.dumps(manifest, indent=2)
     except Exception as e:
         logger.error(f"Failed to generate migration manifest: {e}")
         return False, str(e), ""
+
 
 def configure_b2_cors_policy(b2_id: str, b2_key: str, b2_bucket: str, allowed_origins: list = None) -> tuple[bool, str]:
     """
