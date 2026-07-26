@@ -271,3 +271,46 @@ def parallel_upload_vault(b2_id: str, b2_key: str, b2_bucket: str, panels: list,
     except Exception as e:
         logger.error(f"Parallel upload to B2 failed in Agent Studio: {e}")
         return False, str(e), []
+
+def interpolate_scene_prompts(start_prompt: str, end_prompt: str, steps_count: int = 5) -> list[str]:
+    """
+    FEATURE 8: Genblaze Custom Prompt Interpolation Engine.
+    Smoothly interpolates prompt descriptions across keyframe panels for visual story continuity.
+    """
+    interpolated = []
+    modifiers = [
+        "wide establishing shot",
+        "medium camera track",
+        "close-up character focus",
+        "dynamic motion blur keyframe",
+        "dramatic climax angle"
+    ]
+    for i in range(steps_count):
+        mod = modifiers[i % len(modifiers)]
+        if i == 0:
+            interpolated.append(f"{start_prompt}, {mod}")
+        elif i == steps_count - 1:
+            interpolated.append(f"{end_prompt}, {mod}")
+        else:
+            weight = (i / (steps_count - 1)) * 100
+            interpolated.append(f"Transition scene [{weight:.0f}%]: {start_prompt} leading towards {end_prompt}, {mod}")
+    return interpolated
+
+def benchmark_pipeline_runs(results_list: list) -> dict:
+    """
+    FEATURE 9: Genblaze Quality Control Benchmarking Suite.
+    Generates quantitative benchmark metrics comparing visual continuity scores across run iterations.
+    """
+    if not results_list:
+        return {"average_score": 0.0, "max_score": 0.0, "min_score": 0.0, "total_runs": 0}
+    scores = [r.get("score", 0.0) for r in results_list if isinstance(r, dict)]
+    if not scores:
+        return {"average_score": 0.0, "max_score": 0.0, "min_score": 0.0, "total_runs": 0}
+    return {
+        "total_runs": len(scores),
+        "average_score": sum(scores) / len(scores),
+        "max_score": max(scores),
+        "min_score": min(scores),
+        "pass_rate_percent": (sum(1 for s in scores if s >= 0.75) / len(scores)) * 100.0
+    }
+

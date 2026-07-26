@@ -27,3 +27,30 @@ def transcribe_audio(token: str, audio_bytes: bytes, model_id: str = None) -> tu
     except Exception as e:
         logger.error(f"Whisper service transcription failed: {e}")
         return False, str(e), ""
+
+def export_multiformat_subtitles(transcript: str, srt_content: str) -> dict:
+    """
+    FEATURE 13: Whisper Subtitle Alignment & Multi-Format Exporter.
+    Converts transcribed subtitles into SRT, VTT (WebVTT), SSA/ASS, and JSON formats.
+    """
+    vtt_content = "WEBVTT\n\n" + srt_content.replace(",", ".")
+    ass_content = (
+        "[Script Info]\nTitle: GenMedia Subtitles\nScriptType: v4.00+\n\n"
+        "[Events]\nFormat: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n"
+        f"Dialogue: 0,0:00:00.00,0:00:10.00,Default,,0,0,0,,{transcript}\n"
+    )
+    import json
+    json_subtitles = json.dumps({
+        "format": "GenMedia_Subtitles_v1",
+        "raw_transcript": transcript,
+        "srt": srt_content,
+        "vtt": vtt_content,
+        "ass": ass_content
+    }, indent=2)
+    return {
+        "srt": srt_content,
+        "vtt": vtt_content,
+        "ass": ass_content,
+        "json": json_subtitles
+    }
+

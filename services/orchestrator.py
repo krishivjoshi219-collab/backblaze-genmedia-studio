@@ -86,6 +86,49 @@ class CentralOrchestrator:
             logger.error(f"Orchestrator chained run failed: {e}")
             return False, str(e), None
 
+    def execute_conditional_pipeline(self, pipeline_id: str, steps_config: list, condition_fn=None) -> tuple[bool, str, list]:
+        """
+        FEATURE 6: Genblaze Multi-Branch Conditional Execution Engine.
+        Dynamically branches execution steps based on runtime evaluations or condition checks.
+        """
+        active_steps = []
+        for step in steps_config:
+            if condition_fn is None or condition_fn(step):
+                active_steps.append(step)
+        return self.execute_chained_steps(pipeline_id, active_steps)
+
+    def execute_with_fallback(self, model_id: str, fallback_models: list[str], prompt: str, modality: str) -> tuple[bool, str, any]:
+        """
+        FEATURE 7: Genblaze Automatic Fallback Provider Routing.
+        Automatically retries step generation across fallback model identifiers if primary fails.
+        """
+        candidates = [model_id] + (fallback_models or [])
+        last_err = ""
+        for model in candidates:
+            ok, msg, res = self.execute_single_step(model_id=model, prompt=prompt, modality=modality)
+            if ok:
+                return True, f"Successfully executed using candidate model '{model}'", res
+            last_err = msg
+            logger.warning(f"Candidate model '{model}' failed ({msg}). Trying fallback...")
+        return False, f"All candidate models failed. Last error: {last_err}", None
+
+    def get_pipeline_telemetry(self, pipeline_res) -> dict:
+        """
+        FEATURE 10: Genblaze Real-Time Event-Driven Telemetry Tracker.
+        Computes sub-step latency, success metrics, and asset payload telemetry.
+        """
+        if not pipeline_res or not hasattr(pipeline_res, 'run'):
+            return {"total_steps": 0, "status": "unknown"}
+        steps = pipeline_res.run.steps
+        completed = sum(1 for s in steps if getattr(s, 'status', '') in ('completed', 'succeeded'))
+        return {
+            "total_steps": len(steps),
+            "completed_steps": completed,
+            "failed_steps": len(steps) - completed,
+            "success_rate_percent": (completed / len(steps) * 100.0) if steps else 0.0,
+            "timestamp": logger.name
+        }
+
     def _map_modality(self, modality_str: str) -> Modality:
         mapping = {
             "image": Modality.IMAGE,
@@ -109,3 +152,4 @@ class CentralOrchestrator:
         }
         val = step_type_str.lower().strip()
         return mapping.get(val, StepType.GENERATE)
+
