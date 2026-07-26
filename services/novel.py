@@ -112,3 +112,31 @@ def compile_epub_ebook_manifest(title: str, jp_text: str, en_text: str) -> tuple
         logger.error(f"EPUB export failed: {e}")
         return False, str(e), ""
 
+def synthesize_multispeaker_voiceover(token: str, dialogue_lines: list[dict]) -> tuple[bool, str, list]:
+    """
+    FEATURE 28: Multi-Speaker TTS Voiceover Audio Synthesizer.
+    Assigns distinct voice profiles to light novel dialogue speakers and generates multi-track audio clips.
+    """
+    try:
+        orchestrator = CentralOrchestrator(api_token=token)
+        audio_tracks = []
+        for idx, line in enumerate(dialogue_lines):
+            speaker = line.get("speaker", f"Speaker_{idx + 1}")
+            text = line.get("text", "")
+            ok, msg, res = orchestrator.execute_single_step(
+                model_id=MODEL_CATALOG["audio_generate"],
+                prompt=f"Voice synthesis for {speaker}: {text}",
+                modality="audio"
+            )
+            if ok:
+                audio_tracks.append({
+                    "speaker": speaker,
+                    "text": text,
+                    "audio_path": res.assets[0].metadata.get("audio_path", "")
+                })
+        return True, f"Synthesized {len(audio_tracks)} dialogue voiceover tracks!", audio_tracks
+    except Exception as e:
+        logger.error(f"Multi-speaker voiceover synthesis failed: {e}")
+        return False, str(e), []
+
+

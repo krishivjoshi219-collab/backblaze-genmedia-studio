@@ -9,9 +9,26 @@ import logging
 from PIL import Image
 
 # Import Modular Services
-from services.manga import compile_manga_panel, colorize_manga_panel, synthesize_storyboard_reel_html
-from services.novel import write_japanese_novel_scene, translate_novel_text, generate_audio_dramatization, compile_epub_ebook_manifest
-from services.whisper import transcribe_audio, export_multiformat_subtitles
+from services.manga import (
+    compile_manga_panel,
+    colorize_manga_panel,
+    synthesize_storyboard_reel_html,
+    extract_manga_bubble_ocr,
+    create_character_anchor_profile,
+    generate_custom_manga_grid,
+)
+from services.novel import (
+    write_japanese_novel_scene,
+    translate_novel_text,
+    generate_audio_dramatization,
+    compile_epub_ebook_manifest,
+    synthesize_multispeaker_voiceover,
+)
+from services.whisper import (
+    transcribe_audio,
+    export_multiformat_subtitles,
+    optimize_subtitle_timing,
+)
 from services.vault import (
     test_b2_connection,
     archive_to_b2,
@@ -23,9 +40,19 @@ from services.vault import (
     upload_large_b2_media_chunked,
     tag_and_index_b2_asset,
     export_b2_s3_migration_manifest,
+    configure_b2_cors_policy,
+    get_b2_vault_health_metrics,
+    create_bulk_b2_vault_zip,
+    diff_b2_file_revisions,
+    simulate_b2_glacier_archival,
 )
 from services.diagnostics import check_system_package_health, SentinelGuard, ScoutParser
-from services.agent_studio import run_agent_loop, parallel_upload_vault, interpolate_scene_prompts, benchmark_pipeline_runs
+from services.agent_studio import (
+    run_agent_loop,
+    parallel_upload_vault,
+    interpolate_scene_prompts,
+    benchmark_pipeline_runs,
+)
 from services.security import (
     SecureBalanceSandbox,
     TokenScrubber,
@@ -34,10 +61,16 @@ from services.security import (
     TeamWorkspaceManager,
     generate_provenance_certificate_text,
     calculate_generation_quota_cost,
+    embed_steganographic_signature,
+    rotate_c2pa_signing_keys,
+    audit_token_scopes,
+    record_security_audit_log,
+    evaluate_geofencing_policy,
 )
 from services.temporal_vault import list_historical_versions, download_historical_file
 from services.lineage import render_lineage_ui, build_lineage_graph
 from services.pendo_tracking import pendo_track
+
 
 
 # Setup Logger for UI App context
@@ -2571,15 +2604,34 @@ with tab6:
                     st.error(msg_a)
 
         st.markdown("---")
-        st.subheader("📝 Feature 13: Multi-Format Subtitles Exporter")
+        st.subheader("📝 Feature 13: Multi-Format Subtitles Exporter & Pace Optimizer (Feature 29)")
         raw_tr = st.session_state.get("whisper_transcript", "Sora discovers the ancient magic circles are compiled code.")
         raw_srt = st.session_state.get("whisper_srt", "1\n00:00:00,000 --> 00:00:05,000\nSora discovers the ancient magic circles are compiled code.")
         sub_formats = export_multiformat_subtitles(raw_tr, raw_srt)
         st.download_button("📥 Download WebVTT (.vtt)", data=sub_formats["vtt"], file_name="subtitles.vtt", mime="text/vtt")
         st.download_button("📥 Download SSA/ASS (.ass)", data=sub_formats["ass"], file_name="subtitles.ass", mime="text/plain")
         st.download_button("📥 Download Subtitle JSON", data=sub_formats["json"], file_name="subtitles.json", mime="application/json")
+        if st.button("⏱️ Audit Subtitle Reading Pace (Feature 29)"):
+            ok_p, msg_p, pace_metrics = optimize_subtitle_timing(raw_srt)
+            st.json(pace_metrics)
+
+        st.markdown("---")
+        st.subheader("🔍 Feature 26: Manga Speech Bubble OCR Extractor")
+        if st.button("🔤 Extract Dialogue Text via OCR"):
+            ok_ocr, bubbles = extract_manga_bubble_ocr("manga_panel.png")
+            st.write("**Extracted Dialogue Bubbles:**")
+            st.json(bubbles)
 
     with col_f2:
+        st.subheader("👤 Feature 27: Anime Character Anchor Profile")
+        c_name = st.text_input("Character Name", value="Sora")
+        c_hair = st.text_input("Hair Color", value="Silver Blue")
+        c_outfit = st.text_input("Outfit Style", value="Mage Robes with Cyber Glyphs")
+        if st.button("👤 Generate Character Consistency Profile"):
+            profile = create_character_anchor_profile(c_name, c_hair, c_outfit, "Crimson Red")
+            st.json(profile)
+
+        st.markdown("---")
         st.subheader("🔍 Feature 16: C2PA Deepfake Tampering Detector")
         if st.button("🛡️ Run C2PA Tamper Audit", key="btn_tamper_audit"):
             if st.session_state.get("manga_image"):
@@ -2602,19 +2654,26 @@ with tab6:
             st.download_button("📥 Download Certificate (.txt)", data=cert_text, file_name="c2pa_certificate.txt")
 
         st.markdown("---")
-        st.subheader("👥 Feature 17: Team Workspaces (RBAC)")
+        st.subheader("👥 Feature 17 & 38: RBAC Workspaces & API Scope Audit")
         workspace_mgr = TeamWorkspaceManager()
         workspace_mgr.add_member("judge@devpost.com", "Admin")
         workspace_mgr.add_member("creator@genmedia.studio", "Creator")
         st.json({"workspace_members": workspace_mgr.members})
+        scope_res = audit_token_scopes(get_active_token(), b2_id)
+        st.write("**API Scope Audit (Feature 38):**", scope_res["scope_status"])
 
     st.markdown("---")
-    st.subheader("📊 Feature 20: Real-Time Analytics Dashboard")
+    st.subheader("📊 Feature 7 & 20: B2 Vault Health & Analytics Dashboard")
     col_stat1, col_stat2, col_stat3, col_stat4 = st.columns(4)
     col_stat1.metric("Total Generations", st.session_state.get("tries_used", 0))
     col_stat2.metric("C2PA Authenticity Rate", "100%")
     col_stat3.metric("B2 Vault Storage Used", "1.2 MB")
     col_stat4.metric("Pipeline Latency", "1.2s")
+    if b2_configured and st.button("🏥 Run B2 Vault Health Audit (Feature 7)"):
+        ok_vh, msg_vh, metrics_vh = get_b2_vault_health_metrics(b2_id, b2_key, b2_bucket)
+        if ok_vh:
+            st.json(metrics_vh)
+
 
 # ==================== TAB 7: SECURE SEE CODE ====================
 with tab7:

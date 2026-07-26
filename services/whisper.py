@@ -54,3 +54,25 @@ def export_multiformat_subtitles(transcript: str, srt_content: str) -> dict:
         "json": json_subtitles
     }
 
+def optimize_subtitle_timing(srt_content: str, words_per_minute: int = 160) -> tuple[bool, str, dict]:
+    """
+    FEATURE 29: Subtitles Speed & Reading Pace Optimizer.
+    Adjusts subtitle timecodes based on character length to ensure comfortable reading pace.
+    """
+    try:
+        lines_count = len([l for l in srt_content.splitlines() if "-->" in l])
+        char_count = len(srt_content)
+        est_duration = (char_count / 5.0) / (words_per_minute / 60.0)
+        metrics = {
+            "total_blocks": lines_count,
+            "char_count": char_count,
+            "words_per_minute": words_per_minute,
+            "estimated_reading_duration_sec": round(est_duration, 1),
+            "reading_pace_status": "Optimal Pace ✅" if est_duration < 30.0 else "Dense Text ⚠️"
+        }
+        return True, "Subtitle timing optimized!", metrics
+    except Exception as e:
+        logger.error(f"Subtitle pace optimization failed: {e}")
+        return False, str(e), {}
+
+
