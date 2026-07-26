@@ -1,38 +1,49 @@
+<div align="center">
+
 # 🌌 Backblaze GenMedia Studio
 
-> **Next-Generation Multi-Modal Generative Media Orchestration, C2PA Cryptographic Provenance & Backblaze B2 Media Cloud**
->
-> Official Repository Submission for the **Backblaze Generative AI Media Hackathon: Build with Genblaze on B2**.
+<img src="https://readme-typing-svg.demolab.com?font=Space+Grotesk&weight=800&size=28&pause=1000&color=FF3366&center=true&vCenter=true&width=700&lines=Multi-Modal+Generative+Media+Studio;Powered+by+Genblaze+SDK+%26+Backblaze+B2;C2PA+Cryptographic+Content+Provenance;Streamlit+Community+Cloud+Deployable" alt="Typing Banner" />
 
-[![Backblaze B2 Cloud Storage](https://img.shields.io/badge/Backblaze-B2_Cloud_Storage-blue?logo=backblaze)](https://www.backblaze.com/cloud-storage)
-[![Genblaze SDK](https://img.shields.io/badge/Genblaze-SDK_Pipeline-orange)](https://github.com/backblaze-labs/genblaze)
-[![Streamlit Framework](https://img.shields.io/badge/Streamlit-1.30+-FF4B4B?logo=streamlit)](https://streamlit.io/)
-[![Python Version](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python)](https://www.python.org/)
-[![Graphviz Engine](https://img.shields.io/badge/Graphviz-Lineage_Graph-purple)](https://graphviz.org/)
+**Next-Generation Multi-Modal Generative Media Orchestration, C2PA Cryptographic Provenance & Backblaze B2 Media Cloud**
+
+*Official Submission for the **Backblaze Generative AI Media Hackathon: Build with Genblaze on B2***
+
+---
+
+[![Deploy to Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://streamlit.io/cloud)
+[![Backblaze B2 Cloud Storage](https://img.shields.io/badge/Backblaze-B2_Cloud_Storage-blue?logo=backblaze&style=for-the-badge)](https://www.backblaze.com/cloud-storage)
+[![Genblaze SDK](https://img.shields.io/badge/Genblaze-SDK_Pipeline-orange?style=for-the-badge)](https://github.com/backblaze-labs/genblaze)
+[![Streamlit Community Cloud](https://img.shields.io/badge/Streamlit-Community_Cloud_Ready-FF4B4B?logo=streamlit&style=for-the-badge)](https://streamlit.io/)
+[![Python Version](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&style=for-the-badge)](https://www.python.org/)
+[![Graphviz Engine](https://img.shields.io/badge/Graphviz-Lineage_Graph-purple?style=for-the-badge)](https://graphviz.org/)
+
+</div>
 
 ---
 
 ## 📑 Table of Contents
 1. [Executive Summary & Problem Statement](#-executive-summary--problem-statement)
-2. [Hackathon Alignment & Rule Compliance Matrix](#-hackathon-alignment--rule-compliance-matrix)
-3. [System Architecture & Data Flow](#-system-architecture--data-flow)
-4. [Complete Feature Deep-Dive](#-complete-feature-deep-dive)
-   - [4.1 Manga & Graphic Novel Compiler](#41-manga--graphic-novel-compiler)
-   - [4.2 Light Novel Scene & Localization Engine](#42-light-novel-scene--localization-engine)
-   - [4.3 Whisper Subtitle Transcriber & Subtitles Manifest](#43-whisper-subtitle-transcriber--subtitles-manifest)
-   - [4.4 Autonomous Genblaze Agent Studio](#44-autonomous-genblaze-agent-studio)
-   - [4.5 Backblaze B2 Vault & Spatial Time Travel](#45-backblaze-b2-vault--spatial-time-travel)
-   - [4.6 C2PA Cryptographic Provenance Engine](#46-c2pa-cryptographic-provenance-engine)
-   - [4.7 Security Sandbox & Token Scrubber](#47-security-sandbox--token-scrubber)
-   - [4.8 Visual Lineage Graph & Webhook Dispatcher](#48-visual-lineage-graph--webhook-dispatcher)
-5. [Deep-Dive: Backblaze B2 Integration](#-deep-dive-backblaze-b2-integration)
-6. [Deep-Dive: Genblaze SDK Architecture](#-deep-dive-genblaze-sdk-architecture)
-7. [AI Providers & Models Specification Catalog](#-ai-providers--models-specification-catalog)
-8. [C2PA Metadata Standard Specification](#-c2pa-metadata-standard-specification)
-9. [Installation & Setup Instructions](#-installation--setup-instructions)
-10. [Judges & Evaluators Quickstart Guide](#-judges--evaluators-quickstart-guide)
-11. [Product Feedback for Genblaze SDK](#-product-feedback-for-genblaze-sdk)
-12. [License & Repository Status](#-license--repository-status)
+2. [Streamlit Community Cloud One-Click Deployment](#-streamlit-community-cloud-one-click-deployment)
+3. [Animated Feature Showcase](#-animated-feature-showcase)
+4. [Hackathon Alignment & Rule Compliance Matrix](#-hackathon-alignment--rule-compliance-matrix)
+5. [System Architecture & Data Flow](#-system-architecture--data-flow)
+6. [Complete Feature Deep-Dive](#-complete-feature-deep-dive)
+   - [6.1 Manga & Graphic Novel Compiler](#61-manga--graphic-novel-compiler)
+   - [6.2 Light Novel Scene & Localization Engine](#62-light-novel-scene--localization-engine)
+   - [6.3 Whisper Subtitle Transcriber & Subtitles Manifest](#63-whisper-subtitle-transcriber--subtitles-manifest)
+   - [6.4 Autonomous Genblaze Agent Studio](#64-autonomous-genblaze-agent-studio)
+   - [6.5 Backblaze B2 Vault & Spatial Time Travel](#65-backblaze-b2-vault--spatial-time-travel)
+   - [6.6 C2PA Cryptographic Provenance Engine](#66-c2pa-cryptographic-provenance-engine)
+   - [6.7 Security Sandbox & Token Scrubber](#67-security-sandbox--token-scrubber)
+   - [6.8 Visual Lineage Graph & Webhook Dispatcher](#68-visual-lineage-graph--webhook-dispatcher)
+7. [Deep-Dive: Backblaze B2 Cloud Storage Integration](#-deep-dive-backblaze-b2-cloud-storage-integration)
+8. [Deep-Dive: Genblaze SDK Architecture](#-deep-dive-genblaze-sdk-architecture)
+9. [AI Providers & Models Specification Catalog](#-ai-providers--models-specification-catalog)
+10. [C2PA Metadata Standard Specification](#-c2pa-metadata-standard-specification)
+11. [Installation & Setup Instructions](#-installation--setup-instructions)
+12. [Judges & Evaluators Quickstart Guide](#-judges--evaluators-quickstart-guide)
+13. [Product Feedback for Genblaze SDK](#-product-feedback-for-genblaze-sdk)
+14. [License & Repository Status](#-license--repository-status)
 
 ---
 
@@ -48,41 +59,143 @@ Modern digital media generation—encompassing manga creation, graphic novel ass
 
 ### The Solution: Backblaze GenMedia Studio
 
-**Backblaze GenMedia Studio** solves these challenges by combining **Genblaze SDK** multi-step pipeline orchestration with **Backblaze B2 Cloud Storage** and **C2PA Cryptographic Provenance Verification** inside an intuitive Streamlit studio application.
+**Backblaze GenMedia Studio** solves these challenges by combining **Genblaze SDK** multi-step pipeline orchestration with **Backblaze B2 Cloud Storage**, **Streamlit Community Cloud Deployment**, and **C2PA Cryptographic Provenance Verification** inside an intuitive Streamlit studio application.
 
-```
-+-----------------------------------------------------------------------------------+
-|                           BACKBLAZE GENMEDIA STUDIO                               |
-+-----------------------------------------------------------------------------------+
-|  +---------------------+  +----------------------+  +--------------------------+  |
-|  | Manga & Novel Suite |  | Autonomous Agent Loop|  | Whisper Transcriber      |  |
-|  +----------+----------+  +----------+-----------+  +------------+-------------+  |
-|             |                        |                       |                    |
-|             v                        v                       v                    |
-|  +-----------------------------------------------------------------------------+  |
-|  |                          Genblaze SDK Pipeline                              |  |
-|  |      [genblaze.Pipeline] ---> [ThresholdEvaluator] ---> [SyncProvider]       |  |
-|  +-----------------------------------+-----------------------------------------+  |
-|                                      |                                            |
-|                                      v                                            |
-|  +-----------------------------------------------------------------------------+  |
-|  |                     C2PA Cryptographic Provenance Engine                     |  |
-|  |         (HMAC-SHA256 Signatures, PNG PngInfo, WAV RIFF Metadata)           |  |
-|  +-----------------------------------+-----------------------------------------+  |
-|                                      |                                            |
-|                                      v                                            |
-|  +-----------------------------------------------------------------------------+  |
-|  |                       Backblaze B2 Cloud Storage Vault                       |  |
-|  |     (b2sdk v2, Spatial Time-Travel, Presigned CDN Streaming, Zip Bundles)     |  |
-|  +-----------------------------------------------------------------------------+  |
-+-----------------------------------------------------------------------------------+
+```mermaid
+graph TD
+    A[👤 User Prompt & Storyboard Spec] --> B[⚡ Genblaze Pipeline Orchestrator]
+    B --> C[🎨 Multi-Modal Generation: FLUX.1 / Qwen2.5 / Whisper / MusicGen]
+    C --> D{🤖 Genblaze ThresholdEvaluator}
+    D -- Score < 0.75 (Failed) --> E[🔄 Auto-Refine Prompts & Stabilizer Seeds]
+    E --> B
+    D -- Score >= 0.75 (Passed) --> F[🔐 C2PA Cryptographic Signatures HMAC-SHA256]
+    F --> G[💾 Backblaze B2 Cloud Storage Vault]
+    G --> H[🚀 Presigned HTML5 CDN Stream & Storyboard Zip Archive]
+    G --> I[🌳 Graphviz Ancestry Lineage Graph]
 ```
 
 ---
 
-## 🏆 Hackathon Alignment & Rule Compliance Matrix
+## ☁️ Streamlit Community Cloud One-Click Deployment
 
-This project was built specifically for the **Backblaze Generative AI Media Hackathon: Build with Genblaze on B2**. Below is a comprehensive matrix detailing how Backblaze GenMedia Studio addresses all official hackathon rules, judging criteria, and platform requirements:
+Backblaze GenMedia Studio is natively optimized for **Streamlit Community Cloud**.
+
+[![Deploy to Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://streamlit.io/cloud)
+
+### ⚙️ How Streamlit Community Cloud Configuration Works
+
+The repository includes pre-configured setup files for zero-friction cloud deployment:
+
+- **[`packages.txt`](file:///home/krishiv/k/backblaze_genmedia_hackathon/packages.txt)**: Installs APT Linux system dependencies (`graphviz`, `ffmpeg`) automatically during container build.
+- **[`.streamlit/config.toml`](file:///home/krishiv/k/backblaze_genmedia_hackathon/.streamlit/config.toml)**: Configures server theme, headless execution mode, and upload boundaries.
+- **[`.streamlit/secrets.toml.template`](file:///home/krishiv/k/backblaze_genmedia_hackathon/.streamlit/secrets.toml.template)**: Provides a secrets template for Cloud Secrets management.
+
+### 🔑 Setting Up Streamlit Cloud Secrets
+
+In your Streamlit Community Cloud dashboard (`App Settings -> Secrets`), paste your credentials:
+
+```toml
+HF_TOKEN = "hf_your_hugging_face_token_here"
+B2_KEY_ID = "your_backblaze_b2_key_id_here"
+B2_APPLICATION_KEY = "your_backblaze_b2_application_key_here"
+B2_BUCKET_NAME = "your_backblaze_b2_bucket_name_here"
+WEBHOOK_URL = "https://discord.com/api/webhooks/your_webhook_id/your_webhook_token"
+```
+
+The application automatically reads `st.secrets` on load via `get_secret()` without requiring manual UI input from judges or users!
+
+---
+
+## 🎬 Animated Feature Showcase
+
+````carousel
+```
++-----------------------------------------------------------------------------+
+|                      🎨 1. MANGA & GRAPHIC NOVEL COMPILER                    |
++-----------------------------------------------------------------------------+
+|  [ Panel 1: Syntax Error ]       | [ Panel 2: Recompiling Runtime ]        |
+|  "WHAT?! MAGIC RUNS ON A         | "YES! WE NEED TO COMPILE THE             |
+|   COMPILER?!"                    |  FIREBALL SPELL NOW!"                    |
+|  --------------------------------+----------------------------------------  |
+|  [ Panel 3: Runtime Execution ]  | PROMPT: Cyberpunk mage debugging runes    |
+|  "EXECUTING SPELL AT RUNTIME"    | GENBLAZE SDK PIPELINE ACTIVE              |
++-----------------------------------------------------------------------------+
+```
+<!-- slide -->
+```
++-----------------------------------------------------------------------------+
+|               📚 2. LIGHT NOVEL SCENE & LOCALIZATION CONSOLE                |
++-----------------------------------------------------------------------------+
+|  [ 日本語 (Japanese Original) ]    | [ English Localized Output ]          |
+|  「――エラーだと？ 馬鹿な、そんな  | "--An error? No way, that's           |
+|   はずはない！」                  |  impossible!"                         |
+|  私は深夜のギルドの片隅で...       | I shouted in the dark corner of the   |
+|                                  | guild hall...                         |
++-----------------------------------------------------------------------------+
+```
+<!-- slide -->
+```
++-----------------------------------------------------------------------------+
+|             🎙️ 3. WHISPER SUBTITLE TRANSCRIBER & SUBTITLE MANIFEST           |
++-----------------------------------------------------------------------------+
+|  1                                                                          |
+|  00:00:00,000 --> 00:00:03,800                                              |
+|  In this scene, Sora discovers that the ancient magic circles are code.     |
+|                                                                             |
+|  2                                                                          |
+|  00:00:03,800 --> 00:00:07,400                                              |
+|  He attempts to debug the loop, hoping to prevent guild destruction.        |
++-----------------------------------------------------------------------------+
+```
+<!-- slide -->
+```
++-----------------------------------------------------------------------------+
+|               🤖 4. AUTONOMOUS GENBLAZE AGENT STUDIO LOOP                   |
++-----------------------------------------------------------------------------+
+|  [Iteration 1] Visual Continuity Score: 0.64 (Threshold: 0.75) ❌ FAILED     |
+|  [Auto-Correction] Appending stabilizers: "consistent style lighting"        |
+|  -------------------------------------------------------------------------  |
+|  [Iteration 2] Visual Continuity Score: 0.82 (Threshold: 0.75) ✅ PASSED     |
+|  Canonical Run Manifest Hash: e3b0c44298fc1c149afbf4c8996fb92427ae...        |
++-----------------------------------------------------------------------------+
+```
+<!-- slide -->
+```
++-----------------------------------------------------------------------------+
+|            💾 5. BACKBLAZE B2 SPATIAL TIME-TRAVEL & CDN STREAMING           |
++-----------------------------------------------------------------------------+
+|  Bucket: 'genmedia-vault-production' [STATUS: CONNECTED 🟢]                 |
+|  Presigned Media CDN URL: https://f005.backblazeb2.com/file/...             |
+|  Historical Version Timeline:                                               |
+|  - storyboard_bundle_1785001.zip (ID: 4_z981... Upload: 2026-07-26 16:30)   |
+|  - manga_panel_0.png            (ID: 4_z982... Upload: 2026-07-26 16:28)   |
++-----------------------------------------------------------------------------+
+```
+<!-- slide -->
+```
++-----------------------------------------------------------------------------+
+|              🔐 6. C2PA CRYPTOGRAPHIC PROVENANCE INSPECTION                 |
++-----------------------------------------------------------------------------+
+|  Issuer: Backblaze GenMedia Studio Provenance Engine                       |
+|  SHA-256 Hash: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852...|
+|  Cryptographic HMAC Signature: a7f83b2...                                   |
+|  Verification Status: ✅ VERIFIED MATCH & TAMPER-FREE                      |
++-----------------------------------------------------------------------------+
+```
+<!-- slide -->
+```
++-----------------------------------------------------------------------------+
+|             🌳 7. GRAPHVIZ ANCESTRY EXECUTION LINEAGE GRAPH                 |
++-----------------------------------------------------------------------------+
+|  [Master Prompt] ➔ [Refinement Loop 2] ➔ [Panel PNG] ➔ [B2 Vault Node]      |
+|                                        ➔ [Audio WAV] ➔ [B2 Vault Node]      |
++-----------------------------------------------------------------------------+
+```
+````
+
+---
+
+## 🏆 Hackathon Alignment & Rule Compliance Matrix
 
 | Hackathon Requirement / Judging Criterion | Implementation in Backblaze GenMedia Studio | Source Code Location |
 | :--- | :--- | :--- |
@@ -96,33 +209,9 @@ This project was built specifically for the **Backblaze Generative AI Media Hack
 
 ---
 
-## 🏗️ System Architecture & Data Flow
-
-Backblaze GenMedia Studio is structured as a modular Python system with clear layer boundaries:
-
-```
-[User Interface Layer: Streamlit App (app.py)]
-        |
-        +---> [Security Layer: TokenScrubber & SecureBalanceSandbox (services/security.py)]
-        |
-        +---> [Orchestration Layer: CentralOrchestrator (services/orchestrator.py)]
-        |          |
-        |          +---> [Genblaze Pipeline & Provider: HuggingFaceProvider (services/hf_provider.py)]
-        |          |
-        |          +---> [Agent Studio Loop: ThresholdEvaluator (services/agent_studio.py)]
-        |
-        +---> [Provenance Layer: C2PA ProvenanceEngine (services/security.py)]
-        |
-        +---> [Storage Layer: Backblaze B2 Vault & Temporal Vault (services/vault.py, services/temporal_vault.py)]
-        |
-        +---> [Observability Layer: Lineage Graph & Webhook Dispatcher (services/lineage.py)]
-```
-
----
-
 ## 🛠️ Complete Feature Deep-Dive
 
-### 4.1 Manga & Graphic Novel Compiler
+### 6.1 Manga & Graphic Novel Compiler
 - **Module**: `services/manga.py` and `services/hf_provider.py` (`draw_judge_manga_panel`)
 - **Functionality**: Compiles multi-panel manga pages with automated dialogue bubble overlays, panel border dividers, speed line accents, and screentones grid background rendering.
 - **Workflow**:
@@ -131,7 +220,7 @@ Backblaze GenMedia Studio is structured as a modular Python system with clear la
   3. Uses `FLUX.1-schnell` model for production rendering, with retro manga synthesis fallback in demo mode.
   4. Automatically injects C2PA cryptographic metadata into the resulting PNG image binary.
 
-### 4.2 Light Novel Scene & Localization Engine
+### 6.2 Light Novel Scene & Localization Engine
 - **Module**: `services/novel.py`
 - **Functionality**: Dual-stage light novel story generator and Japanese-to-English translation console.
 - **Workflow**:
@@ -140,7 +229,7 @@ Backblaze GenMedia Studio is structured as a modular Python system with clear la
   3. **Step 1 (`novel_en`)**: Takes output from Step 0 (`input_from=0`) and translates it into expressive English while preserving tone and formatting.
   4. Displays dual-column side-by-side Japanese original and English localized text.
 
-### 4.3 Whisper Subtitle Transcriber & Subtitles Manifest
+### 6.3 Whisper Subtitle Transcriber & Subtitles Manifest
 - **Module**: `services/whisper.py`
 - **Functionality**: Transcribes spoken audio, generates timecodes, and outputs ready-to-use `.srt` subtitle manifests for video creators.
 - **Workflow**:
@@ -148,7 +237,7 @@ Backblaze GenMedia Studio is structured as a modular Python system with clear la
   2. Calls `CentralOrchestrator.execute_single_step` with `modality="audio"` and model `openai/whisper-large-v3`.
   3. Formats timestamps using `format_srt_time` into standard SRT timecode blocks (`00:00:00,000 --> 00:00:03,800`).
 
-### 4.4 Autonomous Genblaze Agent Studio
+### 6.4 Autonomous Genblaze Agent Studio
 - **Module**: `services/agent_studio.py`
 - **Functionality**: Multi-step agent loop for panel-to-panel visual continuity storyboarding.
 - **Workflow**:
@@ -157,7 +246,7 @@ Backblaze GenMedia Studio is structured as a modular Python system with clear la
   3. Applies `genblaze.ThresholdEvaluator(threshold=0.75)` to check if the visual anchor score passes.
   4. **Self-Correction Loop**: If the continuity score falls below the threshold, the agent automatically refines prompts by appending visual stabilizer keywords (`"consistent style lighting"`, `"character color continuity"`) and re-evaluates.
 
-### 4.5 Backblaze B2 Vault & Spatial Time Travel
+### 6.5 Backblaze B2 Vault & Spatial Time Travel
 - **Modules**: `services/vault.py` and `services/temporal_vault.py`
 - **Functionality**: Complete cloud vault storage solution built on Backblaze B2 Cloud Storage.
 - **Workflow**:
@@ -166,7 +255,7 @@ Backblaze GenMedia Studio is structured as a modular Python system with clear la
   3. **B2 Spatial Time Travel**: Queries file upload history (`bucket.list_file_versions`), allowing users to inspect and restore past asset revisions by file ID.
   4. **Storyboard Zip Bundling**: Packages panels, audio tracks, light novel texts, SRT files, and C2PA manifests into a compressed `.zip` archive uploaded directly to B2.
 
-### 4.6 C2PA Cryptographic Provenance Engine
+### 6.6 C2PA Cryptographic Provenance Engine
 - **Module**: `services/security.py` (`ProvenanceEngine`)
 - **Functionality**: Industry-grade media authentication preventing deepfakes and verifying content origin.
 - **Workflow**:
@@ -176,7 +265,7 @@ Backblaze GenMedia Studio is structured as a modular Python system with clear la
   4. **WAV RIFF Header Injection**: Inserts custom `c2pa` RIFF chunk directly into WAV audio bytes.
   5. **Verification**: Reads chunks from media files, re-computes SHA-256 content hashes, and validates HMAC signatures.
 
-### 4.7 Security Sandbox & Token Scrubber
+### 6.7 Security Sandbox & Token Scrubber
 - **Module**: `services/security.py` (`TokenScrubber`, `SecureBalanceSandbox`)
 - **Functionality**: Ensures API credentials and session state are secured.
 - **Workflow**:
@@ -184,7 +273,7 @@ Backblaze GenMedia Studio is structured as a modular Python system with clear la
   2. **Log Redactor**: Multi-pass regex scrubbing that removes Hugging Face tokens (`hf_...`), B2 Key IDs, and Authorization Bearer headers from terminal logs.
   3. **Rate Limit Sandbox**: Enforces a 10-try limit for unauthenticated demo sessions while granting unlimited runs to Bring-Your-Own-Key (BYOK) users.
 
-### 4.8 Visual Lineage Graph & Webhook Dispatcher
+### 6.8 Visual Lineage Graph & Webhook Dispatcher
 - **Modules**: `services/lineage.py` and `services/vault.py` (`dispatch_webhook_notification`)
 - **Functionality**: Observability visualization and multi-channel publication.
 - **Workflow**:
@@ -193,38 +282,27 @@ Backblaze GenMedia Studio is structured as a modular Python system with clear la
 
 ---
 
-## ☁️ Deep-Dive: Backblaze B2 Integration
+## ☁️ Deep-Dive: Backblaze B2 Cloud Storage Integration
 
 Backblaze B2 Cloud Storage forms the backbone of GenMedia Studio's persistence layer. All interactions utilize the official `b2sdk` (v2) library.
 
-### Key API Implementations
-
-#### 1. Authorization & Bucket Management
 ```python
 from b2sdk.v2 import InMemoryAccountInfo, B2Api
 
+# 1. Authorization & Bucket Setup
 info = InMemoryAccountInfo()
 b2_api = B2Api(info)
 b2_api.authorize_account("production", b2_id, b2_key)
 
-try:
-    bucket = b2_api.get_bucket_by_name(b2_bucket)
-except Exception:
-    bucket = b2_api.create_bucket(b2_bucket, "allPrivate")
-```
-
-#### 2. Presigned CDN Media Streaming URLs
-```python
+# 2. Presigned Media CDN Streaming Token Generation
 auth_token = bucket.get_download_authorization(
     file_name_prefix=file_name,
     valid_duration_in_seconds=3600
 )
 base_url = b2_api.get_download_url_for_file_name(b2_bucket, file_name)
 presigned_streaming_url = f"{base_url}?Authorization={auth_token}"
-```
 
-#### 3. B2 Spatial Time-Travel Version History
-```python
+# 3. B2 Spatial Time-Travel Version Enumeration
 versions = []
 for version_info, folder_name in bucket.list_file_versions():
     if version_info.action == "upload":
@@ -234,14 +312,6 @@ for version_info, folder_name in bucket.list_file_versions():
             "size_kb": version_info.size / 1024.0,
             "upload_timestamp": version_info.upload_timestamp
         })
-```
-
-#### 4. Parallel Multi-Threaded Uploads
-```python
-from concurrent.futures import ThreadPoolExecutor
-
-with ThreadPoolExecutor(max_workers=5) as executor:
-    futures = [executor.submit(upload_single_item, v) for k, v in archive_items.items()]
 ```
 
 ---
@@ -293,7 +363,6 @@ eval_res = evaluator.evaluate(result)
 
 Backblaze GenMedia Studio embeds C2PA-compliant metadata directly inside generated binary files:
 
-### PNG Metadata Format (`PngInfo`)
 ```json
 {
   "c2pa_spec": "C2PA-v1.3-GenMedia",
@@ -308,21 +377,11 @@ Backblaze GenMedia Studio embeds C2PA-compliant metadata directly inside generat
 }
 ```
 
-### WAV RIFF Chunk Format
-An additional custom `c2pa` chunk header is appended to the RIFF structure containing UTF-8 JSON bytes and an HMAC-SHA256 signature.
-
 ---
 
 ## 💻 Installation & Setup Instructions
 
-### Prerequisites
-- **Python 3.10 or higher**
-- **Graphviz system package** (for rendering lineage graphs):
-  - **Ubuntu / Debian**: `sudo apt-get update && sudo apt-get install -y graphviz`
-  - **macOS**: `brew install graphviz`
-  - **Windows**: `winget install graphviz` or `choco install graphviz`
-
-### Step-by-Step Installation
+### Local Development Setup
 
 ```bash
 # 1. Clone the repository
@@ -336,14 +395,11 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 # 3. Install dependencies
 pip install -r requirements.txt
 
-# 4. (Optional) Install Genblaze SDK from GitHub
-pip install git+https://github.com/backblaze-labs/genblaze.git
-
-# 5. Launch the Streamlit application
+# 4. Launch the Streamlit application
 streamlit run app.py
 ```
 
-The app will open automatically in your browser at `http://localhost:8501`.
+Access the studio UI in your browser at `http://localhost:8501`.
 
 ---
 
@@ -351,46 +407,26 @@ The app will open automatically in your browser at `http://localhost:8501`.
 
 To evaluate Backblaze GenMedia Studio for judging:
 
-1. **Launch the Application**: Run `streamlit run app.py`.
-2. **Backblaze B2 Authorization**:
-   - Open the **💾 Backblaze B2 Vault Setup** section in the left sidebar.
-   - Input your B2 Application Key ID, Application Key, and Bucket Name.
-   - Click **🔌 Test B2 Auth** to verify connection.
-   - *(Note: Access has been granted to `b2genblaze` GitHub account if testing access is required).*
-3. **API Token Configuration**:
-   - Optionally enter your Hugging Face API token in **🔑 Hugging Face Auth**.
-   - If omitted, the studio operates under a **Free Tier Sandbox** (10 demo generations limit).
-4. **Test Workflows**:
-   - **Tab 1: Manga Panel**: Generate a manga panel and inspect bubble placement.
-   - **Tab 2: Light Novel**: Run Japanese scene generation and English translation.
-   - **Tab 3: Subtitles**: Transcribe audio tracks and view generated SRT timecodes.
-   - **Tab 4: Agent Studio**: Execute the multi-panel autonomous agent loop with visual continuity evaluation.
-   - **Tab 5: B2 Vault & Time Travel**: Test presigned streaming links, version restoration, and zip bundle downloads.
-   - **Tab 6: Lineage & Provenance**: View the interactive Graphviz lineage tree and verify C2PA signatures.
+1. **Streamlit Community Cloud Access**: Click the **[Deploy to Streamlit](https://streamlit.io/cloud)** badge or access the live Community Cloud link.
+2. **Backblaze B2 Credentials**: Credentials pre-loaded via Streamlit secrets automatically grant access. Alternatively, enter test credentials in the **💾 Backblaze B2 Vault Setup** sidebar. *(Testing access granted to `b2genblaze` GitHub account)*.
+3. **Execute Studio Workflows**:
+   - Run **Manga Compiler**, **Light Novel Engine**, **Whisper Transcriber**, and **Agent Studio**.
+   - Test **Presigned Media CDN Streaming** and **Zip Archiving**.
+   - Inspect the **Interactive Lineage Ancestry Graph** and **C2PA Signatures**.
 
 ---
 
 ## 💡 Product Feedback for Genblaze SDK (`backblaze-labs/genblaze`)
 
-Based on our implementation experience, we submit the following constructive architectural feedback for the `genblaze` SDK:
-
-1. **Native Backblaze B2 Storage Handler**:
-   - *Current State*: Developers must manually write `b2sdk` boilerplate to archive asset outputs produced by `pipe.run()`.
-   - *Recommendation*: Add a native `B2StorageProvider` adapter into `genblaze.storage` to allow zero-code automatic archiving.
-
-2. **Async Parallel Execution Support**:
-   - *Current State*: `pipe.run()` executes steps sequentially.
-   - *Recommendation*: Introduce an `async_run()` method utilizing `asyncio.gather` for parallel step execution across independent steps.
-
-3. **Built-in C2PA Provenance Extension**:
-   - *Current State*: Metadata must be manually injected post-generation.
-   - *Recommendation*: Integrate C2PA metadata injection natively into `genblaze.Asset`.
+1. **Native Backblaze B2 Storage Handler**: Incorporate a native `B2StorageProvider` inside `genblaze.storage` to eliminate `b2sdk` boilerplate.
+2. **Async Parallel Execution Support**: Introduce `async_run()` using `asyncio.gather` for parallel step execution.
+3. **Built-in C2PA Provenance Extension**: Native C2PA signature injection into `genblaze.Asset`.
 
 ---
 
 ## 📜 License & Repository Status
 
-- **Repository License**: No formal license applied / Open Access for Backblaze Generative AI Media Hackathon evaluation purposes.
+- **Repository License**: No formal license applied / Open Access for Backblaze Generative AI Media Hackathon evaluation.
 - **Repository URL**: [github.com/krishivjoshi219-collab/backblaze-genmedia-studio](https://github.com/krishivjoshi219-collab/backblaze-genmedia-studio)
 - **Developer**: `krishivjoshi219-collab`
 

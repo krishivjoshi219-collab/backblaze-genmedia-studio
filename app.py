@@ -109,22 +109,40 @@ def secure_increment_tries(count: int = 1):
     st.session_state["tries_signature"] = sandbox.generate_signature(new_val)
 
 
+def get_secret(key_name: str, default: str = "") -> str:
+    """Helper to fetch configuration secrets from st.secrets (Streamlit Community Cloud) or os.environ."""
+    try:
+        if hasattr(st, "secrets") and key_name in st.secrets:
+            return str(st.secrets[key_name]).strip()
+    except Exception:
+        pass
+    return os.environ.get(key_name, default).strip()
+
 # Extract plaintext token on-demand
 def get_active_token() -> str:
     return scrubber.unmask_token(st.session_state.get("hf_token_masked", b""))
 
 
-# Initialize B2 vault credentials
+# Initialize B2 vault credentials with Streamlit Secrets support
 if "b2_key_id" not in st.session_state:
-    st.session_state["b2_key_id"] = ""
+    st.session_state["b2_key_id"] = get_secret("B2_KEY_ID", "")
 if "b2_application_key" not in st.session_state:
-    st.session_state["b2_application_key"] = ""
+    st.session_state["b2_application_key"] = get_secret("B2_APPLICATION_KEY", "")
 if "b2_bucket_name" not in st.session_state:
-    st.session_state["b2_bucket_name"] = ""
+    st.session_state["b2_bucket_name"] = get_secret("B2_BUCKET_NAME", "")
+
+# Auto-initialize Hugging Face Token if present in secrets
+if not st.session_state.get("hf_token_masked"):
+    secret_hf = get_secret("HF_TOKEN", "")
+    if secret_hf:
+        masked_val, display_val = scrubber.scrub_and_mask_token(secret_hf)
+        st.session_state["hf_token_masked"] = masked_val
+        st.session_state["hf_token_display"] = display_val
 
 # Pendo session visitor ID for server-side tracking
 if "pendo_visitor_id" not in st.session_state:
     st.session_state["pendo_visitor_id"] = f"streamlit_{uuid.uuid4().hex[:16]}"
+
 
 # Generated Assets Store
 if "manga_image" not in st.session_state:
