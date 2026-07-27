@@ -914,7 +914,7 @@ with tab1:
     </svg>
     </div>
     """
-    st.components.v1.html(svg_manga, height=105, scrolling=False)
+    st.html(svg_manga)
 
     col1, col2 = st.columns([1, 1])
 
@@ -1018,7 +1018,7 @@ with tab1:
             """,
                 unsafe_allow_html=True,
             )
-            st.image(st.session_state["manga_image"], use_container_width=True)
+            st.image(st.session_state["manga_image"], width="stretch")
             st.markdown(
                 """
                 </div>
@@ -1114,7 +1114,7 @@ with tab2:
     </svg>
     </div>
     """
-    st.components.v1.html(svg_novel, height=105, scrolling=False)
+    st.html(svg_novel)
 
     ln_tabs = st.tabs(["✍️ LN Generator", "🔄 Text Translator"])
 
@@ -1381,7 +1381,7 @@ with tab3:
     </svg>
     </div>
     """
-    st.components.v1.html(svg_whisper, height=105, scrolling=False)
+    st.html(svg_whisper)
 
     col1, col2 = st.columns([1, 1])
 
@@ -1557,7 +1557,7 @@ with tab4:
     </svg>
     </div>
     """
-    st.components.v1.html(svg_agent, height=105, scrolling=False)
+    st.html(svg_agent)
 
     st.write(
         "Orchestrate an advanced Genblaze Agent Loop for multi-panel continuity generation. Evaluates consistency against a template and dynamically refines parameters on failure."
@@ -2029,7 +2029,7 @@ with tab5:
         st.subheader("🖼️ Visual Workflow DAG Topology")
         try:
             dag_graph = render_workflow_dag_graph(st.session_state["comfy_nodes"])
-            st.graphviz_chart(dag_graph, use_container_width=True)
+            st.graphviz_chart(dag_graph)
         except Exception as graph_err:
             st.warning(f"Visual rendering notice: {graph_err}")
 
