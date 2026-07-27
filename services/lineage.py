@@ -178,16 +178,14 @@ def render_lineage_ui(run_data: dict, key_prefix: str = "lineage"):
     # Render Graphviz SVG
     svg_data = render_lineage_graph_svg(run_data)
     if svg_data:
-        st.components.v1.html(
-            f'<div style="text-align: center; width: 100%; overflow-x: auto; background: #0e1117; padding: 10px; border-radius: 12px;">{svg_data}</div>',
-            height=280,
-            scrolling=True
+        st.html(
+            f'<div style="text-align: center; width: 100%; overflow-x: auto; background: #0e1117; padding: 10px; border-radius: 12px;">{svg_data}</div>'
         )
     else:
         # Streamlit fallback chart
         try:
             dot = build_lineage_graph(run_data)
-            st.graphviz_chart(dot, use_container_width=True)
+            st.graphviz_chart(dot)
         except Exception as e:
             st.warning(f"Lineage rendering notice: {e}")
 
