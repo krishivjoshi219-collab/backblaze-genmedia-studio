@@ -8,9 +8,11 @@ font = "sans serif"
 [server]
 headless = true
 enableCORS = true
-enableXsrfProtection = true
+enableXsrfProtection = false
 maxUploadSize = 200
 healthCheckInterval = 30
+port = 5000
+address = "0.0.0.0"
 
 [browser]
 gatherUsageStats = false
