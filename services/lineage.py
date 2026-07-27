@@ -185,7 +185,7 @@ def render_lineage_ui(run_data: dict, key_prefix: str = "lineage"):
         # Streamlit fallback chart
         try:
             dot = build_lineage_graph(run_data)
-            st.graphviz_chart(dot)
+            st.graphviz_chart(dot, width="stretch")
         except Exception as e:
             st.warning(f"Lineage rendering notice: {e}")
 

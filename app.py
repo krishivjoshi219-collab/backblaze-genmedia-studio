@@ -883,33 +883,33 @@ with tab1:
     <div style="text-align: center;">
     <svg width="100%" height="80" viewBox="0 0 600 80" style="background: rgba(10,8,25,0.4); border: 1px solid rgba(160, 51, 255, 0.2); border-radius: 12px; padding: 10px;">
         <defs>
-            <linearGradient id="neonGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <linearGradient id="mangaNeonGrad" x1="0%" y1="0%" x2="100%" y2="0%">
                 <stop offset="0%" stop-color="#ff3366" />
                 <stop offset="100%" stop-color="#a033ff" />
             </linearGradient>
-            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+            <filter id="mangaGlow" x="-20%" y="-20%" width="140%" height="140%">
                 <feGaussianBlur stdDeviation="3" result="blur" />
                 <feComposite in="SourceGraphic" in2="blur" operator="over" />
             </filter>
         </defs>
-        
+
         <!-- Node 1: Input -->
         <rect x="20" y="15" width="120" height="50" rx="8" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
         <text x="80" y="45" fill="#f8fafc" font-size="12" font-family="Space Grotesk" text-anchor="middle" font-weight="600">Prompt Input</text>
-        
+
         <!-- Arrow 1 -->
-        <line x1="140" y1="40" x2="220" y2="40" stroke="url(#neonGrad)" stroke-width="3" stroke-dasharray="5 5" filter="url(#glow)"/>
-        
+        <line x1="140" y1="40" x2="220" y2="40" stroke="url(#mangaNeonGrad)" stroke-width="3" stroke-dasharray="5 5" filter="url(#mangaGlow)"/>
+
         <!-- Node 2: Model -->
-        <rect x="220" y="15" width="160" height="50" rx="8" fill="rgba(160, 51, 255, 0.1)" stroke="#a033ff" stroke-width="2" filter="url(#glow)"/>
+        <rect x="220" y="15" width="160" height="50" rx="8" fill="rgba(160, 51, 255, 0.1)" stroke="#a033ff" stroke-width="2" filter="url(#mangaGlow)"/>
         <text x="300" y="37" fill="#f8fafc" font-size="12" font-family="Space Grotesk" text-anchor="middle" font-weight="600">FLUX.1-schnell</text>
         <text x="300" y="53" fill="#94a3b8" font-size="10" font-family="Outfit" text-anchor="middle">StepType.GENERATE</text>
-        
+
         <!-- Arrow 2 -->
-        <line x1="380" y1="40" x2="460" y2="40" stroke="url(#neonGrad)" stroke-width="3" stroke-dasharray="5 5" filter="url(#glow)"/>
-        
+        <line x1="380" y1="40" x2="460" y2="40" stroke="url(#mangaNeonGrad)" stroke-width="3" stroke-dasharray="5 5" filter="url(#mangaGlow)"/>
+
         <!-- Node 3: Output -->
-        <rect x="460" y="15" width="120" height="50" rx="8" fill="rgba(255, 51, 102, 0.1)" stroke="#ff3366" stroke-width="2" filter="url(#glow)"/>
+        <rect x="460" y="15" width="120" height="50" rx="8" fill="rgba(255, 51, 102, 0.1)" stroke="#ff3366" stroke-width="2" filter="url(#mangaGlow)"/>
         <text x="520" y="45" fill="#f8fafc" font-size="12" font-family="Space Grotesk" text-anchor="middle" font-weight="600">Image Asset</text>
     </svg>
     </div>
@@ -1074,41 +1074,41 @@ with tab2:
     <div style="text-align: center;">
     <svg width="100%" height="80" viewBox="0 0 800 80" style="background: rgba(10,8,25,0.4); border: 1px solid rgba(160, 51, 255, 0.2); border-radius: 12px; padding: 10px;">
         <defs>
-            <linearGradient id="neonGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <linearGradient id="novelNeonGrad" x1="0%" y1="0%" x2="100%" y2="0%">
                 <stop offset="0%" stop-color="#ff3366" />
                 <stop offset="100%" stop-color="#a033ff" />
             </linearGradient>
-            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+            <filter id="novelGlow" x="-20%" y="-20%" width="140%" height="140%">
                 <feGaussianBlur stdDeviation="3" result="blur" />
                 <feComposite in="SourceGraphic" in2="blur" operator="over" />
             </filter>
         </defs>
-        
+
         <!-- Node 1: Concept -->
         <rect x="20" y="15" width="110" height="50" rx="8" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
         <text x="75" y="45" fill="#f8fafc" font-size="11" font-family="Space Grotesk" text-anchor="middle" font-weight="600">LN Concept</text>
-        
+
         <!-- Arrow 1 -->
-        <line x1="130" y1="40" x2="190" y2="40" stroke="url(#neonGrad)" stroke-width="3" stroke-dasharray="5 5" filter="url(#glow)"/>
-        
+        <line x1="130" y1="40" x2="190" y2="40" stroke="url(#novelNeonGrad)" stroke-width="3" stroke-dasharray="5 5" filter="url(#novelGlow)"/>
+
         <!-- Node 2: Stage 1 (JP Write) -->
-        <rect x="190" y="15" width="160" height="50" rx="8" fill="rgba(160, 51, 255, 0.1)" stroke="#a033ff" stroke-width="2" filter="url(#glow)"/>
+        <rect x="190" y="15" width="160" height="50" rx="8" fill="rgba(160, 51, 255, 0.1)" stroke="#a033ff" stroke-width="2" filter="url(#novelGlow)"/>
         <text x="270" y="37" fill="#f8fafc" font-size="11" font-family="Space Grotesk" text-anchor="middle" font-weight="600">Qwen2.5-7B [JP]</text>
         <text x="270" y="53" fill="#94a3b8" font-size="9" font-family="Outfit" text-anchor="middle">Step 0: Generate</text>
-        
+
         <!-- Arrow 2 -->
-        <line x1="350" y1="40" x2="410" y2="40" stroke="url(#neonGrad)" stroke-width="3" stroke-dasharray="5 5" filter="url(#glow)"/>
-        
+        <line x1="350" y1="40" x2="410" y2="40" stroke="url(#novelNeonGrad)" stroke-width="3" stroke-dasharray="5 5" filter="url(#novelGlow)"/>
+
         <!-- Node 3: Stage 2 (EN Translate) -->
-        <rect x="410" y="15" width="160" height="50" rx="8" fill="rgba(0, 198, 255, 0.1)" stroke="#00c6ff" stroke-width="2" filter="url(#glow)"/>
+        <rect x="410" y="15" width="160" height="50" rx="8" fill="rgba(0, 198, 255, 0.1)" stroke="#00c6ff" stroke-width="2" filter="url(#novelGlow)"/>
         <text x="490" y="37" fill="#f8fafc" font-size="11" font-family="Space Grotesk" text-anchor="middle" font-weight="600">Qwen2.5-7B [EN]</text>
         <text x="490" y="53" fill="#94a3b8" font-size="9" font-family="Outfit" text-anchor="middle">Step 1: input_from=0</text>
-        
+
         <!-- Arrow 3 -->
-        <line x1="570" y1="40" x2="630" y2="40" stroke="url(#neonGrad)" stroke-width="3" stroke-dasharray="5 5" filter="url(#glow)"/>
-        
+        <line x1="570" y1="40" x2="630" y2="40" stroke="url(#novelNeonGrad)" stroke-width="3" stroke-dasharray="5 5" filter="url(#novelGlow)"/>
+
         <!-- Node 4: Chained Output -->
-        <rect x="630" y="15" width="150" height="50" rx="8" fill="rgba(255, 51, 102, 0.1)" stroke="#ff3366" stroke-width="2" filter="url(#glow)"/>
+        <rect x="630" y="15" width="150" height="50" rx="8" fill="rgba(255, 51, 102, 0.1)" stroke="#ff3366" stroke-width="2" filter="url(#novelGlow)"/>
         <text x="705" y="37" fill="#f8fafc" font-size="11" font-family="Space Grotesk" text-anchor="middle" font-weight="600">Chained Assets</text>
         <text x="705" y="53" fill="#94a3b8" font-size="9" font-family="Outfit" text-anchor="middle">JP Text & EN Text</text>
     </svg>
@@ -1349,33 +1349,33 @@ with tab3:
     <div style="text-align: center;">
     <svg width="100%" height="80" viewBox="0 0 600 80" style="background: rgba(10,8,25,0.4); border: 1px solid rgba(160, 51, 255, 0.2); border-radius: 12px; padding: 10px;">
         <defs>
-            <linearGradient id="neonGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <linearGradient id="whisperNeonGrad" x1="0%" y1="0%" x2="100%" y2="0%">
                 <stop offset="0%" stop-color="#ff3366" />
                 <stop offset="100%" stop-color="#a033ff" />
             </linearGradient>
-            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+            <filter id="whisperGlow" x="-20%" y="-20%" width="140%" height="140%">
                 <feGaussianBlur stdDeviation="3" result="blur" />
                 <feComposite in="SourceGraphic" in2="blur" operator="over" />
             </filter>
         </defs>
-        
+
         <!-- Node 1: Audio Input -->
         <rect x="20" y="15" width="120" height="50" rx="8" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
         <text x="80" y="45" fill="#f8fafc" font-size="12" font-family="Space Grotesk" text-anchor="middle" font-weight="600">Audio Track</text>
-        
+
         <!-- Arrow 1 -->
-        <line x1="140" y1="40" x2="220" y2="40" stroke="url(#neonGrad)" stroke-width="3" stroke-dasharray="5 5" filter="url(#glow)"/>
-        
+        <line x1="140" y1="40" x2="220" y2="40" stroke="url(#whisperNeonGrad)" stroke-width="3" stroke-dasharray="5 5" filter="url(#whisperGlow)"/>
+
         <!-- Node 2: Model -->
-        <rect x="220" y="15" width="160" height="50" rx="8" fill="rgba(160, 51, 255, 0.1)" stroke="#a033ff" stroke-width="2" filter="url(#glow)"/>
+        <rect x="220" y="15" width="160" height="50" rx="8" fill="rgba(160, 51, 255, 0.1)" stroke="#a033ff" stroke-width="2" filter="url(#whisperGlow)"/>
         <text x="300" y="37" fill="#f8fafc" font-size="12" font-family="Space Grotesk" text-anchor="middle" font-weight="600">Whisper-Large-V3</text>
         <text x="300" y="53" fill="#94a3b8" font-size="10" font-family="Outfit" text-anchor="middle">StepType.GENERATE</text>
-        
+
         <!-- Arrow 2 -->
-        <line x1="380" y1="40" x2="460" y2="40" stroke="url(#neonGrad)" stroke-width="3" stroke-dasharray="5 5" filter="url(#glow)"/>
-        
+        <line x1="380" y1="40" x2="460" y2="40" stroke="url(#whisperNeonGrad)" stroke-width="3" stroke-dasharray="5 5" filter="url(#whisperGlow)"/>
+
         <!-- Node 3: Subtitles -->
-        <rect x="460" y="15" width="120" height="50" rx="8" fill="rgba(255, 51, 102, 0.1)" stroke="#ff3366" stroke-width="2" filter="url(#glow)"/>
+        <rect x="460" y="15" width="120" height="50" rx="8" fill="rgba(255, 51, 102, 0.1)" stroke="#ff3366" stroke-width="2" filter="url(#whisperGlow)"/>
         <text x="520" y="37" fill="#f8fafc" font-size="12" font-family="Space Grotesk" text-anchor="middle" font-weight="600">Subtitle Asset</text>
         <text x="520" y="53" fill="#94a3b8" font-size="9" font-family="Outfit" text-anchor="middle">Text & SRT Format</text>
     </svg>
@@ -1508,50 +1508,50 @@ with tab4:
     <div style="text-align: center;">
     <svg width="100%" height="80" viewBox="0 0 1000 80" style="background: rgba(10,8,25,0.4); border: 1px solid rgba(160, 51, 255, 0.2); border-radius: 12px; padding: 10px;">
         <defs>
-            <linearGradient id="neonGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <linearGradient id="agentNeonGrad" x1="0%" y1="0%" x2="100%" y2="0%">
                 <stop offset="0%" stop-color="#ff3366" />
                 <stop offset="100%" stop-color="#a033ff" />
             </linearGradient>
-            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+            <filter id="agentGlow" x="-20%" y="-20%" width="140%" height="140%">
                 <feGaussianBlur stdDeviation="3" result="blur" />
                 <feComposite in="SourceGraphic" in2="blur" operator="over" />
             </filter>
         </defs>
-        
+
         <!-- Node 1: Master Prompt -->
         <rect x="10" y="15" width="120" height="50" rx="8" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
         <text x="70" y="37" fill="#f8fafc" font-size="10" font-family="Space Grotesk" text-anchor="middle" font-weight="600">Master Prompt</text>
         <text x="70" y="51" fill="#94a3b8" font-size="9" font-family="Outfit" text-anchor="middle">Story Concept</text>
-        
+
         <!-- Arrow 1 -->
-        <line x1="130" y1="40" x2="185" y2="40" stroke="url(#neonGrad)" stroke-width="2" stroke-dasharray="3 3"/>
-        
+        <line x1="130" y1="40" x2="185" y2="40" stroke="url(#agentNeonGrad)" stroke-width="2" stroke-dasharray="3 3"/>
+
         <!-- Node 2: Concurrent Gen (10 Steps) -->
-        <rect x="185" y="15" width="170" height="50" rx="8" fill="rgba(160, 51, 255, 0.1)" stroke="#a033ff" stroke-width="2" filter="url(#glow)"/>
+        <rect x="185" y="15" width="170" height="50" rx="8" fill="rgba(160, 51, 255, 0.1)" stroke="#a033ff" stroke-width="2" filter="url(#agentGlow)"/>
         <text x="270" y="37" fill="#f8fafc" font-size="10" font-family="Space Grotesk" text-anchor="middle" font-weight="600">Concurrent Gen</text>
         <text x="270" y="51" fill="#94a3b8" font-size="9" font-family="Outfit" text-anchor="middle">5 FLUX + 5 MusicGen</text>
-        
+
         <!-- Arrow 2 -->
-        <line x1="355" y1="40" x2="410" y2="40" stroke="url(#neonGrad)" stroke-width="2" stroke-dasharray="3 3"/>
-        
+        <line x1="355" y1="40" x2="410" y2="40" stroke="url(#agentNeonGrad)" stroke-width="2" stroke-dasharray="3 3"/>
+
         <!-- Node 3: Threshold Evaluator -->
-        <rect x="410" y="15" width="160" height="50" rx="8" fill="rgba(0, 198, 255, 0.1)" stroke="#00c6ff" stroke-width="2" filter="url(#glow)"/>
+        <rect x="410" y="15" width="160" height="50" rx="8" fill="rgba(0, 198, 255, 0.1)" stroke="#00c6ff" stroke-width="2" filter="url(#agentGlow)"/>
         <text x="490" y="37" fill="#f8fafc" font-size="10" font-family="Space Grotesk" text-anchor="middle" font-weight="600">ThresholdEvaluator</text>
         <text x="490" y="51" fill="#94a3b8" font-size="9" font-family="Outfit" text-anchor="middle">Continuity Score</text>
-        
+
         <!-- Arrow 3 -->
-        <line x1="570" y1="40" x2="625" y2="40" stroke="url(#neonGrad)" stroke-width="2" stroke-dasharray="3 3"/>
-        
+        <line x1="570" y1="40" x2="625" y2="40" stroke="url(#agentNeonGrad)" stroke-width="2" stroke-dasharray="3 3"/>
+
         <!-- Node 4: Self-Correction Loop -->
-        <rect x="625" y="15" width="170" height="50" rx="8" fill="rgba(255, 193, 7, 0.1)" stroke="#ffc107" stroke-width="2" filter="url(#glow)"/>
+        <rect x="625" y="15" width="170" height="50" rx="8" fill="rgba(255, 193, 7, 0.1)" stroke="#ffc107" stroke-width="2" filter="url(#agentGlow)"/>
         <text x="710" y="37" fill="#f8fafc" font-size="10" font-family="Space Grotesk" text-anchor="middle" font-weight="600">Self-Correction Loop</text>
         <text x="710" y="51" fill="#94a3b8" font-size="9" font-family="Outfit" text-anchor="middle">Adjust Seed & Prompt</text>
-        
+
         <!-- Arrow 4 -->
-        <line x1="795" y1="40" x2="850" y2="40" stroke="url(#neonGrad)" stroke-width="2" stroke-dasharray="3 3"/>
-        
+        <line x1="795" y1="40" x2="850" y2="40" stroke="url(#agentNeonGrad)" stroke-width="2" stroke-dasharray="3 3"/>
+
         <!-- Node 5: Verified Output -->
-        <rect x="850" y="15" width="140" height="50" rx="8" fill="rgba(255, 51, 102, 0.1)" stroke="#ff3366" stroke-width="2" filter="url(#glow)"/>
+        <rect x="850" y="15" width="140" height="50" rx="8" fill="rgba(255, 51, 102, 0.1)" stroke="#ff3366" stroke-width="2" filter="url(#agentGlow)"/>
         <text x="920" y="37" fill="#f8fafc" font-size="10" font-family="Space Grotesk" text-anchor="middle" font-weight="600">Verified Manifest</text>
         <text x="920" y="51" fill="#94a3b8" font-size="9" font-family="Outfit" text-anchor="middle">SHA-256 Canonical</text>
     </svg>
@@ -2029,7 +2029,7 @@ with tab5:
         st.subheader("🖼️ Visual Workflow DAG Topology")
         try:
             dag_graph = render_workflow_dag_graph(st.session_state["comfy_nodes"])
-            st.graphviz_chart(dag_graph)
+            st.graphviz_chart(dag_graph, width="stretch")
         except Exception as graph_err:
             st.warning(f"Visual rendering notice: {graph_err}")
 
