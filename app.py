@@ -244,24 +244,17 @@ def get_secret(key_name: str, default: str = "") -> str:
 
 # Extract plaintext token on-demand
 def get_active_token() -> str:
-    return scrubber.unmask_token(st.session_state.get("hf_token_masked", b""))
+    user_token = scrubber.unmask_token(st.session_state.get("hf_token_masked", b"")).strip()
+    return user_token or get_secret("HF_TOKEN")
 
 
 # Initialize B2 vault credentials with Streamlit Secrets support
 if "b2_key_id" not in st.session_state:
-    st.session_state["b2_key_id"] = get_secret("B2_KEY_ID", "")
+    st.session_state["b2_key_id"] = ""
 if "b2_application_key" not in st.session_state:
-    st.session_state["b2_application_key"] = get_secret("B2_APPLICATION_KEY", "")
+    st.session_state["b2_application_key"] = ""
 if "b2_bucket_name" not in st.session_state:
-    st.session_state["b2_bucket_name"] = get_secret("B2_BUCKET_NAME", "")
-
-# Auto-initialize Hugging Face Token if present in secrets
-if not st.session_state.get("hf_token_masked"):
-    secret_hf = get_secret("HF_TOKEN", "")
-    if secret_hf:
-        masked_val, display_val = scrubber.scrub_and_mask_token(secret_hf)
-        st.session_state["hf_token_masked"] = masked_val
-        st.session_state["hf_token_display"] = display_val
+    st.session_state["b2_bucket_name"] = ""
 
 # Pendo session visitor ID for server-side tracking
 if "pendo_visitor_id" not in st.session_state:
@@ -657,28 +650,30 @@ st.sidebar.markdown(
 
 # BYOK Token Field with Scrubber & Masking
 st.sidebar.subheader("🔑 Hugging Face Auth")
+hf_placeholder = "🔒 Loaded from Streamlit Secrets" if get_secret("HF_TOKEN") else ""
 raw_token = st.sidebar.text_input(
     "HF API Token (BYOK)",
-    value=st.session_state.get("hf_token_display", ""),
+    value="",
+    placeholder=hf_placeholder,
     type="password",
     help="Bring Your Own Key. The API key is immediately encrypted in memory upon entry.",
 )
 
-if raw_token != st.session_state.get("hf_token_display", ""):
-    masked_val, display_val = scrubber.scrub_and_mask_token(raw_token)
-    st.session_state["hf_token_masked"] = masked_val
-    st.session_state["hf_token_display"] = display_val
-    pendo_track(
-        "hf_token_configured",
-        {
-            "is_token_set": bool(raw_token.strip()),
-            "previous_tries_used": st.session_state["tries_used"],
-        },
-        visitor_id=st.session_state["pendo_visitor_id"],
-    )
-    st.rerun()
+if raw_token.strip():
+    masked_val, display_val = scrubber.scrub_and_mask_token(raw_token.strip())
+    if masked_val != st.session_state.get("hf_token_masked"):
+        st.session_state["hf_token_masked"] = masked_val
+        st.session_state["hf_token_display"] = display_val
+        pendo_track(
+            "hf_token_configured",
+            {
+                "is_token_set": True,
+                "previous_tries_used": st.session_state["tries_used"],
+            },
+            visitor_id=st.session_state["pendo_visitor_id"],
+        )
 
-has_byok = bool(st.session_state.get("hf_token_masked"))
+has_byok = bool(get_active_token())
 
 # Absolute Rate-Limit Protection (10 Free Tries Limit)
 st.sidebar.markdown("---")
@@ -701,15 +696,31 @@ else:
 # Backblaze B2 Bucket Credentials
 st.sidebar.markdown("---")
 st.sidebar.subheader("💾 Backblaze B2 Vault Setup")
-b2_id = st.sidebar.text_input(
-    "B2 Application Key ID", value=st.session_state["b2_key_id"], type="password"
+b2_id_placeholder = "🔒 Loaded from Streamlit Secrets" if get_secret("B2_KEY_ID") else ""
+b2_key_placeholder = "🔒 Loaded from Streamlit Secrets" if get_secret("B2_APPLICATION_KEY") else ""
+b2_bucket_placeholder = "🔒 Loaded from Streamlit Secrets" if get_secret("B2_BUCKET_NAME") else ""
+
+b2_id_input = st.sidebar.text_input(
+    "B2 Application Key ID",
+    value="",
+    placeholder=b2_id_placeholder,
+    type="password",
 )
-b2_key = st.sidebar.text_input(
-    "B2 Application Key", value=st.session_state["b2_application_key"], type="password"
+b2_key_input = st.sidebar.text_input(
+    "B2 Application Key",
+    value="",
+    placeholder=b2_key_placeholder,
+    type="password",
 )
-b2_bucket = st.sidebar.text_input(
-    "B2 Bucket Name", value=st.session_state["b2_bucket_name"]
+b2_bucket_input = st.sidebar.text_input(
+    "B2 Bucket Name",
+    value="",
+    placeholder=b2_bucket_placeholder,
 )
+
+b2_id = b2_id_input.strip() or get_secret("B2_KEY_ID")
+b2_key = b2_key_input.strip() or get_secret("B2_APPLICATION_KEY")
+b2_bucket = b2_bucket_input.strip() or get_secret("B2_BUCKET_NAME")
 
 st.session_state["b2_key_id"] = b2_id
 st.session_state["b2_application_key"] = b2_key
