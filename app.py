@@ -673,7 +673,7 @@ if raw_token.strip():
             visitor_id=st.session_state["pendo_visitor_id"],
         )
 
-has_byok = bool(get_active_token())
+has_byok = bool(raw_token.strip())
 
 # Absolute Rate-Limit Protection (10 Free Tries Limit)
 st.sidebar.markdown("---")
@@ -684,7 +684,8 @@ if has_byok:
     st.sidebar.success("🟢 BYOK Active: Unlimited Tries")
     st.sidebar.caption(f"Used this session: {tries_used} generation(s)")
 else:
-    st.sidebar.warning("⚠️ Free Tier: 10 Tries Limit")
+    remaining = max(0, 10 - tries_used)
+    st.sidebar.warning(f"🟡 Studio Free Tier: {remaining}/10 Left")
     progress = min(tries_used / 10, 1.0)
     st.sidebar.progress(progress)
     st.sidebar.write(f"Tries Used: **{tries_used} / 10**")
