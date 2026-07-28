@@ -15,6 +15,10 @@ from services.security import ProvenanceEngine
 logger = logging.getLogger("GenMediaHFProvider")
 provenance_engine = ProvenanceEngine()
 
+# New HF Inference Router endpoint (replaces deprecated api-inference.huggingface.co)
+def _hf_url(model_id: str) -> str:
+    return f"https://router.huggingface.co/hf-inference/models/{model_id}"
+
 # Helper function to format seconds to SRT format
 def format_srt_time(seconds):
     if seconds is None:
@@ -214,7 +218,7 @@ class HuggingFaceProvider(SyncProvider):
         headers = {"Authorization": f"Bearer {token}"}
         
         if model == "black-forest-labs/FLUX.1-schnell":
-            endpoint = "https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell"
+            endpoint = _hf_url("black-forest-labs/FLUX.1-schnell")
             payload = {"inputs": prompt}
             response = None
             for attempt in range(3):
@@ -255,7 +259,7 @@ class HuggingFaceProvider(SyncProvider):
                 step.status = "failed"
                 
         elif model == "Qwen/Qwen2.5-7B-Instruct":
-            endpoint = "https://api-inference.huggingface.co/models/Qwen/Qwen2.5-7B-Instruct"
+            endpoint = _hf_url("Qwen/Qwen2.5-7B-Instruct")
             final_prompt = prompt
             if step.inputs:
                 input_asset = step.inputs[0]
@@ -307,7 +311,7 @@ class HuggingFaceProvider(SyncProvider):
                 step.status = "failed"
                 
         elif model == "openai/whisper-large-v3":
-            endpoint = "https://api-inference.huggingface.co/models/openai/whisper-large-v3"
+            endpoint = _hf_url("openai/whisper-large-v3")
             audio_bytes = step.params.get("audio_bytes")
             
             if audio_bytes:
@@ -367,7 +371,7 @@ class HuggingFaceProvider(SyncProvider):
                 step.status = "failed"
                 
         elif model == "facebook/musicgen-small":
-            endpoint = f"https://api-inference.huggingface.co/models/{model}"
+            endpoint = _hf_url(model)
             payload = {"inputs": prompt}
             response = None
             for attempt in range(3):
