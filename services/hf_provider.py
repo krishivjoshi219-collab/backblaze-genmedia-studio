@@ -15,7 +15,7 @@ from services.security import ProvenanceEngine
 logger = logging.getLogger("GenMediaHFProvider")
 provenance_engine = ProvenanceEngine()
 
-# New HF Inference Router endpoint (replaces deprecated api-inference.huggingface.co)
+# HF Inference Router endpoint (router.huggingface.co)
 def _hf_url(model_id: str) -> str:
     return f"https://router.huggingface.co/hf-inference/models/{model_id}"
 
