@@ -591,15 +591,15 @@ st.markdown(
     color: var(--muted);
 }
 
-/* Streamlit native widget labels — keep default layout, just colour */
+/* Streamlit native widget labels — colour only, no layout overrides */
 [data-testid="stWidgetLabel"] p,
-[data-testid="stWidgetLabel"] label,
-[data-testid="stWidgetLabel"] span {
+[data-testid="stWidgetLabel"] label {
     color: var(--muted) !important;
     font-size: .9rem !important;
     font-weight: 500 !important;
     line-height: 1.4 !important;
 }
+/* Do NOT touch [data-testid="stWidgetLabel"] span — those are Material Icon nodes */
 
 /* List items in markdown only */
 [data-testid="stMarkdown"] li {
@@ -640,10 +640,76 @@ a:hover { color: var(--a2); text-decoration: none; }
     background: linear-gradient(90deg, transparent, rgba(124,58,237,0.85), rgba(244,63,94,0.65), transparent);
     pointer-events: none; z-index: 1;
 }
-[data-testid="stSidebar"] * { font-family: 'Inter', sans-serif !important; }
+/* Sidebar text — scoped carefully to NOT touch icon font nodes */
+[data-testid="stSidebar"] p,
+[data-testid="stSidebar"] label,
+[data-testid="stSidebar"] div,
+[data-testid="stSidebar"] button { font-family: 'Inter', sans-serif !important; }
 [data-testid="stSidebar"] h1,
 [data-testid="stSidebar"] h2,
 [data-testid="stSidebar"] h3 { font-family: 'Space Grotesk', sans-serif !important; }
+
+/* ═══════════════════════════════════════════════════
+   MATERIAL ICON OVERFLOW FIX
+   Prevents raw strings like 'visibility', '_arrow_right',
+   '_arrow_drop_down' from overflowing inputs & expanders
+═══════════════════════════════════════════════════ */
+
+/* Reset icon spans inside inputs — must use font-family: inherit so
+   Material Icons icon font renders glyphs, not raw text */
+div[data-baseweb="input"] span,
+div[data-baseweb="input"] i,
+.stTextInput span,
+.stPasswordInput span {
+    font-family: inherit !important;
+    line-height: normal !important;
+    letter-spacing: normal !important;
+    overflow: hidden !important;
+    display: inline-flex !important;
+    align-items: center !important;
+}
+
+/* Expander arrow / icon spans */
+[data-testid="stExpander"] summary span,
+[data-testid="stExpander"] summary svg,
+[data-testid="stExpander"] summary i {
+    display: inline-flex !important;
+    align-items: center !important;
+    line-height: normal !important;
+    overflow: visible !important;
+    flex-shrink: 0 !important;
+}
+
+/* Sidebar icon spans — sidebar star-selector was nuking icon font */
+[data-testid="stSidebar"] span[data-testid="stIconMaterial"],
+[data-testid="stSidebar"] .st-aria-hidden,
+[data-testid="stSidebar"] span[class*="material"],
+[data-testid="stSidebar"] span[class*="icon"] {
+    font-family: 'Material Icons', 'Material Icons Outlined', sans-serif !important;
+    line-height: normal !important;
+    overflow: hidden !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    vertical-align: middle !important;
+}
+
+/* Selectbox dropdown arrow — prevent raw text leak */
+div[data-baseweb="select"] span,
+div[data-baseweb="select"] i {
+    font-family: inherit !important;
+    line-height: normal !important;
+    overflow: hidden !important;
+}
+
+/* Number input up/down chevrons */
+button[data-testid="stNumberInputStepDown"] span,
+button[data-testid="stNumberInputStepUp"] span {
+    font-family: inherit !important;
+    line-height: normal !important;
+    overflow: hidden !important;
+    display: inline-flex !important;
+    align-items: center !important;
+}
 
 .sidebar-title {
     font-family: 'Space Grotesk', sans-serif !important;
