@@ -3,11 +3,11 @@
 # 🌌 Backblaze GenMedia Studio Hub
 ### *Powered by Google Gemini API (Nano Banana 2) & Backblaze B2 Media Cloud*
 
-<img src="https://readme-typing-svg.demolab.com?font=Space+Grotesk&weight=800&size=28&pause=1000&color=FF3366&center=true&vCenter=true&width=750&lines=Multi-Modal+Generative+Media+Studio;Powered+by+Gemini+3.1+Flash+Image+(Nano+Banana+2);Backblaze+B2+Content-Addressed+Cloud+Vault;C2PA+Cryptographic+Content+Provenance;Streamlit+Community+Cloud+Deployable" alt="Typing Banner Main" />
+<img src="https://readme-typing-svg.demolab.com?font=Space+Grotesk&weight=800&size=28&pause=1000&color=FF3366&center=true&vCenter=true&width=750&lines=Multi-Modal+Generative+Media+Studio;Powered+by+Gemini+2.5+Flash+Image+(Nano+Banana+2);Backblaze+B2+Content-Addressed+Cloud+Vault;C2PA+Cryptographic+Content+Provenance;Streamlit+Community+Cloud+Deployable" alt="Typing Banner Main" />
 
 <br />
 
-<img src="https://readme-typing-svg.demolab.com?font=Outfit&weight=600&size=18&pause=1500&color=00C6FF&center=true&vCenter=true&width=750&lines=%E2%9A%A1+Google+GenAI+SDK+(gemini-3.1-flash-image)+Integration;%F0%9F%92%BE+Content-Addressed+B2+Storage+Deduplication;%F0%9F%A4%96+ThresholdEvaluator+Self-Correction+Loops" alt="Typing Banner Sub" />
+<img src="https://readme-typing-svg.demolab.com?font=Outfit&weight=600&size=18&pause=1500&color=00C6FF&center=true&vCenter=true&width=750&lines=%E2%9A%A1+Google+GenAI+SDK+(gemini-2.5-flash-image)+Integration;%F0%9F%92%BE+Content-Addressed+B2+Storage+Deduplication;%F0%9F%A4%96+ThresholdEvaluator+Self-Correction+Loops" alt="Typing Banner Sub" />
 
 **Next-Generation Multi-Modal Generative Media Orchestration, C2PA Cryptographic Provenance & Backblaze B2 Media Cloud**
 
@@ -16,7 +16,7 @@
 ---
 
 [![Deploy to Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://backblaze-genmedia-studio-yq7ghbwrivfgb3ws3xdtta.streamlit.app/)
-[![Google GenAI SDK](https://img.shields.io/badge/Google_GenAI-Gemini_3.1_Flash_Image-4285F4?logo=google&style=for-the-badge)](https://ai.google.dev/)
+[![Google GenAI SDK](https://img.shields.io/badge/Google_GenAI-Gemini_2.5_Flash_Image-4285F4?logo=google&style=for-the-badge)](https://ai.google.dev/)
 [![Backblaze B2 Cloud Storage](https://img.shields.io/badge/Backblaze-B2_Cloud_Storage-blue?logo=backblaze&style=for-the-badge)](https://www.backblaze.com/cloud-storage)
 [![Genblaze SDK](https://img.shields.io/badge/Genblaze-SDK_Pipeline-orange?style=for-the-badge)](https://github.com/backblaze-labs/genblaze)
 [![Streamlit Community Cloud](https://img.shields.io/badge/Streamlit-Community_Cloud_Live-FF4B4B?logo=streamlit&style=for-the-badge)](https://backblaze-genmedia-studio-yq7ghbwrivfgb3ws3xdtta.streamlit.app/)
@@ -58,12 +58,12 @@ Digital media creation—ranging from Japanese manga panel design, light novel c
 
 ### The Solution: Backblaze GenMedia Studio Hub
 
-**Backblaze GenMedia Studio Hub** solves these fundamental challenges by combining Google's **Gemini 3.1 Flash Image (`gemini-3.1-flash-image`) Nano Banana 2** engine with the **Genblaze SDK** multi-step pipeline engine, **Backblaze B2 Cloud Storage**, **C2PA Cryptographic Content Provenance**, and an ultra-modern, production-grade **Streamlit Studio Hub**.
+**Backblaze GenMedia Studio Hub** solves these fundamental challenges by combining Google's **Gemini 2.5 Flash Image (`gemini-2.5-flash-image`) Nano Banana 2** engine with the **Genblaze SDK** multi-step pipeline engine, **Backblaze B2 Cloud Storage**, **C2PA Cryptographic Content Provenance**, and an ultra-modern, production-grade **Streamlit Studio Hub**.
 
 ```mermaid
 graph TD
     A[👤 Creator Prompt Input] --> B[⚡ Genblaze Pipeline Orchestrator]
-    B --> C[🍌 Gemini 3.1 Flash Image API]
+    B --> C[🍌 Gemini 2.5 Flash Image API]
     B --> D[🎵 MusicGen Audio Inference]
     B --> E[📝 LLM Text Translation / Writer]
     C & D & E --> F[🛡️ ThresholdEvaluator Quality Guard]

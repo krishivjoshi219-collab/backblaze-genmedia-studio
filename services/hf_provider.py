@@ -25,7 +25,7 @@ provenance_engine = ProvenanceEngine()
 
 def generate_manga_panel(prompt: str, api_key: str = None, style_preset: str = "Manga / Anime Style") -> bytes:
     """
-    Generates manga panel artwork using Gemini API (Nano Banana 2: gemini-3.1-flash-image).
+    Generates manga panel artwork using Gemini API (Nano Banana 2: gemini-2.5-flash-image).
     Includes automatic prompt enhancement and robust error handling with zero UI crashes.
     """
     effective_key = api_key or os.environ.get("GEMINI_API_KEY")
@@ -46,7 +46,7 @@ def generate_manga_panel(prompt: str, api_key: str = None, style_preset: str = "
 
     try:
         response = client.models.generate_content(
-            model='gemini-3.1-flash-image',
+            model='gemini-2.5-flash-image',
             contents=[enhanced_prompt],
             config=types.GenerateContentConfig(
                 response_modalities=['TEXT', 'IMAGE']
@@ -58,6 +58,7 @@ def generate_manga_panel(prompt: str, api_key: str = None, style_preset: str = "
                 return part.inline_data.data
 
         raise RuntimeError("No image data returned from Gemini API.")
+
 
     except Exception as e:
         print(f"[Gemini Image Agent Error]: {e}")
@@ -319,7 +320,7 @@ class HuggingFaceProvider(SyncProvider):
                     manifest = provenance_engine.create_manifest(
                         prompt=prompt,
                         seed=seed,
-                        model_id="gemini-3.1-flash-image",
+                        model_id="gemini-2.5-flash-image",
                         timestamp=time.time()
                     )
                     provenance_engine.inject_png_provenance(img, manifest, output_path=img_path)
