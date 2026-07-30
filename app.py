@@ -699,17 +699,22 @@ else:
 
 # API Key Guide
 with st.sidebar.expander("🔑 API Key Setup Guide", expanded=False):
-    st.markdown("""**🍌 Gemini API Key** (for Image Generation)
+    st.markdown("""**🍌 Gemini API Key** (for Best Image Quality)
 - Get free key: [Google AI Studio](https://aistudio.google.com/)
 - Key format: `AIzaSy...`
 - Powers: `gemini-2.5-flash-image` manga panels
+
+**🌸 Pollinations.AI** (Free fallback — no key needed!)
+- Automatic Tier 2 fallback when no Gemini key is set
+- Uses FLUX model via [pollinations.ai](https://pollinations.ai)
+- No signup required — works instantly
 
 **🤗 HF Token** (for Text & Audio)
 - Get free token: [huggingface.co/settings/tokens](https://huggingface.co/settings/tokens)
 - Token format: `hf_...`
 - Powers: Qwen LLM, Whisper, MusicGen
 
-> 💡 Both keys can be entered in the text field above or set as Streamlit secrets.
+> 💡 Image generation cascade: **Gemini → Pollinations.AI → Demo**
 """)
 
 # Backblaze B2 Bucket Credentials
@@ -987,14 +992,15 @@ with tab1:
             "Cyberpunk Neon Panel": ", cyberpunk anime style, retro-futurism, glowing neon accents, dramatic reflections, high contrast",
         }
 
-        # Always warn that image generation requires BYOK Gemini key
+        # Inform about the 3-tier image generation cascade
         gemini_key_configured = bool(get_secret("GEMINI_API_KEY") or (raw_token.strip() and raw_token.strip().startswith("AIzaSy")))
         if not gemini_key_configured:
-            st.warning(
-                "🔑 **Gemini API Key Required for Image Generation**: Image panels are powered by "
-                "`gemini-2.5-flash-image` (Google GenAI). Free tier simulation mode will generate a "
-                "demo placeholder panel. To generate **real AI artwork**, enter your `GEMINI_API_KEY` "
-                "in the sidebar (starts with `AIzaSy...`). Get a free key at [Google AI Studio](https://aistudio.google.com/)."
+            st.info(
+                "🌸 **No Gemini Key detected — using Pollinations.AI (free fallback).**\n\n"
+                "Image panels will be generated via [Pollinations.AI](https://pollinations.ai) (FLUX model, no key required). "
+                "For best quality, add your `GEMINI_API_KEY` (`AIzaSy...`) in the sidebar → "
+                "[Get free key](https://aistudio.google.com/).\n\n"
+                "**Generation cascade:** 🍌 Gemini → 🌸 Pollinations.AI → 🎨 Demo Placeholder"
             )
 
         is_disabled = not has_byok and tries_used >= 10

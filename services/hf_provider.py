@@ -44,6 +44,10 @@ SUPPORTED_PROVIDERS = {
         "facebook/musicgen-small": "MusicGen Small (HF Token)",
         "facebook/musicgen-medium": "MusicGen Medium (HF Token)",
     },
+    "image_free": {
+        "pollinations/flux": "Pollinations.AI FLUX (Free, No Key Required)",
+        "pollinations/turbo": "Pollinations.AI Turbo (Free, No Key Required)",
+    },
 }
 
 def detect_api_key_type(key: str) -> str:
@@ -94,6 +98,52 @@ def generate_manga_panel(prompt: str, api_key: str = None, style_preset: str = "
     except Exception as e:
         print(f"[Gemini Image Agent Error]: {e}")
         raise e
+
+
+def generate_image_pollinations(
+    prompt: str,
+    width: int = 1024,
+    height: int = 1024,
+    model: str = "flux",
+    seed: int = None,
+    enhance: bool = True,
+) -> bytes:
+    """
+    FREE fallback image generator via Pollinations.AI public API.
+    No API key required. Rate-limit friendly. Returns raw PNG bytes.
+    Docs: https://pollinations.ai
+    """
+    import urllib.parse
+
+    # Manga-style prompt enhancement
+    enhanced_prompt = (
+        f"High contrast black and white manga panel, detailed ink lineart, "
+        f"dramatic manga shading, masterpiece quality: {prompt}"
+    )
+    encoded_prompt = urllib.parse.quote(enhanced_prompt)
+
+    params = [
+        f"width={width}",
+        f"height={height}",
+        f"model={model}",
+        "nologo=true",
+        "safe=false",
+    ]
+    if seed is not None:
+        params.append(f"seed={seed}")
+    if enhance:
+        params.append("enhance=true")
+
+    url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?{'&'.join(params)}"
+    logger.info(f"[Pollinations.AI] Requesting image from: {url[:120]}...")
+
+    response = requests.get(url, timeout=60)
+    if response.status_code == 200 and response.content:
+        return response.content
+
+    raise RuntimeError(
+        f"Pollinations.AI returned HTTP {response.status_code}. Content: {response.text[:200]}"
+    )
 
 
 # HF Inference Router endpoint (router.huggingface.co)
@@ -349,28 +399,66 @@ class HuggingFaceProvider(SyncProvider):
         endpoint = _hf_url(model)
 
         try:
-            if modality_val == "image" or "flux" in model.lower():
-                try:
-                    if not gemini_key:
-                        raise RuntimeError("gemini_key is empty. Falling back to simulation.")
-                    img_bytes = generate_manga_panel(prompt=prompt, api_key=gemini_key)
-                    temp_dir = tempfile.gettempdir()
-                    img_path = os.path.join(temp_dir, f"manga_panel_{int(time.time())}_{random.randint(1000, 9999)}.png")
-                    img = Image.open(io.BytesIO(img_bytes))
-                    manifest = provenance_engine.create_manifest(
-                        prompt=prompt,
-                        seed=seed,
-                        model_id="gemini-2.5-flash-image",
-                        timestamp=time.time()
-                    )
-                    provenance_engine.inject_png_provenance(img, manifest, output_path=img_path)
-                    step.assets.append(Asset(
-                        url=f"file://{img_path}",
-                        media_type="image/png",
-                        metadata={"image_path": img_path, "prompt": prompt, "seed": seed, "provenance": manifest}
-                    ))
-                except Exception as g_err:
-                    logger.warning(f"Gemini Image API call failed: {g_err}. Using simulation fallback.")
+            if modality_val == "image" or "flux" in model.lower() or "gemini" in model.lower():
+                img_bytes = None
+                used_provider = "simulation"
+
+                # ── Tier 1: Gemini 2.5 Flash Image (BYOK - Gemini API Key required) ──
+                if gemini_key:
+                    try:
+                        img_bytes = generate_manga_panel(prompt=prompt, api_key=gemini_key)
+                        used_provider = "gemini-2.5-flash-image"
+                        logger.info("[Image] Tier 1 Gemini API: SUCCESS")
+                    except Exception as g_err:
+                        logger.warning(f"[Image] Tier 1 Gemini failed: {g_err}. Trying Pollinations.AI fallback.")
+                else:
+                    logger.info("[Image] No Gemini key — skipping Tier 1, going to Pollinations.AI.")
+
+                # ── Tier 2: Pollinations.AI (Free, no key required) ──
+                if img_bytes is None:
+                    try:
+                        img_bytes = generate_image_pollinations(
+                            prompt=prompt,
+                            width=1024,
+                            height=1024,
+                            model="flux",
+                            seed=seed,
+                            enhance=True,
+                        )
+                        used_provider = "pollinations/flux"
+                        logger.info("[Image] Tier 2 Pollinations.AI: SUCCESS")
+                    except Exception as p_err:
+                        logger.warning(f"[Image] Tier 2 Pollinations.AI failed: {p_err}. Falling back to simulation.")
+
+                # ── Tier 3: Offline simulation fallback ──
+                if img_bytes is not None:
+                    try:
+                        temp_dir = tempfile.gettempdir()
+                        img_path = os.path.join(temp_dir, f"manga_panel_{int(time.time())}_{random.randint(1000, 9999)}.png")
+                        img = Image.open(io.BytesIO(img_bytes))
+                        manifest = provenance_engine.create_manifest(
+                            prompt=prompt,
+                            seed=seed,
+                            model_id=used_provider,
+                            timestamp=time.time()
+                        )
+                        provenance_engine.inject_png_provenance(img, manifest, output_path=img_path)
+                        step.assets.append(Asset(
+                            url=f"file://{img_path}",
+                            media_type="image/png",
+                            metadata={
+                                "image_path": img_path,
+                                "prompt": prompt,
+                                "seed": seed,
+                                "provenance": manifest,
+                                "provider": used_provider,
+                            }
+                        ))
+                    except Exception as save_err:
+                        logger.warning(f"[Image] Failed to save image from {used_provider}: {save_err}. Using simulation.")
+                        step.assets.append(_generate_fallback_image_asset(step, prompt, seed, model))
+                else:
+                    logger.warning("[Image] All image providers failed. Using offline simulation fallback.")
                     step.assets.append(_generate_fallback_image_asset(step, prompt, seed, model))
 
 
