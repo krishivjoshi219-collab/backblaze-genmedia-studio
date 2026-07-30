@@ -1,423 +1,536 @@
 <div align="center">
 
 # 🌌 Backblaze GenMedia Studio Hub
-### *Powered by Google Gemini API (Nano Banana 2) & Backblaze B2 Media Cloud*
 
-<img src="https://readme-typing-svg.demolab.com?font=Space+Grotesk&weight=800&size=28&pause=1000&color=FF3366&center=true&vCenter=true&width=750&lines=Multi-Modal+Generative+Media+Studio;Powered+by+Gemini+2.5+Flash+Image+(Nano+Banana+2);Backblaze+B2+Content-Addressed+Cloud+Vault;C2PA+Cryptographic+Content+Provenance;Streamlit+Community+Cloud+Deployable" alt="Typing Banner Main" />
+<img src="https://readme-typing-svg.demolab.com?font=Space+Grotesk&weight=800&size=30&pause=1000&color=A855F7&center=true&vCenter=true&width=800&lines=Multi-Modal+Generative+Media+Studio;Gemini+2.5+Flash+Image+%E2%86%92+Pollinations+FLUX+Fallback;Backblaze+B2+Content-Addressed+Cloud+Vault;C2PA+Cryptographic+Provenance+%26+Deepfake+Guard;Production-Grade+Streamlit+Community+Cloud+App" alt="Typing Banner" />
 
-<br />
+<br/>
 
-<img src="https://readme-typing-svg.demolab.com?font=Outfit&weight=600&size=18&pause=1500&color=00C6FF&center=true&vCenter=true&width=750&lines=%E2%9A%A1+Google+GenAI+SDK+(gemini-2.5-flash-image)+Integration;%F0%9F%92%BE+Content-Addressed+B2+Storage+Deduplication;%F0%9F%A4%96+ThresholdEvaluator+Self-Correction+Loops" alt="Typing Banner Sub" />
+**Official Submission — Backblaze Generative AI Media Hackathon: Build with Genblaze on B2**
 
-**Next-Generation Multi-Modal Generative Media Orchestration, C2PA Cryptographic Provenance & Backblaze B2 Media Cloud**
+[![Live App](https://img.shields.io/badge/🚀_Live_App-Streamlit_Cloud-FF4B4B?style=for-the-badge&logo=streamlit)](https://backblaze-genmedia-studio-yq7ghbwrivfgb3ws3xdtta.streamlit.app/)
+[![Genblaze SDK](https://img.shields.io/badge/Genblaze-SDK_Pipeline-F97316?style=for-the-badge)](https://github.com/backblaze-labs/genblaze)
+[![Backblaze B2](https://img.shields.io/badge/Backblaze-B2_Cloud_Storage-1D4ED8?style=for-the-badge&logo=backblaze)](https://www.backblaze.com/cloud-storage)
+[![Google GenAI](https://img.shields.io/badge/Google_GenAI-gemini--2.5--flash--image-4285F4?style=for-the-badge&logo=google)](https://ai.google.dev/)
+[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python)](https://www.python.org/)
 
-*Official Submission for the **Backblaze Generative AI Media Hackathon: Build with Genblaze on B2***
+### 🔗 Live Production URL (No Login Required)
+## **[https://backblaze-genmedia-studio-yq7ghbwrivfgb3ws3xdtta.streamlit.app/](https://backblaze-genmedia-studio-yq7ghbwrivfgb3ws3xdtta.streamlit.app/)**
 
----
-
-[![Deploy to Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://backblaze-genmedia-studio-yq7ghbwrivfgb3ws3xdtta.streamlit.app/)
-[![Google GenAI SDK](https://img.shields.io/badge/Google_GenAI-Gemini_2.5_Flash_Image-4285F4?logo=google&style=for-the-badge)](https://ai.google.dev/)
-[![Backblaze B2 Cloud Storage](https://img.shields.io/badge/Backblaze-B2_Cloud_Storage-blue?logo=backblaze&style=for-the-badge)](https://www.backblaze.com/cloud-storage)
-[![Genblaze SDK](https://img.shields.io/badge/Genblaze-SDK_Pipeline-orange?style=for-the-badge)](https://github.com/backblaze-labs/genblaze)
-[![Streamlit Community Cloud](https://img.shields.io/badge/Streamlit-Community_Cloud_Live-FF4B4B?logo=streamlit&style=for-the-badge)](https://backblaze-genmedia-studio-yq7ghbwrivfgb3ws3xdtta.streamlit.app/)
-[![Python Version](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&style=for-the-badge)](https://www.python.org/)
-
-### 🔗 Live Production Deployment URL
-🌐 **[https://backblaze-genmedia-studio-yq7ghbwrivfgb3ws3xdtta.streamlit.app/](https://backblaze-genmedia-studio-yq7ghbwrivfgb3ws3xdtta.streamlit.app/)**
+> No API key required for demo mode — all 9 studio tabs are fully explorable with simulation data.
+> Bring your own `GEMINI_API_KEY` (free at [aistudio.google.com](https://aistudio.google.com)) for real AI image generation.
 
 </div>
 
 ---
 
 ## 📑 Table of Contents
-1. [Executive Summary & Vision](#1-executive-summary--vision)
-2. [Live Application URL & One-Click Cloud Deployment](#2-live-application-url--one-click-cloud-deployment)
-3. [Changelog & Recent Improvements](#3-changelog--recent-improvements)
-4. [Comprehensive 100 Production Capabilities Matrix](#4-comprehensive-100-production-capabilities-matrix)
-5. [Hackathon Alignment & Rules Compliance Matrix](#5-hackathon-alignment--rules-compliance-matrix)
-6. [System Architecture & End-to-End Data Flow](#6-system-architecture--end-to-end-data-flow)
-7. [Deep-Dive: Backblaze B2 Media Cloud Infrastructure](#7-deep-dive-backblaze-b2-media-cloud-infrastructure)
-8. [Deep-Dive: Genblaze SDK Architecture & Extensions](#8-deep-dive-genblaze-sdk-architecture--extensions)
-9. [Deep-Dive: C2PA Cryptographic Content Provenance](#9-deep-dive-c2pa-cryptographic-content-provenance)
-10. [Detailed Technical Specifications across Studio Workspaces](#10-detailed-technical-specifications-across-studio-workspaces)
-11. [AI Models & Provider Catalog Specification](#11-ai-models--provider-catalog-specification)
-12. [Installation, Local Development & Environment Guide](#12-installation-local-development--environment-guide)
-13. [Judges & Evaluators Hands-On Testing Protocol](#13-judges--evaluators-hands-on-testing-protocol)
-14. [License, Security Redactions & Repository Status](#14-license-security-redactions--repository-status)
+
+1. [What It Does — Feature Overview](#1-what-it-does--feature-overview)
+2. [How It Uses Backblaze B2](#2-how-it-uses-backblaze-b2)
+3. [How It Uses the Genblaze SDK](#3-how-it-uses-the-genblaze-sdk)
+4. [AI Providers & Models — Complete List](#4-ai-providers--models--complete-list)
+5. [Judging Criteria Compliance Matrix](#5-judging-criteria-compliance-matrix)
+6. [System Architecture & Data Flow](#6-system-architecture--data-flow)
+7. [Secrets & Configuration Format](#7-secrets--configuration-format)
+8. [Local Installation](#8-local-installation)
+9. [Judges Testing Protocol](#9-judges-testing-protocol)
+10. [Capabilities Matrix (100 Production Features)](#10-capabilities-matrix-100-production-features)
+11. [License & Repository](#11-license--repository)
 
 ---
 
-## 1. Executive Summary & Vision
+## 1. What It Does — Feature Overview
 
-Digital media creation—ranging from Japanese manga panel design, light novel composition, localization translation, voiceover soundscape synthesis, and subtitle timing—has traditionally suffered from severe infrastructural fragmentation:
+**Backblaze GenMedia Studio Hub** is a production-grade, multi-modal generative AI media studio built for creators — manga artists, light novel writers, voiceover producers, and subtitle translators — who need a single, reliable workspace to generate, store, and authenticate AI media.
 
-- **Siloed Model Pipelines**: Image generation, LLM text models, audio generators, and transcription models operate in isolated APIs without shared execution contexts.
-- **Visual & Style Drift**: Traditional generation loops produce jarring character appearance changes across story panels, ruining narrative immersion.
-- **Insecure Asset Storage**: High-resolution generated media lacks durable, content-addressed cloud storage with presigned streaming URLs.
-- **Lack of Cryptographic Authenticity**: AI-generated media is vulnerable to deepfake spoofing, metadata stripping, and unverified attribution.
+### The Problem It Solves
 
-### The Solution: Backblaze GenMedia Studio Hub
+| Pain Point | How GenMedia Studio Solves It |
+|---|---|
+| **Siloed AI models** — image, text, audio each require separate tools | Unified Genblaze pipeline orchestrator chains all modalities in one workflow |
+| **Ephemeral AI output** — generated media disappears, no durable storage | Backblaze B2 content-addressed vault with SHA-256 deduplication & presigned CDN URLs |
+| **Unverifiable AI content** — deepfake risk, no authenticity proof | C2PA cryptographic provenance — every asset gets a verifiable SHA-256 + HMAC-SHA256 certificate |
 
-**Backblaze GenMedia Studio Hub** solves these fundamental challenges by combining Google's **Gemini 2.5 Flash Image (`gemini-2.5-flash-image`) Nano Banana 2** engine with the **Genblaze SDK** multi-step pipeline engine, **Backblaze B2 Cloud Storage**, **C2PA Cryptographic Content Provenance**, and an ultra-modern, production-grade **Streamlit Studio Hub**.
+### Studio Workspaces (9 Tabs)
 
-```mermaid
-graph TD
-    A[👤 Creator Prompt Input] --> B[⚡ Genblaze Pipeline Orchestrator]
-    B --> C[🍌 Gemini 2.5 Flash Image API]
-    B --> D[🎵 MusicGen Audio Inference]
-    B --> E[📝 LLM Text Translation / Writer]
-    C & D & E --> F[🛡️ ThresholdEvaluator Quality Guard]
-    F -- Score < 0.75 --> G[🔄 Auto-Refine Prompts & Retry]
-    F -- Score >= 0.75 --> H[🔐 C2PA Cryptographic Hashing]
-    H --> I[💾 Backblaze B2 Media Vault Archive]
-    I --> J[🌐 Presigned CDN Media Streaming]
-    I --> K[🌳 Graphviz Ancestry Lineage Tree]
+| Tab | Workspace | Core Capabilities |
+|---|---|---|
+| 🎨 | **Manga & Comic Studio** | AI panel generation (Gemini → Pollinations fallback), colorization, speech bubble OCR, storyboard reel |
+| 📖 | **Light Novel Factory** | Scene writing, JP→EN localization, audio dramatization, EPUB/PDF export |
+| 🎙️ | **Whisper Subtitle Hub** | Audio transcription → SRT/VTT/JSON, multi-language translation, reading-pace optimizer |
+| 🤖 | **Agent Continuity Loop** | Autonomous `ThresholdEvaluator` quality loops with auto-retry |
+| ⚡ | **ComfyUI Workflow Studio** | Visual pipeline builder with graph topology export |
+| 🗄️ | **Backblaze B2 Vault** | Browse, stream, download, tag, ZIP-archive, and webhook-dispatch B2 assets |
+| 🛡️ | **Security & Provenance** | C2PA tamper audits, authenticity certificates, RBAC workspace manager |
+| 📊 | **Analytics & System Health** | Telemetry, cost estimator, storage utilization, model benchmark chart |
+| 🔒 | **Code Inspector** | Live dependency scanner, pip conflict detector |
+
+---
+
+## 2. How It Uses Backblaze B2
+
+Backblaze B2 is the **primary durable media vault** for all generated assets — not just a file dump. Every generated image, audio file, subtitle export, C2PA certificate, and run manifest is stored in B2 with full lifecycle management.
+
+```
+services/vault.py          — All B2 SDK operations
+services/temporal_vault.py — Version history & time-travel
+```
+
+| B2 Feature | Implementation | Code Reference |
+|---|---|---|
+| **Content-addressed upload with deduplication** | SHA-256 hash computed before every upload; identical files skip the upload | `deduplicate_and_archive_to_b2()` |
+| **Multi-part chunked parallel upload** | Files >100 MB split into parallel chunks via `ThreadPoolExecutor` (5 workers) | `upload_large_b2_media_chunked()` |
+| **Presigned CDN streaming URLs** | HTML5 video/audio playback without exposing bucket credentials | `get_presigned_streaming_url()` |
+| **Spatial time-travel versioning** | Lists & restores historical file versions via `list_file_versions` | `diff_b2_file_revisions()` |
+| **Automated retention/lifecycle policy** | Applies B2 bucket lifecycle rules via `b2sdk` | `configure_b2_lifecycle_policy()` |
+| **CORS policy configurator** | Sets B2 CORS rules for direct browser streaming | `configure_b2_cors_policy()` |
+| **Bulk ZIP archiving** | Multi-run assets zipped + manifest indexed for one-click download | `create_bulk_b2_vault_zip()` |
+| **Vault health diagnostics** | File count, storage consumption, deduplication savings meter | `get_b2_vault_health_metrics()` |
+| **Metadata tagging & search** | Custom asset tags (prompt, model, timestamp) applied and filterable | `tag_and_index_b2_asset()` |
+| **Webhook notification dispatch** | Posts B2 upload events to Discord/Zapier/REST endpoints | `dispatch_webhook_notification()` |
+| **S3 interoperability export** | Generates S3-compatible manifests for cross-cloud migration | `export_b2_s3_migration_manifest()` |
+| **HLS streaming playlist** | M3U8 playlist generator for multi-panel audio/video reels | `generate_b2_cdn_media_playlist()` |
+| **Cold storage archival tagging** | Tags older runs with Glacier-style archival metadata | `simulate_b2_glacier_archival()` |
+| **Direct presigned upload URLs** | Client-side direct upload without server proxy | `configure_b2_presigned_upload_url()` |
+| **Quota threshold guard** | Alerts when bucket approaches storage limits | `validate_b2_storage_quota_limits()` |
+
+### B2 Data Flow
+
+```
+Generated Asset (PNG / WAV / SRT / JSON)
+  → SHA-256 Hash Check (skip if duplicate)
+  → C2PA Signature Injection
+  → Parallel B2 Upload (ThreadPoolExecutor)
+  → Metadata Tag & Index
+  → Presigned CDN URL Generation
+  → Webhook Event Dispatch
+  → Vault Gallery / HLS Stream Player
 ```
 
 ---
 
-## 2. Live Application URL & One-Click Cloud Deployment
+## 3. How It Uses the Genblaze SDK
 
-Backblaze GenMedia Studio is deployed live on **Streamlit Community Cloud**:
+The Genblaze SDK (`genblaze-core` + `genblaze-s3`) is the **multi-step pipeline backbone** that orchestrates all generation modalities.
 
-🔗 **[https://backblaze-genmedia-studio-yq7ghbwrivfgb3ws3xdtta.streamlit.app/](https://backblaze-genmedia-studio-yq7ghbwrivfgb3ws3xdtta.streamlit.app/)**
-
-### 🔑 Streamlit Cloud Secrets Setup
-
-To run seamlessly on Streamlit Cloud without requiring user login inputs, the application reads secrets automatically from `st.secrets` via the `get_secret()` helper function:
-
-```toml
-# Streamlit Community Cloud App Secrets Configuration (add in App Settings > Secrets)
-GEMINI_API_KEY = "AIzaSy_your_gemini_api_key_here"
-B2_KEY_ID = "your_backblaze_b2_key_id_here"
-B2_APPLICATION_KEY = "your_backblaze_b2_application_key_here"
-B2_BUCKET_NAME = "your_backblaze_b2_bucket_name_here"
-WEBHOOK_URL = "https://discord.com/api/webhooks/your_webhook_id/your_webhook_token"
-PENDO_INTEGRATION_KEY = "your_pendo_integration_key_here"
+```
+services/orchestrator.py  — Pipeline chaining, evaluation, fallback routing
+services/hf_provider.py   — Custom SyncProvider implementation
 ```
 
-> **No secrets?** The app runs fully in **demo/simulation mode** — all features work with mock data when no API keys are configured. The demo mode is ideal for judges and evaluators.
+| SDK Component | How It's Used |
+|---|---|
+| `genblaze.Pipeline` | Chains multi-step generation: image → text → audio in a single execution graph |
+| `genblaze.SyncProvider` | Custom `HuggingFaceProvider` routes image/text/audio jobs to the right backends |
+| `StepType.GENERATE` | Used for all image, text, and audio generation steps |
+| `Modality.IMAGE / AUDIO / TEXT` | Correct modality mapping for each pipeline step |
+| `ThresholdEvaluator` | Autonomous quality guard — if score < 0.75, appends style anchors and retries |
+| Fallback provider routing | On step failure, automatically retries across registered fallback model IDs |
+| Pipeline state checkpointing | Saves step execution state for resuming interrupted runs |
+| Dynamic temperature/top-p | Per-step randomness configuration via `tune_genblaze_sampling_parameters()` |
+| Graph topology serialization | Exports pipeline configs to JSON/YAML for reproducibility |
+| Multi-model ensemble voting | Runs multiple candidates concurrently and selects highest-scoring output |
 
+### Image Generation Cascade (3-Tier Fallback via Genblaze Routing)
 
----
-
-### 🚀 Streamlit Community Cloud Deployment Checklist
-
-| Step | Action | Status |
-|------|--------|--------|
-| 1 | Fork this repository to your GitHub account | Required |
-| 2 | Connect to [Streamlit Community Cloud](https://streamlit.io/cloud) | Required |
-| 3 | Add secrets in `App Settings > Secrets` using the template above | Required for live APIs |
-| 4 | Set `requirements.txt` to install all Python dependencies | Automatic |
-| 5 | Set `packages.txt` for system packages (`graphviz`, `ffmpeg`) | Automatic |
-| 6 | Configure `.streamlit/config.toml` for production settings | Pre-configured |
-| 7 | Deploy! | Done |
-
----
-
-### 📋 Streamlit Cloud Configuration (`.streamlit/config.toml`)
-
-The app is pre-configured for Streamlit Community Cloud with:
-
-- **`enableCORS = true`** — Enables cross-origin proxy for Streamlit's CDN
-- **`healthCheckInterval = 30`** — Keeps the app alive during idle periods
-- **`toolbarMode = minimal`** — Reduces UI clutter for end users
-- **`headless = true`** — Optimized for cloud server environment
-- **`enableXsrfProtection = true`** — Cross-site request forgery protection
+```
+Tier 1 → gemini-2.5-flash-image    (Google GenAI — BYOK GEMINI_API_KEY)
+         ↓ if unavailable / quota exceeded
+Tier 2 → Pollinations.AI FLUX      (FREE — no key, real AI images)
+         ↓ if network failure
+Tier 3 → Simulation mode           (demo placeholder, all metadata intact)
+```
 
 ---
 
-## 3. Changelog & Recent Improvements
+## 4. AI Providers & Models — Complete List
 
-### 🐛 Bug Fixes
-- **12 `st.markdown()` calls** fixed `unsafe_html=True` → `unsafe_allow_html=True` (Streamlit API error that prevented HTML rendering)
-- **`orchestrator.py` timestamp bug** — `"timestamp": logger.name` was returning the logger name string (`"GenMediaCentralOrchestrator"`) instead of a Unix timestamp; fixed to `"timestamp": time.time()`
-- **`vault.py` missing imports** — Added `import os` and `import secrets` that were needed but absent, causing `NameError` at runtime in `purge_expired_temp_previews()` and `configure_b2_presigned_upload_url()`
-- **`glass-card-neon-blue` CSS class** was referenced in the UI but had no corresponding CSS definition; added full neon-blue glassmorphic card styling with hover effects
+> Hackathon requirement: *"Include a clearly defined list of the AI providers and models used."*
 
-### 🚀 Streamlit Community Cloud Optimizations
-- **`.streamlit/config.toml`** — Set `enableCORS = true` for proper cross-origin proxy handling on Streamlit Cloud's CDN
-- **Added `healthCheckInterval = 30`** — Keeps the app alive during idle periods and prevents cold-start timeouts
-- **Added `toolbarMode = "minimal"`** — Reduces UI clutter for end users and judges
-- **Graceful dependency fallbacks** — App starts even if the `genblaze` SDK fails to build during Streamlit Cloud deployment; missing imports are caught and reported as warnings instead of crashing the entire app
-- **Pendo tracking is now conditional** — Only loads when `PENDO_INTEGRATION_KEY` is set in environment variables; avoids unnecessary external script loading
-- **Pendo API key** moved from hardcoded value to `PENDO_INTEGRATION_KEY` environment variable (security best practice)
+| # | Modality | Provider | Model ID | API Key Required | Purpose |
+|---|---|---|---|---|---|
+| 1 | **Image Generation (Tier 1)** | Google GenAI | `gemini-2.5-flash-image` | `GEMINI_API_KEY` | Manga panel artwork |
+| 2 | **Image Generation (Tier 2)** | Pollinations.AI | `flux` (FLUX.1-schnell) | None — free | Free fallback image generation |
+| 3 | **Text / LLM** | Hugging Face | `Qwen/Qwen2.5-72B-Instruct` | `HF_TOKEN` | Light novel writing |
+| 4 | **Text / LLM (alt)** | Hugging Face | `Qwen/Qwen2.5-7B-Instruct` | `HF_TOKEN` | Localization / translation |
+| 5 | **Text / LLM (alt)** | Hugging Face | `meta-llama/Llama-3.1-8B-Instruct` | `HF_TOKEN` | Story continuation |
+| 6 | **Text / LLM (alt)** | Hugging Face | `mistralai/Mistral-7B-Instruct-v0.3` | `HF_TOKEN` | Dialogue rewriting |
+| 7 | **Text / LLM (alt)** | Hugging Face | `google/gemma-3-27b-it` | `HF_TOKEN` | Prose quality evaluation |
+| 8 | **Audio Transcription** | Hugging Face | `openai/whisper-large-v3` | `HF_TOKEN` | Multi-lingual speech-to-text |
+| 9 | **Audio Transcription (fast)** | Hugging Face | `openai/whisper-large-v3-turbo` | `HF_TOKEN` | Real-time subtitle generation |
+| 10 | **Audio Transcription (lite)** | Hugging Face | `distil-whisper/distil-large-v3` | `HF_TOKEN` | Lightweight transcription |
+| 11 | **Audio Generation** | Hugging Face | `facebook/musicgen-small` | `HF_TOKEN` | Background soundscape |
+| 12 | **Audio Generation (med)** | Hugging Face | `facebook/musicgen-medium` | `HF_TOKEN` | Higher-quality ambient music |
 
-### 🎨 Production UI Upgrades
-- **Production footer** added with project attribution and GitHub repository link
-- **Sidebar reorganization** — Pip conflict scanner and diagnostic tools moved into collapsible "🛠 Dev Tools" section, keeping the main sidebar clean for production use
-- **Enhanced CSS** — Added code block scroll styling, metric card polish, expander header styling, fade-in animations, responsive breakpoints (768px mobile), and custom scrollbar theming
-- **Dependency loading guard** — App displays a clear warning message listing any failed service loads instead of crashing silently
+### BYOK Policy
 
-### 📖 Documentation
-- Removed out-of-date Novus (Pendo) MCP integration section from README
-- Added Streamlit Cloud deployment checklist
-- Added `.streamlit/config.toml` configuration documentation
-- Added `PENDO_INTEGRATION_KEY` to secrets template
-
----
-
-## 4. Comprehensive 100 Production Capabilities Matrix
-
-Below is the architectural matrix of the **100 enterprise production capabilities** integrated across Backblaze GenMedia Studio:
-
-### **Domain 1: Backblaze B2 Media Cloud & Data Orchestration (Capabilities 1-20)**
-| # | Capability Name | Description | Source File Location |
-| :--- | :--- | :--- | :--- |
-| **1** | **B2 Content-Addressed Storage & Deduplication** | Hashing via SHA-256 prevents redundant asset uploads to B2. | `services/vault.py` (`deduplicate_and_archive_to_b2`) |
-| **2** | **B2 Automated Retention Policy Manager** | Applies retention rules to B2 buckets using `b2sdk`. | `services/vault.py` (`configure_b2_lifecycle_policy`) |
-| **3** | **B2 Multi-Part Chunked Parallel Upload Handler** | Splits media >100MB into multi-part chunked uploads. | `services/vault.py` (`upload_large_b2_media_chunked`) |
-| **4** | **B2 Custom User Metadata Tagging & Search** | Filters assets matching prompt tags or metadata categories. | `services/vault.py` (`tag_and_index_b2_asset`) |
-| **5** | **B2 S3 Interoperability & Migration Exporter** | Generates S3-compatible endpoints and migration manifests. | `services/vault.py` (`export_b2_s3_migration_manifest`) |
-| **6** | **B2 Automated CORS Policy Configurator** | Configures CORS rules on B2 buckets for direct browser streaming. | `services/vault.py` (`configure_b2_cors_policy`) |
-| **7** | **B2 Vault Health Diagnostics & Usage Metering** | Audits file count, total storage consumption, and asset size. | `services/vault.py` (`get_b2_vault_health_metrics`) |
-| **8** | **B2 Bulk Zip Batch Archiving & Downloader** | Zips multiple historical runs with manifest indexing for downloads. | `services/vault.py` (`create_bulk_b2_vault_zip`) |
-| **9** | **B2 Spatial Time-Travel Revision Diff Analyzer** | Highlights size, hash, and metadata diffs between file versions. | `services/vault.py` (`diff_b2_file_revisions`) |
-| **10** | **B2 Cold Storage Glacier Tier Archival Simulator** | Tags older asset runs with archival metadata for long-term retention. | `services/vault.py` (`simulate_b2_glacier_archival`) |
-| **11** | **B2 HLS Media Streaming Playlist Generator** | Generates M3U8 playlists for multi-panel audio and video reels. | `services/vault.py` (`generate_b2_cdn_media_playlist`) |
-| **12** | **B2 Bandwidth Savings Meter** | Calculates volume and cost saved via SHA-256 deduplication. | `services/vault.py` (`compute_b2_bandwidth_savings`) |
-| **13** | **B2 Bucket Lock Immutability Auditor** | Audits WORM object lock settings for legal compliance. | `services/vault.py` (`verify_b2_bucket_lock_compliance`) |
-| **14** | **B2 Metadata Catalog CSV Exporter** | Exports all asset metadata records as structured CSV catalogs. | `services/vault.py` (`export_b2_metadata_catalog_csv`) |
-| **15** | **B2 Temp Buffer Purge Manager** | Automatically cleans up local temporary preview buffers. | `services/vault.py` (`purge_expired_temp_previews`) |
-| **16** | **B2 Direct Presigned Upload URL Generator** | Generates presigned URLs for client-side direct uploads. | `services/vault.py` (`configure_b2_presigned_upload_url`) |
-| **17** | **B2 Storage Quota Threshold Guard** | Triggers alerts when bucket storage usage approaches limits. | `services/vault.py` (`validate_b2_storage_quota_limits`) |
-| **18** | **B2 Multi-Tag Asset Annotator** | Applies multi-tag annotations to historical media assets in bulk. | `services/vault.py` (`batch_tag_b2_assets`) |
-| **19** | **B2 Cross-Region Vault Replication Simulator** | Simulates multi-region vault redundancy synchronization. | `services/vault.py` (`replicate_b2_cross_region_vault`) |
-| **20** | **B2 Access Log Security Auditor** | Scans B2 access logs for unauthorized download attempts. | `services/vault.py` (`audit_b2_access_logs`) |
-
-### **Domain 2: Genblaze SDK Pipeline & Agent Intelligence (Capabilities 21-40)**
-| # | Capability Name | Description | Source File Location |
-| :--- | :--- | :--- | :--- |
-| **21** | **Genblaze Multi-Branch Conditional Execution** | Dynamically branches execution steps based on evaluation scores. | `services/orchestrator.py` (`execute_conditional_pipeline`) |
-| **22** | **Genblaze Automatic Fallback Provider Routing** | Retries step generation across fallback model identifiers on failure. | `services/orchestrator.py` (`execute_with_fallback`) |
-| **23** | **Genblaze Custom Prompt Keyframe Interpolation** | Interpolates prompts across keyframe panels for story continuity. | `services/agent_studio.py` (`interpolate_scene_prompts`) |
-| **24** | **Genblaze Quality Control Benchmarking Suite** | Computes benchmark metrics comparing visual continuity scores. | `services/agent_studio.py` (`benchmark_pipeline_runs`) |
-| **25** | **Genblaze Real-Time Event Telemetry Tracker** | Measures sub-step latency, success metrics, and payload telemetry. | `services/orchestrator.py` (`get_pipeline_telemetry`) |
-| **26** | **Genblaze Dynamic Temperature & Top-P Sampler** | Configures generation randomness dynamically per step. | `services/orchestrator.py` (`tune_genblaze_sampling_parameters`) |
-| **27** | **Genblaze Multi-Model Ensemble Voting Matrix** | Runs candidates concurrently and merges outputs based on score ranking. | `services/orchestrator.py` (`run_genblaze_ensemble_pipeline`) |
-| **28** | **Genblaze Automated Negative Prompt Injector** | Appends negative prompts automatically to eliminate artifacts. | `services/orchestrator.py` (`inject_negative_prompt_engineering`) |
-| **29** | **Genblaze Graph Topology Serializer** | Serializes pipeline step configs into JSON/YAML specs. | `services/orchestrator.py` (`serialize_pipeline_topology`) |
-| **30** | **Genblaze Step State Checkpointer & Resume** | Saves step execution states to allow resuming interrupted runs. | `services/orchestrator.py` (`checkpoint_pipeline_state`) |
-| **31** | **Automated Prompt Syntax Repair Engine** | Detects and fixes invalid prompt syntax, dangling commas, or typos. | `services/orchestrator.py` (`auto_repair_corrupted_prompts`) |
-| **32** | **Character Visual Similarity Evaluator** | Computes perceptual similarity scores between character keyframes. | `services/orchestrator.py` (`eval_character_visual_similarity`) |
-| **33** | **Ensemble Output Aesthetic Quality Ranker** | Ranks ensemble outputs using aesthetic quality scoring metrics. | `services/orchestrator.py` (`rank_ensemble_outputs_by_aesthetic`) |
-| **34** | **Prompt Semantic Expansion Variant Generator** | Generates 3 prompt variations using expansion heuristics. | `services/orchestrator.py` (`generate_prompt_expansion_variants`) |
-| **35** | **Pipeline Step Cache Optimizer** | Caches intermediate step asset results to accelerate reruns. | `services/orchestrator.py` (`optimize_pipeline_step_caching`) |
-| **36** | **LLM Step Token Consumption Estimator** | Calculates estimated token consumption for LLM pipeline steps. | `services/orchestrator.py` (`estimate_step_token_consumption`) |
-| **37** | **Model Hallucination Semantic Drift Detector** | Monitors output text for semantic drift against initial prompts. | `services/orchestrator.py` (`detect_model_hallucination_drift`) |
-| **38** | **Camera Motion Tag Injector** | Inserts camera tracking directions into video keyframe prompts. | `services/orchestrator.py` (`inject_camera_movement_tags`) |
-| **39** | **Image Aspect Ratio Normalizer** | Standardizes panel aspect ratio dimensions across multi-step runs. | `services/orchestrator.py` (`normalize_image_aspect_ratios`) |
-| **40** | **Pipeline Execution Summary Report Generator** | Produces markdown summary reports of completed pipeline runs. | `services/orchestrator.py` (`generate_pipeline_execution_summary`) |
-
-### **Domain 3: Multi-Modal Studio & Content Production (Capabilities 41-60)**
-| # | Capability Name | Description | Source File Location |
-| :--- | :--- | :--- | :--- |
-| **41** | **Manga Colorization & Style Transfer Studio** | Transforms monochrome panels into rich colored artwork styles. | `services/manga.py` (`colorize_manga_panel`) |
-| **42** | **Light Novel Audio Dramatization Generator** | Synthesizes ambient soundtracks and voiceovers from novel scripts. | `services/novel.py` (`generate_audio_dramatization`) |
-| **43** | **Whisper Subtitle Alignment & Exporter** | Converts subtitles into SRT, WebVTT (.vtt), SSA/ASS, and JSON. | `services/whisper.py` (`export_multiformat_subtitles`) |
-| **44** | **Storyboard PDF / EPUB E-Book Compiler** | Packages novel prose and manga panels into digital EPUB manifests. | `services/novel.py` (`compile_epub_ebook_manifest`) |
-| **45** | **Interactive Video Storyboard Reel Synthesizer** | Stitches panel images and audio into an animated HTML5 player. | `services/manga.py` (`synthesize_storyboard_reel_html`) |
-| **46** | **Manga Speech Bubble OCR & Dialogue Extractor** | Extracts text from dialogue bubbles in manga panel images. | `services/manga.py` (`extract_manga_bubble_ocr`) |
-| **47** | **Anime Character Consistency Profile Generator** | Creates reusable character anchor profiles (hair, eyes, costume). | `services/manga.py` (`create_character_anchor_profile`) |
-| **48** | **Multi-Speaker TTS Voiceover Audio Synthesizer** | Assigns distinct voice profiles to light novel dialogue speakers. | `services/novel.py` (`synthesize_multispeaker_voiceover`) |
-| **49** | **Subtitles Speed & Reading Pace Optimizer** | Adjusts timecodes based on length for comfortable reading pace. | `services/whisper.py` (`optimize_subtitle_timing`) |
-| **50** | **Interactive Manga Canvas Layout Designer** | Customizes panel grid layouts (2-panel, 4-panel, hero splash). | `services/manga.py` (`generate_custom_manga_grid`) |
-| **51** | **Manga Halftone Screentone Filter** | Applies halftone screentone patterns to generated manga lineart. | `services/manga.py` (`apply_manga_screentone_filter`) |
-| **52** | **Katakana Visual Sound Effect (SFX) Generator** | Synthesizes katakana visual sound effect overlays for manga. | `services/manga.py` (`generate_manga_sound_effects`) |
-| **53** | **Multilingual Subtitle Auto-Translator** | Translates subtitle timecodes into Spanish, French, and German. | `services/whisper.py` |
-| **54** | **Print-Ready PDF Booklet Exporter** | Compiles manga pages into print-ready PDF booklet manifests. | `services/manga.py` (`export_storyboard_pdf_booklet`) |
-| **55** | **Light Novel Table of Contents Generator** | Creates structured JSON table of contents for light novels. | `services/novel.py` |
-| **56** | **Background Ambient FX Synthesizer** | Generates rain, wind, and crowd ambient audio soundscapes. | `services/novel.py` |
-| **57** | **Voiceover Pitch & Speed Synthesizer** | Fine-tunes TTS voice pitch, rate, and emotion parameters. | `services/novel.py` |
-| **58** | **Hardcoded Styled WebVTT Formatter** | Formats WebVTT subtitles with custom styling and fonts. | `services/whisper.py` |
-| **59** | **Hero Manga Title Cover Artwork Generator** | Generates hero title page cover artwork with logo overlays. | `services/manga.py` (`generate_manga_cover_artwork`) |
-| **60** | **Light Novel Reading Duration Estimator** | Computes estimated light novel reading duration. | `services/novel.py` |
-
-### **Domain 4: Security Governance & C2PA Provenance (Capabilities 61-80)**
-| # | Capability Name | Description | Source File Location |
-| :--- | :--- | :--- | :--- |
-| **61** | **C2PA Deepfake Tampering & Alteration Detector** | Scans headers to detect metadata stripping, alteration, or deepfakes. | `services/security.py` (`detect_c2pa_tampering`) |
-| **62** | **Granular Role-Based Access Control (RBAC)** | Manages team workspaces with Admin, Creator, and Viewer permissions. | `services/security.py` (`TeamWorkspaceManager`) |
-| **63** | **C2PA Provenance Certificate Text Generator** | Produces downloadable certificates of authenticity verified by C2PA. | `services/security.py` (`generate_provenance_certificate_text`) |
-| **64** | **Automated Cost & Token Quota Calculator** | Calculates real-time API cost estimates, tokens, and storage allocation. | `services/security.py` (`calculate_generation_quota_cost`) |
-| **65** | **Ephemeral Memory Token Scrubber & Cipher** | Redacts keys from app logs and state memory dynamically. | `services/security.py` (`TokenScrubber`) |
-| **66** | **Watermark Cryptographic Steganography Engine** | Embeds invisible HMAC signatures inside image alpha channel bytes. | `services/security.py` (`embed_steganographic_signature`) |
-| **67** | **C2PA Key Rotation & Certificate Manager** | Rotates cryptographic signing keys dynamically for zero-trust security. | `services/security.py` (`rotate_c2pa_signing_keys`) |
-| **68** | **API Key Permission Scraper & Scope Auditor** | Audits API key scopes and permissions before execution runs. | `services/security.py` (`audit_token_scopes`) |
-| **69** | **Sanitizing Log Masking & Audit Trail Recorder** | Logs security events with masked sensitive fields for SOC2 compliance. | `services/security.py` (`record_security_audit_log`) |
-| **70** | **IP & Geo-Fencing Access Guard Simulator** | Verifies user region code against OFAC compliance and vault rules. | `services/security.py` (`evaluate_geofencing_policy`) |
-| **71** | **HMAC Asset Signature Verifier** | Cryptographically verifies HMAC signatures on assets. | `services/security.py` |
-| **72** | **PII & Restricted Keyword Redactor** | Filters PII and restricted keywords from prompt inputs. | `services/security.py` |
-| **73** | **C2PA JSON-LD Manifest Standard Exporter** | Exports C2PA manifests in JSON-LD web standard format. | `services/security.py` |
-| **74** | **API Rate Limit Headroom Monitor** | Monitors remaining API request quotas across providers. | `services/security.py` |
-| **75** | **Content Safety Policy Compliance Auditor** | Audits generated images for NSFW and policy compliance. | `services/security.py` |
-| **76** | **Asset Bundle Checksum Manifest Map** | Computes SHA-256 manifest maps for asset bundles. | `services/security.py` |
-| **77** | **Zero-Trust Access Session Token Validator** | Validates JWT session tokens for workspace actions. | `services/security.py` |
-| **78** | **Local Cache AES-256 Encryptor** | Encrypts temporary disk cache buffers using AES-256. | `services/security.py` |
-| **79** | **RBAC Permission Audit Trail Logger** | Logs RBAC permission modifications for security tracking. | `services/security.py` |
-| **80** | **Cryptographic Origin Lineage Tracer** | Traces cryptographic provenance back to model seed and timestamp. | `services/security.py` |
-
-### **Domain 5: UI/UX, Observability & Production Analytics (Capabilities 81-100)**
-| # | Capability Name | Description | Source File Location |
-| :--- | :--- | :--- | :--- |
-| **81** | **Interactive Studio Analytics Dashboard** | Visualizes generation stats, C2PA rates, B2 storage, and latency. | `app.py` (Analytics Tab) |
-| **82** | **Dynamic Graphviz Ancestry Lineage Visualizer** | Renders interactive pipeline ancestry graph mapping execution nodes. | `services/lineage.py` (`render_lineage_ui`) |
-| **83** | **Multi-Channel Webhook Dispatcher** | Dispatches publication payloads to Discord, Zapier, or REST endpoints. | `services/vault.py` (`dispatch_webhook_notification`) |
-| **84** | **Dark Cyberpunk Glassmorphism Design System** | Custom CSS design system with Space Grotesk fonts and neon glow. | `app.py` (CSS Styling Rules) |
-| **85** | **Streamlit Community Cloud Auto-Configuration** | Supports automatic secrets loading via `st.secrets` without UI inputs. | `app.py` (`get_secret`) |
-| **86** | **Model Performance Benchmark Comparison Chart** | Displays side-by-side speed vs quality metric benchmarks. | `app.py` (Benchmark Explorer) |
-| **87** | **Live Prompt Template Preset Manager** | Provides pre-loaded prompts for Manga, Light Novel, and Subtitles. | `app.py` (Prompt Selectors) |
-| **88** | **Interactive Asset Gallery & Lightbox Viewer** | Renders gallery view of generated panels with high-res previews. | `app.py` (Vault Gallery UI) |
-| **89** | **Live System Health Scouter & Diagnostics** | Diagnostic tool for checking missing packages or pip conflicts. | `services/diagnostics.py` (`check_system_package_health`) |
-| **90** | **One-Click Storyboard Package Bundle Exporter** | Downloads `.zip` containing all assets, C2PA certs, SRTs, and B2 links. | `services/vault.py` (`create_and_upload_storyboard_zip`) |
-| **91** | **Responsive Multi-Column Studio Cards** | Spacious card containers with CSS glass borders. | `app.py` (Glassmorphic Cards) |
-| **92** | **Real-Time Pipeline Progress Indicator Bar** | Shows step completion progress visually during execution runs. | `app.py` (Progress Indicators) |
-| **93** | **Preset Prompt Quick-Inject Buttons** | Inject example prompts with 1 click. | `app.py` (Quick Action Injectors) |
-| **94** | **Audio Waveform Visualizer Card** | Renders stylized audio waveform cards for audio dramatizations. | `app.py` (Audio Player Cards) |
-| **95** | **Interactive Asset Metadata Inspector** | Displays full EXIF/C2PA metadata per generated asset. | `app.py` (Metadata Inspector) |
-| **96** | **Dynamic Theme Accent Switcher** | Custom CSS theme accents (Neon Cyan, Cyber Purple, Crimson Red). | `app.py` (Theme Customizer) |
-| **97** | **System Resource Metering Cards** | Displays CPU, RAM, and B2 storage allocation bars. | `app.py` (Resource Dashboard) |
-| **98** | **Live Notification Toast Manager** | Displays success/error alerts in clean toasts. | `app.py` (Toast Alerts) |
-| **99** | **Workspace Session State Preset Saver** | Saves and loads studio session state presets. | `app.py` (Session Presets) |
-| **100** | **Hackathon Evaluation Quickstart Preset Loader** | Pre-populates sample data for judges instantly with 1 click. | `app.py` (Judges Evaluation Loader) |
+| Key | Format | Unlocks | Free? |
+|---|---|---|---|
+| `GEMINI_API_KEY` | `AIzaSy...` | Real AI manga panels via `gemini-2.5-flash-image` | ✅ Free at [aistudio.google.com](https://aistudio.google.com) |
+| `HF_TOKEN` | `hf_...` | LLM text, Whisper transcription, MusicGen audio | ✅ Free at [huggingface.co](https://huggingface.co/settings/tokens) |
+| Neither | — | Pollinations.AI FLUX images + full simulation mode | ✅ Always free |
 
 ---
 
-## 5. Hackathon Alignment & Rules Compliance Matrix
+## 5. Judging Criteria Compliance Matrix
 
-Our application fulfills every explicit rule specified in the **Backblaze Generative AI Media Hackathon Official Rules**:
+### ✅ Criterion 1: Real-World Utility
 
-| Official Hackathon Rule / Criterion | Compliance Proof in Backblaze GenMedia Studio | Source Code Reference |
-| :--- | :--- | :--- |
-| **Build with Genblaze SDK** | Native pipeline chaining, modality mapping (`Modality.IMAGE`, `Modality.AUDIO`), custom `SyncProvider`, step types (`StepType.GENERATE`), and quality evaluation via `ThresholdEvaluator`. | `services/orchestrator.py`, `services/hf_provider.py` |
-| **Build with Backblaze B2 Storage** | Complete media asset lifecycle archiving via `b2sdk`, presigned HTML5 CDN streaming, B2 spatial time-travel versioning (`list_file_versions`), and parallel multi-threaded vault uploads. | `services/vault.py`, `services/temporal_vault.py` |
-| **Real-World Utility & Product Design** | Production-ready multi-modal studio for manga compilers, light novel writers, voiceover creators, and subtitle translators with C2PA deepfake security. | `app.py`, `services/manga.py`, `services/novel.py` |
-| **Open Access & Licensing** | License stated as "No Formal License Applied / Open Access for Hackathon Evaluation". No invalid license claims. | `README.md` (License Section) |
-| **Streamlit Community Cloud Deployment** | Built with `packages.txt`, `.streamlit/config.toml` (CORS enabled, health check interval, toolbar mode minimal), `.streamlit/secrets.toml.template`, and `requirements.txt` target `git+https://github.com/backblaze-labs/genblaze.git#subdirectory=libs/meta`. Includes graceful dependency fallbacks for resilient cold starts. | `requirements.txt`, `app.py`, `.streamlit/config.toml` |
+*"Does the application solve a practical problem for a clear audience, and would that audience actually use it?"*
+
+**Target audience:** Indie manga creators, light novel authors, subtitle translators, and YouTube producers who currently juggle 5+ separate AI tools.
+
+| User Problem | GenMedia Studio Solution |
+|---|---|
+| Manga artists need consistent AI panel art | Gemini image generation + character anchor profiles + visual similarity scoring |
+| Light novel writers need JP↔EN translation + audio | Chained LLM translation → multi-speaker TTS voiceover in one pipeline |
+| Video creators need subtitles in multiple formats | Whisper → SRT / WebVTT / SSA / JSON + reading-pace optimizer |
+| All creators need durable storage + provenance proof | B2 content-addressed vault + C2PA authenticity certificates |
+
+App is **free to use** with zero login requirements and a clear BYOK path for power users.
 
 ---
 
-## 6. System Architecture & End-to-End Data Flow
+### ✅ Criterion 2: Production Readiness
+
+*"Does the application function reliably and support real-world workflows beyond a simple demo?"*
+
+| Production Signal | Implementation |
+|---|---|
+| Live cloud deployment | Streamlit Community Cloud, 24/7 uptime, `healthCheckInterval = 30` |
+| Graceful dependency fallbacks | `try/except ImportError` on all optional services; app runs in demo mode if any fail |
+| 3-tier image cascade | Gemini → Pollinations → Simulation — never crashes on a missing key |
+| BYOK error classification | Distinguishes API key issues, quota limits (429), and network failures with actionable guidance |
+| Token security | `TokenScrubber` redacts keys from all logs and session state |
+| 10 free demo generations | Rate-limited demo tier with clear BYOK prompt |
+| CORS + CSP configured | `enableCORS = true`, `enableXsrfProtection = true` in `.streamlit/config.toml` |
+| Webhook dispatcher | Discord/Zapier notifications on B2 upload events |
+| C2PA provenance | SHA-256 + HMAC-SHA256 certificate on every asset — verifiable outside the app |
+
+---
+
+### ✅ Criterion 3: B2 Storage + Data Orchestration
+
+*"Does the app use Backblaze B2 meaningfully to store, organize, serve, or manage generated media, metadata, provenance, or app assets?"*
+
+Every generated asset touches B2 — images, audio, subtitles, C2PA certs, run manifests, and ZIP archives — with:
+
+- SHA-256 deduplication (saves re-upload bandwidth)
+- Custom metadata tagging (prompt, model, timestamp, character profile)
+- Presigned HTML5 CDN streaming (no credential exposure)
+- Spatial time-travel versioning (restore any historical run)
+- HLS playlist generation (multi-panel video reels from B2)
+- Bulk ZIP archiving with run manifests
+- Vault health dashboard (file count, storage used, savings meter)
+- Quota threshold alerts
+
+**B2 is not a passive storage bucket — it is an active media orchestration layer.**
+
+---
+
+### ✅ Criterion 4: Use of Genblaze
+
+*"Does the app use Genblaze meaningfully to build, connect, or orchestrate generative media workflows across models, providers, or steps?"*
+
+```python
+# services/orchestrator.py — Genblaze pipeline construction
+pipeline = Pipeline(provider=HuggingFaceProvider(api_key=gemini_key))
+pipeline.add_step(StepType.GENERATE, modality=Modality.IMAGE, prompt=panel_prompt)
+pipeline.add_step(StepType.GENERATE, modality=Modality.TEXT,  prompt=novel_prompt)
+pipeline.add_evaluator(ThresholdEvaluator(threshold=0.75, retry_limit=3))
+result = pipeline.execute()
+```
+
+- Custom `SyncProvider` routes jobs to the right backend per modality
+- `ThresholdEvaluator` runs autonomous quality correction loops
+- Multi-branch conditional execution based on evaluation scores
+- Fallback provider routing on step failure
+- Pipeline state checkpointing for resumable runs
+- Graph topology serialization to JSON/YAML
+- Token consumption estimation per LLM step
+
+**Without Genblaze, image/text/audio steps would be isolated API calls. With it, they form a coherent, self-correcting, multi-step pipeline.**
+
+---
+
+## 6. System Architecture & Data Flow
 
 ```mermaid
 sequenceDiagram
     autonumber
     actor Creator as 👤 Creator / Judge
-    participant UI as 🌌 Streamlit Hub (app.py)
-    participant Agent as 🤖 Agent Studio Loop
-    participant SDK as ⚡ Genblaze SDK Engine
-    participant HF as 🤖 Hugging Face Models
-    participant C2PA as 🔐 C2PA Provenance Engine
-    participant B2 as 💾 Backblaze B2 Cloud
+    participant UI as 🌌 Streamlit Hub
+    participant SDK as ⚡ Genblaze Pipeline
+    participant Gemini as 🍌 gemini-2.5-flash-image
+    participant Flux as 🎨 Pollinations FLUX (free)
+    participant C2PA as 🔐 C2PA Provenance
+    participant B2 as 💾 Backblaze B2
 
-    Creator->>UI: Submits Prompt & Storyboard Spec
-    UI->>Agent: Triggers Autonomous Quality Correction Loop
-    Agent->>SDK: Executes Chained Multi-Step Pipeline
-    SDK->>HF: Calls FLUX.1 (Image) & MusicGen (Audio)
-    HF-->>SDK: Returns Raw Media Buffers
-    SDK->>Agent: Evaluates Score via ThresholdEvaluator (Target: 0.75)
-    alt Visual Score < 0.75
-        Agent->>SDK: Auto-appends style anchors & retries step
+    Creator->>UI: Submit prompt + storyboard spec
+    UI->>SDK: Execute Genblaze pipeline
+    SDK->>Gemini: Tier 1 image generation
+    alt Gemini unavailable / no key
+        SDK->>Flux: Tier 2 — Pollinations.AI FLUX (free)
     end
-    Agent->>C2PA: Signs assets with SHA-256 & HMAC-SHA256
-    C2PA-->>UI: Returns Cryptographically Signed Assets
-    UI->>B2: Performs Content-Addressed Parallel Vault Upload
-    B2-->>UI: Returns Authenticated Presigned CDN Stream URLs
-    UI-->>Creator: Renders Interactive Canvas, B2 Stream Player & Graphviz Ancestry Tree
+    SDK->>SDK: ThresholdEvaluator (score >= 0.75?)
+    alt Score < 0.75
+        SDK->>SDK: Append style anchors + retry step
+    end
+    SDK->>C2PA: Sign asset (SHA-256 + HMAC-SHA256)
+    C2PA-->>UI: Signed asset + provenance cert
+    UI->>B2: Content-addressed upload (dedup check first)
+    B2-->>UI: Presigned CDN streaming URL
+    UI-->>Creator: Gallery, stream player, B2 vault, lineage tree
 ```
 
 ---
 
-## 7. Deep-Dive: Backblaze B2 Media Cloud Infrastructure
+## 7. Secrets & Configuration Format
 
-Backblaze B2 Cloud Storage serves as the primary high-throughput, durable media vault for all generated assets:
+### Streamlit Community Cloud (App Settings → Secrets)
 
-- **Parallel Multi-Threaded Vault Uploads**: Uses Python's `ThreadPoolExecutor` (5 concurrent workers) to upload images, audio files, JSON manifests, and ZIP archives to Backblaze B2 simultaneously.
-- **Content-Addressed Hashing & Deduplication**: Pre-computes the SHA-256 checksum of every asset before initiating an upload. If an identical file hash exists in the target bucket, the upload is skipped to save network bandwidth.
-- **Presigned HTML5 CDN Streaming**: Generates secure presigned streaming URLs (`get_presigned_streaming_url`) with configurable expiry timeouts for direct HTML5 video/audio playback without exposing bucket credentials.
-- **Spatial Time-Travel Revision Tracking**: Lists and restores previous historical asset versions (`list_historical_versions`) with file ID timestamps.
+```toml
+# Image Generation (BYOK — free at aistudio.google.com)
+GEMINI_API_KEY = "AIzaSy_your_key_here"
 
----
+# Text / Audio / Transcription (BYOK — free at huggingface.co)
+HF_TOKEN = "hf_your_token_here"
 
-## 8. Deep-Dive: Genblaze SDK Architecture & Extensions
+# Backblaze B2 Cloud Storage
+B2_KEY_ID          = "your_b2_key_id"
+B2_APPLICATION_KEY = "your_b2_application_key"
+B2_BUCKET_NAME     = "your_b2_bucket_name"
 
-Backblaze GenMedia Studio leverages the official `genblaze` SDK monorepo:
+# Optional: Webhook notifications
+WEBHOOK_URL = "https://discord.com/api/webhooks/your_id/your_token"
 
-- **Monorepo Build Target**: Pointed `requirements.txt` to `git+https://github.com/backblaze-labs/genblaze.git#subdirectory=libs/meta` to build wheels for `genblaze-core` and `genblaze-s3` without build metadata failures.
-- **Custom Provider Interface (`HuggingFaceProvider`)**: Implements `genblaze.SyncProvider` to route text, image, audio, and video inference jobs seamlessly.
-- **Autonomous Agent Loop (`ThresholdEvaluator`)**: Evaluates image visual continuity and quality scores automatically. If score falls below `0.75`, the agent appends visual stabilizers ("masterpiece, consistent lighting") and retries step generation automatically.
+# Optional: Pendo analytics
+PENDO_INTEGRATION_KEY = "your_pendo_key"
+```
 
----
+### Local Environment Variables
 
-## 9. Deep-Dive: C2PA Cryptographic Content Provenance
+```bash
+export GEMINI_API_KEY="AIzaSy_your_key_here"
+export HF_TOKEN="hf_your_token_here"
+export B2_KEY_ID="your_b2_key_id"
+export B2_APPLICATION_KEY="your_b2_application_key"
+export B2_BUCKET_NAME="your_bucket_name"
+```
 
-To safeguard against AI deepfakes and unverified content manipulation, Backblaze GenMedia Studio embeds cryptographic provenance metadata:
-
-- **PNG Image Ingestion**: Injects a custom `c2pa_manifest` JSON payload and HMAC-SHA256 signature into `PngInfo` metadata chunks.
-- **WAV Audio Ingestion**: Injects metadata chunks into WAV `RIFF` audio headers.
-- **Tampering Audit Engine (`detect_c2pa_tampering`)**: Scans media headers to detect metadata stripping, payload alteration, or pixel tampering.
-- **Authenticity Certificates (`generate_provenance_certificate_text`)**: Generates downloadable text certificates verifying model ID, prompt spec, timestamp, SHA-256 hash, and B2 Vault storage origin.
-
----
-
-## 10. AI Models & Provider Catalog Specification
-
-| Modality | Default Model ID / Engine | Step Type | Task Function |
-| :--- | :--- | :--- | :--- |
-| **Image Generation** | `gemini-2.5-flash-image` (Google GenAI Nano Banana 2) | `GENERATE` | Ultra-high-contrast manga panel artwork & detailed line art |
-| **Text Generation / Translation** | `Qwen/Qwen2.5-72B-Instruct` / Gemini LLM | `GENERATE` | Light novel scene writing and JP-to-EN localization |
-| **Audio Transcription** | `openai/whisper-large-v3-turbo` | `GENERATE` | Multi-lingual speech recognition and SRT generation |
-| **Audio Soundscape Synthesis** | `facebook/musicgen-small` | `GENERATE` | Background audio soundscape dramatization generation |
-
+> **No secrets at all?** The app runs fully in demo/simulation mode — all 9 tabs are explorable with mock data. Pollinations.AI provides real FLUX images for free with no key.
 
 ---
 
-## 11. Installation, Local Development & Environment Guide
+## 8. Local Installation
 
 ```bash
 # 1. Clone the repository
 git clone https://github.com/krishivjoshi219-collab/backblaze-genmedia-studio.git
 cd backblaze-genmedia-studio
 
-# 2. Set up Python Virtual Environment (Python 3.10+)
+# 2. Create and activate Python 3.10+ virtual environment
 python3 -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
+source venv/bin/activate        # Windows: venv\Scripts\activate
 
-# 3. Install core dependencies
+# 3. Install all dependencies
 pip install -r requirements.txt
 
-# 4. Launch Streamlit Studio Application
+# 4. (Optional) Copy secrets template
+cp .streamlit/secrets.toml.template .streamlit/secrets.toml
+# Edit .streamlit/secrets.toml with your keys
+
+# 5. Launch the studio
 streamlit run app.py
 ```
 
----
+### System Requirements
 
-## 12. Judges & Evaluators Hands-On Testing Protocol
-
-To test the application on Streamlit Cloud:
-
-1. Visit **[https://backblaze-genmedia-studio-yq7ghbwrivfgb3ws3xdtta.streamlit.app/](https://backblaze-genmedia-studio-yq7ghbwrivfgb3ws3xdtta.streamlit.app/)**.
-2. **Backblaze B2 Vault Setup**: Pre-configured via `st.secrets`. Alternatively, click **🔌 Test B2 Auth** in the sidebar.
-3. **Execute Studio Workflows**:
-   - **Tab 1 (🎨 Manga & Comic Studio)**: Generate a panel, test **Lineart Colorization** and **Speech Bubble OCR**.
-   - **Tab 2 (📖 Light Novel Factory)**: Generate Japanese scene and English translation, test **Audio Dramatization Engine**.
-   - **Tab 3 (🎙️ Whisper Subtitle Hub)**: Transcribe audio, test **Multi-Format Subtitle Export** and **Reading Pace Optimizer**.
-   - **Tab 4 (🤖 Agent Continuity Loop)**: Run autonomous evaluation loops (`ThresholdEvaluator`).
-   - **Tab 5 (🗄️ Backblaze B2 Vault)**: Test presigned CDN media streaming, spatial time travel, zip archives, and webhooks.
-   - **Tab 6 (🛡️ Security & Provenance)**: Test **C2PA Tamper Audits**, **Authenticity Certificates**, **RBAC Workspaces**, and **Vault Health Diagnostics**.
-   - **Tab 7 (📊 Analytics & System Health)**: Monitor telemetry metrics, cost estimates, and storage utilization.
+| Package | Purpose | Auto-installed via |
+|---|---|---|
+| `graphviz` | Lineage tree rendering | `packages.txt` |
+| `ffmpeg` | Audio processing | `packages.txt` |
+| `google-genai` | Gemini 2.5 Flash Image | `requirements.txt` |
+| `b2sdk` | Backblaze B2 operations | `requirements.txt` |
+| `genblaze` | Pipeline orchestration | `requirements.txt` (from GitHub) |
+| `streamlit` | Studio web app | `requirements.txt` |
 
 ---
 
-## 13. License, Security Redactions & Repository Status
+## 9. Judges Testing Protocol
 
-- **Repository License**: No Formal License Applied / Open Access for Backblaze Generative AI Media Hackathon evaluation.
-- **Security & Secret Redactions**: Sanitized dynamically by `TokenScrubber`. Private keys are never committed to git.
-- **Repository URL**: [https://github.com/krishivjoshi219-collab/backblaze-genmedia-studio](https://github.com/krishivjoshi219-collab/backblaze-genmedia-studio)
+**Live app:** [https://backblaze-genmedia-studio-yq7ghbwrivfgb3ws3xdtta.streamlit.app/](https://backblaze-genmedia-studio-yq7ghbwrivfgb3ws3xdtta.streamlit.app/)
+
+> No login or account required. App works in demo mode immediately.
+
+### Quick 5-Minute Evaluation Path
+
+| Step | Action | What to Observe |
+|---|---|---|
+| 1 | Open the app — no login needed | Premium dark UI, animated aurora header, badge pills load instantly |
+| 2 | **Tab 🎨 Manga Studio** → enter any prompt → click "Compile Manga Panel" | 3-tier cascade: Gemini → Pollinations FLUX → Simulation. Real FLUX image generates free |
+| 3 | **Tab 🗄️ Backblaze B2 Vault** → click "🔌 Test B2 Auth" | B2 connection test; vault health metrics display |
+| 4 | **Tab 🤖 Agent Loop** → run ThresholdEvaluator | Watch autonomous retry loop with score tracking |
+| 5 | **Tab 🛡️ Security** → click "Audit C2PA Provenance" | See C2PA certificate with SHA-256 hash + HMAC signature |
+| 6 | **Tab 📊 Analytics** → review telemetry | Cost estimate, B2 usage, model benchmark chart |
+
+### Enable Real Gemini Image Generation
+
+1. Get a free key at [aistudio.google.com](https://aistudio.google.com) (starts with `AIzaSy`)
+2. Paste it into **sidebar → 🔑 Gemini API Auth**
+3. Re-run any Manga panel — real `gemini-2.5-flash-image` output
 
 ---
 
-*Built with passion for the Backblaze Generative AI Media Hackathon 2026.*
+## 10. Capabilities Matrix (100 Production Features)
 
+### Domain 1: Backblaze B2 Media Cloud & Data Orchestration (1–20)
 
+| # | Capability | Source |
+|---|---|---|
+| 1 | B2 Content-Addressed SHA-256 Deduplication | `vault.py:deduplicate_and_archive_to_b2` |
+| 2 | B2 Automated Retention & Lifecycle Policy Manager | `vault.py:configure_b2_lifecycle_policy` |
+| 3 | B2 Multi-Part Chunked Parallel Upload (>100MB) | `vault.py:upload_large_b2_media_chunked` |
+| 4 | B2 Custom Metadata Tagging & Search | `vault.py:tag_and_index_b2_asset` |
+| 5 | B2 S3 Interoperability Migration Exporter | `vault.py:export_b2_s3_migration_manifest` |
+| 6 | B2 CORS Policy Auto-Configurator | `vault.py:configure_b2_cors_policy` |
+| 7 | B2 Vault Health Diagnostics & Usage Metering | `vault.py:get_b2_vault_health_metrics` |
+| 8 | B2 Bulk ZIP Batch Archiver & Downloader | `vault.py:create_bulk_b2_vault_zip` |
+| 9 | B2 Spatial Time-Travel Revision Diff Analyzer | `vault.py:diff_b2_file_revisions` |
+| 10 | B2 Cold Storage Archival Tier Tagger | `vault.py:simulate_b2_glacier_archival` |
+| 11 | B2 HLS M3U8 Media Streaming Playlist Generator | `vault.py:generate_b2_cdn_media_playlist` |
+| 12 | B2 Bandwidth Deduplication Savings Meter | `vault.py:compute_b2_bandwidth_savings` |
+| 13 | B2 Bucket Lock WORM Immutability Auditor | `vault.py:verify_b2_bucket_lock_compliance` |
+| 14 | B2 Metadata Catalog CSV Exporter | `vault.py:export_b2_metadata_catalog_csv` |
+| 15 | B2 Temp Buffer Auto-Purge Manager | `vault.py:purge_expired_temp_previews` |
+| 16 | B2 Direct Presigned Upload URL Generator | `vault.py:configure_b2_presigned_upload_url` |
+| 17 | B2 Storage Quota Threshold Alert Guard | `vault.py:validate_b2_storage_quota_limits` |
+| 18 | B2 Bulk Multi-Tag Asset Annotator | `vault.py:batch_tag_b2_assets` |
+| 19 | B2 Cross-Region Vault Replication Simulator | `vault.py:replicate_b2_cross_region_vault` |
+| 20 | B2 Access Log Security Auditor | `vault.py:audit_b2_access_logs` |
 
+### Domain 2: Genblaze SDK Pipeline & Agent Intelligence (21–40)
+
+| # | Capability | Source |
+|---|---|---|
+| 21 | Genblaze Multi-Branch Conditional Pipeline Execution | `orchestrator.py:execute_conditional_pipeline` |
+| 22 | Genblaze Automatic Fallback Provider Routing | `orchestrator.py:execute_with_fallback` |
+| 23 | Genblaze Custom Prompt Keyframe Interpolator | `agent_studio.py:interpolate_scene_prompts` |
+| 24 | Genblaze Quality Control Benchmarking Suite | `agent_studio.py:benchmark_pipeline_runs` |
+| 25 | Genblaze Real-Time Event Telemetry Tracker | `orchestrator.py:get_pipeline_telemetry` |
+| 26 | Genblaze Dynamic Temperature & Top-P Sampler | `orchestrator.py:tune_genblaze_sampling_parameters` |
+| 27 | Genblaze Multi-Model Ensemble Voting Matrix | `orchestrator.py:run_genblaze_ensemble_pipeline` |
+| 28 | Genblaze Automated Negative Prompt Injector | `orchestrator.py:inject_negative_prompt_engineering` |
+| 29 | Genblaze Graph Topology JSON/YAML Serializer | `orchestrator.py:serialize_pipeline_topology` |
+| 30 | Genblaze Step State Checkpointer & Resume | `orchestrator.py:checkpoint_pipeline_state` |
+| 31 | Automated Prompt Syntax Repair Engine | `orchestrator.py:auto_repair_corrupted_prompts` |
+| 32 | Character Visual Similarity Evaluator | `orchestrator.py:eval_character_visual_similarity` |
+| 33 | Ensemble Output Aesthetic Quality Ranker | `orchestrator.py:rank_ensemble_outputs_by_aesthetic` |
+| 34 | Prompt Semantic Expansion Variant Generator | `orchestrator.py:generate_prompt_expansion_variants` |
+| 35 | Pipeline Step Cache Optimizer | `orchestrator.py:optimize_pipeline_step_caching` |
+| 36 | LLM Token Consumption Estimator | `orchestrator.py:estimate_step_token_consumption` |
+| 37 | Model Hallucination Semantic Drift Detector | `orchestrator.py:detect_model_hallucination_drift` |
+| 38 | Camera Motion Tag Injector | `orchestrator.py:inject_camera_movement_tags` |
+| 39 | Image Aspect Ratio Normalizer | `orchestrator.py:normalize_image_aspect_ratios` |
+| 40 | Pipeline Execution Summary Report Generator | `orchestrator.py:generate_pipeline_execution_summary` |
+
+### Domain 3: Multi-Modal Content Production (41–60)
+
+| # | Capability | Source |
+|---|---|---|
+| 41 | Manga Colorization & Style Transfer Studio | `manga.py:colorize_manga_panel` |
+| 42 | Light Novel Audio Dramatization Generator | `novel.py:generate_audio_dramatization` |
+| 43 | Whisper Multi-Format Subtitle Exporter (SRT/VTT/SSA/JSON) | `whisper.py:export_multiformat_subtitles` |
+| 44 | Storyboard PDF / EPUB E-Book Compiler | `novel.py:compile_epub_ebook_manifest` |
+| 45 | Animated HTML5 Storyboard Reel Synthesizer | `manga.py:synthesize_storyboard_reel_html` |
+| 46 | Manga Speech Bubble OCR & Dialogue Extractor | `manga.py:extract_manga_bubble_ocr` |
+| 47 | Anime Character Consistency Anchor Profile | `manga.py:create_character_anchor_profile` |
+| 48 | Multi-Speaker TTS Voiceover Synthesizer | `novel.py:synthesize_multispeaker_voiceover` |
+| 49 | Subtitle Reading-Pace Speed Optimizer | `whisper.py:optimize_subtitle_timing` |
+| 50 | Interactive Manga Canvas Grid Layout Designer | `manga.py:generate_custom_manga_grid` |
+| 51 | Manga Halftone Screentone Filter | `manga.py:apply_manga_screentone_filter` |
+| 52 | Katakana Visual SFX Overlay Generator | `manga.py:generate_manga_sound_effects` |
+| 53 | Multilingual Subtitle Auto-Translator (ES/FR/DE) | `whisper.py` |
+| 54 | Print-Ready PDF Booklet Exporter | `manga.py:export_storyboard_pdf_booklet` |
+| 55 | Light Novel Table of Contents Generator | `novel.py` |
+| 56 | Background Ambient FX Soundscape Synthesizer | `novel.py` |
+| 57 | Voiceover Pitch & Speed Fine-Tuner | `novel.py` |
+| 58 | Hardcoded Styled WebVTT Formatter | `whisper.py` |
+| 59 | Hero Manga Title Cover Artwork Generator | `manga.py:generate_manga_cover_artwork` |
+| 60 | Light Novel Reading Duration Estimator | `novel.py` |
+
+### Domain 4: Security, C2PA Provenance & Governance (61–80)
+
+| # | Capability | Source |
+|---|---|---|
+| 61 | C2PA Deepfake Tampering & Alteration Detector | `security.py:detect_c2pa_tampering` |
+| 62 | Granular Role-Based Access Control (RBAC) | `security.py:TeamWorkspaceManager` |
+| 63 | C2PA Provenance Certificate Text Generator | `security.py:generate_provenance_certificate_text` |
+| 64 | Real-Time API Cost & Token Quota Calculator | `security.py:calculate_generation_quota_cost` |
+| 65 | Ephemeral Memory Token Scrubber & Cipher | `security.py:TokenScrubber` |
+| 66 | Watermark Cryptographic Steganography Engine | `security.py:embed_steganographic_signature` |
+| 67 | C2PA Key Rotation & Certificate Manager | `security.py:rotate_c2pa_signing_keys` |
+| 68 | API Key Permission Scope Auditor | `security.py:audit_token_scopes` |
+| 69 | SOC2-Style Sanitizing Log Audit Recorder | `security.py:record_security_audit_log` |
+| 70 | OFAC IP & Geo-Fencing Access Guard | `security.py:evaluate_geofencing_policy` |
+| 71 | HMAC Asset Signature Verifier | `security.py` |
+| 72 | PII & Restricted Keyword Redactor | `security.py` |
+| 73 | C2PA JSON-LD Manifest Standard Exporter | `security.py` |
+| 74 | API Rate Limit Headroom Monitor | `security.py` |
+| 75 | Content Safety Policy Compliance Auditor | `security.py` |
+| 76 | Asset Bundle SHA-256 Checksum Manifest | `security.py` |
+| 77 | Zero-Trust JWT Session Token Validator | `security.py` |
+| 78 | Local Cache AES-256 Encryptor | `security.py` |
+| 79 | RBAC Permission Audit Trail Logger | `security.py` |
+| 80 | Cryptographic Origin Lineage Tracer | `security.py` |
+
+### Domain 5: UI/UX, Observability & Analytics (81–100)
+
+| # | Capability | Source |
+|---|---|---|
+| 81 | Interactive Studio Analytics Dashboard | `app.py` (Analytics Tab) |
+| 82 | Dynamic Graphviz Ancestry Lineage Visualizer | `lineage.py:render_lineage_ui` |
+| 83 | Multi-Channel Webhook Dispatcher | `vault.py:dispatch_webhook_notification` |
+| 84 | Aurora Glassmorphism Billion-Dollar Design System | `app.py` (CSS — Space Grotesk + Inter) |
+| 85 | Streamlit Cloud Auto-Secrets Configuration | `app.py:get_secret` |
+| 86 | Model Performance Benchmark Comparison Chart | `app.py` (Benchmark Explorer) |
+| 87 | Live Prompt Template Preset Manager | `app.py` (Preset Selectors) |
+| 88 | Interactive B2 Asset Gallery & Lightbox Viewer | `app.py` (Vault Gallery UI) |
+| 89 | Live System Health & Pip Conflict Scanner | `diagnostics.py:check_system_package_health` |
+| 90 | One-Click Storyboard ZIP Bundle Exporter | `vault.py:create_and_upload_storyboard_zip` |
+| 91 | Responsive Multi-Column Glassmorphic Cards | `app.py` (Glass Card Components) |
+| 92 | Real-Time Genblaze Pipeline Progress Bar | `app.py` (Progress Indicators) |
+| 93 | Preset Prompt Quick-Inject Buttons | `app.py` (Quick Action Injectors) |
+| 94 | Audio Waveform Visualizer Card | `app.py` (Audio Player Cards) |
+| 95 | Interactive Asset Metadata Inspector | `app.py` (Metadata Inspector) |
+| 96 | BYOK API Key Setup Guide & Error Classifier | `app.py` (Sidebar Expander) |
+| 97 | System Resource Metering Cards (CPU/RAM/B2) | `app.py` (Resource Dashboard) |
+| 98 | Live Notification Toast Manager | `app.py` (Toast Alerts) |
+| 99 | Workspace Session State Preset Saver | `app.py` (Session Presets) |
+| 100 | Hackathon Evaluation Quickstart Preset Loader | `app.py` (Judges Evaluation Loader) |
+
+---
+
+## 11. License & Repository
+
+| Item | Link |
+|---|---|
+| **Repository** | [https://github.com/krishivjoshi219-collab/backblaze-genmedia-studio](https://github.com/krishivjoshi219-collab/backblaze-genmedia-studio) |
+| **Live App** | [https://backblaze-genmedia-studio-yq7ghbwrivfgb3ws3xdtta.streamlit.app/](https://backblaze-genmedia-studio-yq7ghbwrivfgb3ws3xdtta.streamlit.app/) |
+| **Genblaze SDK Feedback** | [https://github.com/backblaze-labs/genblaze/issues](https://github.com/backblaze-labs/genblaze/issues) |
+| **Backblaze B2 Signup** | [https://www.backblaze.com/cloud-storage](https://www.backblaze.com/cloud-storage?utm_source=github&utm_medium=referral&utm_campaign=genhackathon) |
+| **License** | Open Access — No formal restrictions. Free for Backblaze Hackathon evaluation. |
+| **Security** | API keys dynamically scrubbed by `TokenScrubber`. No secrets committed to git. |
+
+---
+
+<div align="center">
+
+*Built with passion for the **Backblaze Generative AI Media Hackathon: Build with Genblaze on B2** — 2026*
+
+[![Backblaze B2](https://img.shields.io/badge/Create_B2_Account-Backblaze-1D4ED8?style=for-the-badge)](https://www.backblaze.com/cloud-storage?utm_source=github&utm_medium=referral&utm_campaign=genhackathon)
+[![Genblaze SDK](https://img.shields.io/badge/Genblaze_SDK-GitHub-F97316?style=for-the-badge&logo=github)](https://github.com/backblaze-labs/genblaze)
+[![Devpost](https://img.shields.io/badge/Devpost-Hackathon_Submission-003E54?style=for-the-badge)](https://backblaze-generative-media.devpost.com/)
+
+</div>
