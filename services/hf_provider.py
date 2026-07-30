@@ -23,6 +23,37 @@ except ImportError:
 logger = logging.getLogger("GenMediaHFProvider")
 provenance_engine = ProvenanceEngine()
 
+SUPPORTED_PROVIDERS = {
+    "image": {
+        "gemini-2.5-flash-image": "Google GenAI Nano Banana 2 (Gemini API Key required)",
+        "gemini-2.0-flash-preview-image-generation": "Google GenAI Flash Preview (Gemini API Key required)",
+    },
+    "text": {
+        "Qwen/Qwen2.5-7B-Instruct": "Qwen 2.5 7B Instruct (HF Token)",
+        "Qwen/Qwen2.5-72B-Instruct": "Qwen 2.5 72B Instruct (HF Token)",
+        "meta-llama/Llama-3.1-8B-Instruct": "Llama 3.1 8B Instruct (HF Token)",
+        "mistralai/Mistral-7B-Instruct-v0.3": "Mistral 7B Instruct (HF Token)",
+        "google/gemma-3-27b-it": "Gemma 3 27B IT (HF Token)",
+    },
+    "audio_transcribe": {
+        "openai/whisper-large-v3": "Whisper Large V3 (HF Token)",
+        "openai/whisper-large-v3-turbo": "Whisper Large V3 Turbo (HF Token)",
+        "distil-whisper/distil-large-v3": "Distil Whisper Large V3 (HF Token)",
+    },
+    "audio_generate": {
+        "facebook/musicgen-small": "MusicGen Small (HF Token)",
+        "facebook/musicgen-medium": "MusicGen Medium (HF Token)",
+    },
+}
+
+def detect_api_key_type(key: str) -> str:
+    if key.startswith("AIzaSy"):
+        return "gemini"
+    elif key.startswith("hf_"):
+        return "huggingface"
+    else:
+        return "unknown"
+
 def generate_manga_panel(prompt: str, api_key: str = None, style_preset: str = "Manga / Anime Style") -> bytes:
     """
     Generates manga panel artwork using Gemini API (Nano Banana 2: gemini-2.5-flash-image).
@@ -292,12 +323,19 @@ class HuggingFaceProvider(SyncProvider):
         modality_val = modality_raw.value if hasattr(modality_raw, 'value') else str(modality_raw)
         modality_val = str(modality_val).lower().strip()
 
+        # Resolve API keys for different backends
+        gemini_key = os.environ.get("GEMINI_API_KEY") or (token if token.startswith("AIzaSy") else "")
+        hf_key = token if not token.startswith("AIzaSy") else ""
+
         # DEMO / SIMULATION MODE (No token configured)
-        if not token:
+        if modality_val == "image" and not gemini_key:
+            logger.error("RuntimeError: gemini_key is empty for image modality. Falling back to simulation.")
+            step.assets.append(_generate_fallback_image_asset(step, prompt, seed, model))
+            step.status = "completed"
+            return step
+        elif modality_val != "image" and not hf_key:
             logger.info(f"Executing step '{step.step_id}' in Demo/Simulation Mode (No Token)")
-            if modality_val == "image":
-                step.assets.append(_generate_fallback_image_asset(step, prompt, seed, model))
-            elif modality_val == "text":
+            if modality_val == "text":
                 step.assets.append(_generate_fallback_text_asset(step, prompt))
             elif modality_val == "audio":
                 step.assets.append(_generate_fallback_audio_asset(step, prompt, seed, model))
@@ -307,13 +345,15 @@ class HuggingFaceProvider(SyncProvider):
             return step
 
         # LIVE PRODUCTION MODE ROUTING WITH FAULT TOLERANCE
-        headers = {"Authorization": f"Bearer {token}"}
+        headers = {"Authorization": f"Bearer {hf_key}"}
         endpoint = _hf_url(model)
 
         try:
             if modality_val == "image" or "flux" in model.lower():
                 try:
-                    img_bytes = generate_manga_panel(prompt=prompt, api_key=token)
+                    if not gemini_key:
+                        raise RuntimeError("gemini_key is empty. Falling back to simulation.")
+                    img_bytes = generate_manga_panel(prompt=prompt, api_key=gemini_key)
                     temp_dir = tempfile.gettempdir()
                     img_path = os.path.join(temp_dir, f"manga_panel_{int(time.time())}_{random.randint(1000, 9999)}.png")
                     img = Image.open(io.BytesIO(img_bytes))

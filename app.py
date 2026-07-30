@@ -697,6 +697,21 @@ else:
         )
 
 
+# API Key Guide
+with st.sidebar.expander("🔑 API Key Setup Guide", expanded=False):
+    st.markdown("""**🍌 Gemini API Key** (for Image Generation)
+- Get free key: [Google AI Studio](https://aistudio.google.com/)
+- Key format: `AIzaSy...`
+- Powers: `gemini-2.5-flash-image` manga panels
+
+**🤗 HF Token** (for Text & Audio)
+- Get free token: [huggingface.co/settings/tokens](https://huggingface.co/settings/tokens)
+- Token format: `hf_...`
+- Powers: Qwen LLM, Whisper, MusicGen
+
+> 💡 Both keys can be entered in the text field above or set as Streamlit secrets.
+""")
+
 # Backblaze B2 Bucket Credentials
 st.sidebar.markdown("---")
 st.sidebar.subheader("💾 Backblaze B2 Vault Setup")
@@ -853,7 +868,7 @@ def verify_rate_limit():
             )
             st.session_state["rate_limit_event_fired"] = True
         st.error(
-            "Rate limit threshold of 10 free tries reached! Enter your Hugging Face API Token (BYOK) in the sidebar to run unlimited generations."
+            "⚠️ Rate limit of 10 free tries reached! Enter your **Gemini API Key** or **HF Token** in the sidebar to enable unlimited generations."
         )
         return False
     return True
@@ -917,7 +932,7 @@ with tab1:
         
         <!-- Node 2: Model -->
         <rect x="220" y="15" width="160" height="50" rx="8" fill="rgba(160, 51, 255, 0.1)" stroke="#a033ff" stroke-width="2" filter="url(#glow)"/>
-        <text x="300" y="37" fill="#f8fafc" font-size="12" font-family="Space Grotesk" text-anchor="middle" font-weight="600">FLUX.1-schnell</text>
+        <text x="300" y="37" fill="#f8fafc" font-size="12" font-family="Space Grotesk" text-anchor="middle" font-weight="600">gemini-2.5-flash-image</text>
         <text x="300" y="53" fill="#94a3b8" font-size="10" font-family="Outfit" text-anchor="middle">StepType.GENERATE</text>
         
         <!-- Arrow 2 -->
@@ -939,9 +954,9 @@ with tab1:
         )
 
         manga_model = st.text_input(
-            "Manga Image Model Path",
-            value="black-forest-labs/FLUX.1-schnell",
-            help="Dynamic model routing. Ex: black-forest-labs/FLUX.1-schnell or custom anime diffusion endpoints.",
+            "Image Model / Engine",
+            value="gemini-2.5-flash-image",
+            help="Image generation engine. Use 'gemini-2.5-flash-image' (requires Gemini API Key). Gemini keys start with 'AIzaSy'.",
         )
 
         manga_prompt = st.text_area(
@@ -971,6 +986,16 @@ with tab1:
             "Chibi Slice-of-Life": ", cute chibi style, simple lines, colorful anime cartoon illustration, lighthearted mood",
             "Cyberpunk Neon Panel": ", cyberpunk anime style, retro-futurism, glowing neon accents, dramatic reflections, high contrast",
         }
+
+        # Always warn that image generation requires BYOK Gemini key
+        gemini_key_configured = bool(get_secret("GEMINI_API_KEY") or (raw_token.strip() and raw_token.strip().startswith("AIzaSy")))
+        if not gemini_key_configured:
+            st.warning(
+                "🔑 **Gemini API Key Required for Image Generation**: Image panels are powered by "
+                "`gemini-2.5-flash-image` (Google GenAI). Free tier simulation mode will generate a "
+                "demo placeholder panel. To generate **real AI artwork**, enter your `GEMINI_API_KEY` "
+                "in the sidebar (starts with `AIzaSy...`). Get a free key at [Google AI Studio](https://aistudio.google.com/)."
+            )
 
         is_disabled = not has_byok and tries_used >= 10
 
@@ -1015,10 +1040,26 @@ with tab1:
                             visitor_id=st.session_state["pendo_visitor_id"],
                         )
                         st.error(f"Failed to generate image: {res_path}")
+                        
+                        # Detect if it's a BYOK issue
+                        err_str = str(res_path)
+                        if "GEMINI_API_KEY" in err_str or "APIKey" in err_str or "api_key" in err_str.lower() or "missing" in err_str.lower():
+                            st.warning(
+                                "🔑 **This error is API Key related.** Image generation requires a Gemini API Key. "
+                                "Add `GEMINI_API_KEY` (format: `AIzaSy...`) in the sidebar. "
+                                "Get a free key at [Google AI Studio](https://aistudio.google.com/)."
+                            )
+                        elif "quota" in err_str.lower() or "rate" in err_str.lower() or "429" in err_str:
+                            st.warning(
+                                "⏳ **API Rate Limit Hit.** Your Gemini API free quota may be exhausted. "
+                                "Wait a few minutes or upgrade your Google AI Studio plan."
+                            )
 
         if is_disabled:
             st.info(
-                "💡 Pro-Tip: Provide your own Hugging Face token in the sidebar to bypass the 10 free tries limit."
+                "💡 **Free Tier Active**: You have 10 total free tries. For **image generation**, add your "
+                "**Gemini API Key** (`AIzaSy...`) to the sidebar. For **text/audio** features, add your "
+                "**HF Token** (`hf_...`). Both can be entered in the sidebar under 🔑 Gemini API Auth."
             )
 
     with col2:

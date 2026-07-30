@@ -20,7 +20,7 @@ except ImportError:
 logger = logging.getLogger("GenMediaCentralOrchestrator")
 
 MODEL_CATALOG = {
-    "image": "black-forest-labs/FLUX.1-schnell",
+    "image": "gemini-2.5-flash-image",
     "text": "Qwen/Qwen2.5-7B-Instruct",
     "audio_transcribe": "openai/whisper-large-v3",
     "audio_generate": "facebook/musicgen-small"
@@ -28,7 +28,7 @@ MODEL_CATALOG = {
 
 class CentralOrchestrator:
     def __init__(self, api_token: str):
-        # Scrubbed Hugging Face token passed securely into the Provider
+        # API key passed securely into the Provider (supports Gemini and HF tokens)
         self.provider = HuggingFaceProvider(api_key=api_token)
 
     def execute_single_step(
