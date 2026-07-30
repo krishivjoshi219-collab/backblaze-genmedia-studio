@@ -245,7 +245,8 @@ def get_secret(key_name: str, default: str = "") -> str:
 # Extract plaintext token on-demand
 def get_active_token() -> str:
     user_token = scrubber.unmask_token(st.session_state.get("hf_token_masked", b"")).strip()
-    return user_token or get_secret("HF_TOKEN")
+    return user_token or get_secret("GEMINI_API_KEY") or get_secret("HF_TOKEN")
+
 
 
 # Initialize B2 vault credentials with Streamlit Secrets support
@@ -649,14 +650,15 @@ st.sidebar.markdown(
 )
 
 # BYOK Token Field with Scrubber & Masking
-st.sidebar.subheader("🔑 Hugging Face Auth")
-hf_placeholder = "🔒 Loaded from Streamlit Secrets" if get_secret("HF_TOKEN") else ""
+st.sidebar.subheader("🔑 Gemini API Auth")
+gemini_secret = get_secret("GEMINI_API_KEY") or get_secret("HF_TOKEN")
+gemini_placeholder = "🔒 Loaded from Streamlit Secrets" if gemini_secret else ""
 raw_token = st.sidebar.text_input(
-    "HF API Token (BYOK)",
+    "Gemini API Key (BYOK)",
     value="",
-    placeholder=hf_placeholder,
+    placeholder=gemini_placeholder,
     type="password",
-    help="Bring Your Own Key. The API key is immediately encrypted in memory upon entry.",
+    help="Bring Your Own Key for Gemini API. The API key is immediately encrypted in memory upon entry.",
 )
 
 if raw_token.strip():
@@ -665,7 +667,7 @@ if raw_token.strip():
         st.session_state["hf_token_masked"] = masked_val
         st.session_state["hf_token_display"] = display_val
         pendo_track(
-            "hf_token_configured",
+            "gemini_token_configured",
             {
                 "is_token_set": True,
                 "previous_tries_used": st.session_state["tries_used"],
@@ -673,7 +675,7 @@ if raw_token.strip():
             visitor_id=st.session_state["pendo_visitor_id"],
         )
 
-has_byok = bool(raw_token.strip())
+has_byok = bool(raw_token.strip() or gemini_secret)
 
 # Absolute Rate-Limit Protection (10 Free Tries Limit)
 st.sidebar.markdown("---")
@@ -691,8 +693,9 @@ else:
     st.sidebar.write(f"Tries Used: **{tries_used} / 10**")
     if tries_used >= 10:
         st.sidebar.error(
-            "❌ Free tries exhausted! Enter a HF Token to enable unlimited generations."
+            "❌ Free tries exhausted! Enter a Gemini API Key to enable unlimited generations."
         )
+
 
 # Backblaze B2 Bucket Credentials
 st.sidebar.markdown("---")

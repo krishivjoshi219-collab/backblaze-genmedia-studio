@@ -13,8 +13,56 @@ from PIL import Image, ImageDraw
 from genblaze import SyncProvider, Asset
 from services.security import ProvenanceEngine
 
+try:
+    from google import genai
+    from google.genai import types
+except ImportError:
+    genai = None
+    types = None
+
 logger = logging.getLogger("GenMediaHFProvider")
 provenance_engine = ProvenanceEngine()
+
+def generate_manga_panel(prompt: str, api_key: str = None, style_preset: str = "Manga / Anime Style") -> bytes:
+    """
+    Generates manga panel artwork using Gemini API (Nano Banana 2: gemini-3.1-flash-image).
+    Includes automatic prompt enhancement and robust error handling with zero UI crashes.
+    """
+    effective_key = api_key or os.environ.get("GEMINI_API_KEY")
+    
+    if not effective_key:
+        raise ValueError("GEMINI_API_KEY is missing. Please configure it in secrets or UI.")
+
+    if genai is None:
+        raise ImportError("google-genai SDK is not installed.")
+
+    client = genai.Client(api_key=effective_key)
+
+    # Style anchor enhancement
+    enhanced_prompt = (
+        f"High contrast black and white manga panel, detailed ink lineart, "
+        f"dramatic manga shading, masterpiece quality: {prompt}"
+    )
+
+    try:
+        response = client.models.generate_content(
+            model='gemini-3.1-flash-image',
+            contents=[enhanced_prompt],
+            config=types.GenerateContentConfig(
+                response_modalities=['TEXT', 'IMAGE']
+            )
+        )
+
+        for part in response.candidates[0].content.parts:
+            if part.inline_data is not None:
+                return part.inline_data.data
+
+        raise RuntimeError("No image data returned from Gemini API.")
+
+    except Exception as e:
+        print(f"[Gemini Image Agent Error]: {e}")
+        raise e
+
 
 # HF Inference Router endpoint (router.huggingface.co)
 def _hf_url(model_id: str) -> str:
@@ -263,29 +311,15 @@ class HuggingFaceProvider(SyncProvider):
 
         try:
             if modality_val == "image" or "flux" in model.lower():
-                payload = {"inputs": prompt}
-                response = None
-                for attempt in range(3):
-                    response = requests.post(endpoint, headers=headers, json=payload, timeout=45)
-                    if response.status_code == 200:
-                        break
-                    elif response.status_code == 503:
-                        try:
-                            wait_time = response.json().get("estimated_time", 15.0)
-                        except Exception:
-                            wait_time = 15.0
-                        time.sleep(wait_time)
-                    else:
-                        break
-
-                if response and response.status_code == 200:
+                try:
+                    img_bytes = generate_manga_panel(prompt=prompt, api_key=token)
                     temp_dir = tempfile.gettempdir()
                     img_path = os.path.join(temp_dir, f"manga_panel_{int(time.time())}_{random.randint(1000, 9999)}.png")
-                    img = Image.open(io.BytesIO(response.content))
+                    img = Image.open(io.BytesIO(img_bytes))
                     manifest = provenance_engine.create_manifest(
                         prompt=prompt,
                         seed=seed,
-                        model_id=model,
+                        model_id="gemini-3.1-flash-image",
                         timestamp=time.time()
                     )
                     provenance_engine.inject_png_provenance(img, manifest, output_path=img_path)
@@ -294,10 +328,10 @@ class HuggingFaceProvider(SyncProvider):
                         media_type="image/png",
                         metadata={"image_path": img_path, "prompt": prompt, "seed": seed, "provenance": manifest}
                     ))
-                else:
-                    err_msg = response.text if response else "No response"
-                    logger.warning(f"HF Image API call failed (status {response.status_code if response else 'None'}): {err_msg}. Using simulation fallback.")
+                except Exception as g_err:
+                    logger.warning(f"Gemini Image API call failed: {g_err}. Using simulation fallback.")
                     step.assets.append(_generate_fallback_image_asset(step, prompt, seed, model))
+
 
             elif modality_val == "text" or "qwen" in model.lower() or "instruct" in model.lower():
                 final_prompt = prompt
