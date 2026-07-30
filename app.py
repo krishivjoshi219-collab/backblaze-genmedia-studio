@@ -640,72 +640,75 @@ a:hover { color: var(--a2); text-decoration: none; }
     background: linear-gradient(90deg, transparent, rgba(124,58,237,0.85), rgba(244,63,94,0.65), transparent);
     pointer-events: none; z-index: 1;
 }
-/* Sidebar text — scoped carefully to NOT touch icon font nodes */
+/* Sidebar text — only explicit text nodes, NOT button/div (they cascade into icon spans) */
 [data-testid="stSidebar"] p,
-[data-testid="stSidebar"] label,
-[data-testid="stSidebar"] div,
-[data-testid="stSidebar"] button { font-family: 'Inter', sans-serif !important; }
+[data-testid="stSidebar"] label {
+    font-family: 'Inter', sans-serif !important;
+}
 [data-testid="stSidebar"] h1,
 [data-testid="stSidebar"] h2,
 [data-testid="stSidebar"] h3 { font-family: 'Space Grotesk', sans-serif !important; }
 
 /* ═══════════════════════════════════════════════════
-   MATERIAL ICON OVERFLOW FIX
-   Prevents raw strings like 'visibility', '_arrow_right',
-   '_arrow_drop_down' from overflowing inputs & expanders
+   MATERIAL SYMBOLS / ICONS — DEFINITIVE FONT RESTORE
+   Stops ligatures like 'visibility' / '_arrow_right'
+   from rendering as raw text over inputs & buttons
 ═══════════════════════════════════════════════════ */
 
-/* Reset icon spans inside inputs — must use font-family: inherit so
-   Material Icons icon font renders glyphs, not raw text */
-div[data-baseweb="input"] span,
-div[data-baseweb="input"] i,
-.stTextInput span,
-.stPasswordInput span {
-    font-family: inherit !important;
-    line-height: normal !important;
+/* Restore the correct icon font for all Material Symbols/Icons nodes.
+   font-family MUST be the icon font — any other value breaks ligature glyph rendering. */
+i,
+[data-testid="stIconMaterial"],
+span[data-testid="stIconMaterial"],
+[class*="st-emotion-cache"] [data-testid="stIconMaterial"],
+button span[class*="material"],
+span[class*="material-symbols"],
+span[class*="material-icons"] {
+    font-family: 'Material Symbols Rounded', 'Material Symbols Outlined', 'Material Icons', sans-serif !important;
     letter-spacing: normal !important;
-    overflow: hidden !important;
-    display: inline-flex !important;
-    align-items: center !important;
-}
-
-/* Expander arrow / icon spans */
-[data-testid="stExpander"] summary span,
-[data-testid="stExpander"] summary svg,
-[data-testid="stExpander"] summary i {
-    display: inline-flex !important;
-    align-items: center !important;
-    line-height: normal !important;
-    overflow: visible !important;
-    flex-shrink: 0 !important;
-}
-
-/* Sidebar icon spans — sidebar star-selector was nuking icon font */
-[data-testid="stSidebar"] span[data-testid="stIconMaterial"],
-[data-testid="stSidebar"] .st-aria-hidden,
-[data-testid="stSidebar"] span[class*="material"],
-[data-testid="stSidebar"] span[class*="icon"] {
-    font-family: 'Material Icons', 'Material Icons Outlined', sans-serif !important;
-    line-height: normal !important;
+    text-transform: none !important;
+    white-space: nowrap !important;
+    word-wrap: normal !important;
+    direction: ltr !important;
+    -webkit-font-smoothing: antialiased !important;
+    font-feature-settings: 'liga' !important;
+    line-height: 1 !important;
     overflow: hidden !important;
     display: inline-flex !important;
     align-items: center !important;
     vertical-align: middle !important;
 }
 
-/* Selectbox dropdown arrow — prevent raw text leak */
-div[data-baseweb="select"] span,
-div[data-baseweb="select"] i {
-    font-family: inherit !important;
-    line-height: normal !important;
-    overflow: hidden !important;
+/* Expander arrow icon — needs overflow: visible so arrow renders fully */
+[data-testid="stExpander"] summary span,
+[data-testid="stExpander"] summary svg,
+[data-testid="stExpander"] summary i {
+    display: inline-flex !important;
+    align-items: center !important;
+    line-height: 1 !important;
+    overflow: visible !important;
+    flex-shrink: 0 !important;
 }
 
-/* Number input up/down chevrons */
+/* Inline input spans (eye toggle, clear icon, etc) — push right so they
+   don’t overlap typed text; let the icon font render naturally via inherit */
+div[data-baseweb="input"] span,
+div[data-baseweb="input"] i {
+    font-family: inherit !important;
+    line-height: 1 !important;
+    letter-spacing: normal !important;
+    overflow: hidden !important;
+    display: inline-flex !important;
+    align-items: center !important;
+}
+
+/* Selectbox / number stepper icon spans */
+div[data-baseweb="select"] span,
+div[data-baseweb="select"] i,
 button[data-testid="stNumberInputStepDown"] span,
 button[data-testid="stNumberInputStepUp"] span {
     font-family: inherit !important;
-    line-height: normal !important;
+    line-height: 1 !important;
     overflow: hidden !important;
     display: inline-flex !important;
     align-items: center !important;
@@ -733,6 +736,12 @@ button[data-testid="stNumberInputStepUp"] span {
 /* ═══════════════════════════════════════════════════
    INPUTS — Crystal Glass
 ═══════════════════════════════════════════════════ */
+div[data-baseweb="input"] {
+    padding-right: 0.5rem !important;
+}
+div[data-baseweb="input"] input {
+    padding-right: 2rem !important;
+}
 div[data-baseweb="input"] > div,
 div[data-baseweb="textarea"] > div,
 textarea {
