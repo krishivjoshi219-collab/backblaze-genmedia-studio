@@ -349,13 +349,13 @@ st.markdown(
     font-family: 'Inter', sans-serif !important;
 }
 
-/* Ambient glow orbs */
+/* Ambient glow orbs — behind ALL content */
 .stApp::before {
     content: '';
     position: fixed; top: -25vh; right: -15vw;
     width: 65vw; height: 65vw;
     background: radial-gradient(circle, rgba(124,58,237,0.07) 0%, transparent 65%);
-    border-radius: 50%; pointer-events: none; z-index: 0;
+    border-radius: 50%; pointer-events: none; z-index: -1;
     animation: orbDrift 20s ease-in-out infinite alternate;
 }
 .stApp::after {
@@ -363,7 +363,7 @@ st.markdown(
     position: fixed; bottom: -20vh; left: -10vw;
     width: 55vw; height: 55vw;
     background: radial-gradient(circle, rgba(244,63,94,0.06) 0%, transparent 65%);
-    border-radius: 50%; pointer-events: none; z-index: 0;
+    border-radius: 50%; pointer-events: none; z-index: -1;
     animation: orbDrift 26s ease-in-out infinite alternate-reverse;
 }
 @keyframes orbDrift {
@@ -578,13 +578,49 @@ st.markdown(
 }
 
 /* ═══════════════════════════════════════════════════
-   TYPOGRAPHY
+   TYPOGRAPHY — scoped to avoid Streamlit internals
 ═══════════════════════════════════════════════════ */
-p, span, label, li, td, th { line-height: 1.72 !important; letter-spacing: .01em !important; color: var(--muted); }
+
+/* Only style paragraph text in main content areas, not Streamlit widget labels */
+[data-testid="stMarkdown"] p,
+[data-testid="stText"] p,
+.glass-card p, .glass-card-neon-purple p,
+.glass-card-neon-pink p, .glass-card-neon-blue p {
+    line-height: 1.72 !important;
+    letter-spacing: .01em !important;
+    color: var(--muted);
+}
+
+/* Streamlit native widget labels — keep default layout, just colour */
+[data-testid="stWidgetLabel"] p,
+[data-testid="stWidgetLabel"] label,
+[data-testid="stWidgetLabel"] span {
+    color: var(--muted) !important;
+    font-size: .9rem !important;
+    font-weight: 500 !important;
+    line-height: 1.4 !important;
+}
+
+/* List items in markdown only */
+[data-testid="stMarkdown"] li {
+    line-height: 1.72 !important;
+    letter-spacing: .01em !important;
+    color: var(--muted);
+}
+
+/* Table cells */
+td, th {
+    line-height: 1.5 !important;
+    letter-spacing: .01em !important;
+    color: var(--muted);
+}
+
 h1, h2, h3, h4, h5, h6 {
     font-family: 'Space Grotesk', sans-serif !important;
-    line-height: 1.3 !important; letter-spacing: -.025em !important;
-    margin-top: .55rem !important; margin-bottom: .55rem !important;
+    line-height: 1.3 !important;
+    letter-spacing: -.02em !important;
+    margin-top: 1rem !important;
+    margin-bottom: .6rem !important;
     color: var(--txt) !important;
 }
 strong, b { color: var(--txt) !important; }
@@ -602,7 +638,7 @@ a:hover { color: var(--a2); text-decoration: none; }
 [data-testid="stSidebar"]::before {
     content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
     background: linear-gradient(90deg, transparent, rgba(124,58,237,0.85), rgba(244,63,94,0.65), transparent);
-    pointer-events: none;
+    pointer-events: none; z-index: 1;
 }
 [data-testid="stSidebar"] * { font-family: 'Inter', sans-serif !important; }
 [data-testid="stSidebar"] h1,
