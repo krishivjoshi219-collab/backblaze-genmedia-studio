@@ -362,12 +362,13 @@ To safeguard against AI deepfakes and unverified content manipulation, Backblaze
 
 ## 10. AI Models & Provider Catalog Specification
 
-| Modality | Default Model ID | Step Type | Task Function |
+| Modality | Default Model ID / Engine | Step Type | Task Function |
 | :--- | :--- | :--- | :--- |
-| **Image Generation** | `black-forest-labs/FLUX.1-schnell` | `GENERATE` | High-speed 4-step image synthesis for manga panels |
-| **Text Generation / Translation** | `Qwen/Qwen2.5-72B-Instruct` | `GENERATE` | Light novel scene writing and JP-to-EN localization |
+| **Image Generation** | `gemini-2.5-flash-image` (Google GenAI Nano Banana 2) | `GENERATE` | Ultra-high-contrast manga panel artwork & detailed line art |
+| **Text Generation / Translation** | `Qwen/Qwen2.5-72B-Instruct` / Gemini LLM | `GENERATE` | Light novel scene writing and JP-to-EN localization |
 | **Audio Transcription** | `openai/whisper-large-v3-turbo` | `GENERATE` | Multi-lingual speech recognition and SRT generation |
 | **Audio Soundscape Synthesis** | `facebook/musicgen-small` | `GENERATE` | Background audio soundscape dramatization generation |
+
 
 ---
 
