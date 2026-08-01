@@ -28,6 +28,10 @@ SUPPORTED_PROVIDERS = {
         "gemini-2.5-flash-image": "Google GenAI Nano Banana 2 (Gemini API Key required)",
         "gemini-2.0-flash-preview-image-generation": "Google GenAI Flash Preview (Gemini API Key required)",
     },
+    "video": {
+        "THUDM/CogVideoX-5b": "CogVideoX 5B (HF Token)",
+        "guoyww/animatediff-motion-adapter-v1-5-2": "AnimateDiff (HF Token)",
+    },
     "text": {
         "Qwen/Qwen2.5-7B-Instruct": "Qwen 2.5 7B Instruct (HF Token)",
         "Qwen/Qwen2.5-72B-Instruct": "Qwen 2.5 72B Instruct (HF Token)",
@@ -50,17 +54,11 @@ SUPPORTED_PROVIDERS = {
     },
 }
 
-def detect_api_key_type(key: str) -> str:
-    if key.startswith("AIzaSy"):
-        return "gemini"
-    elif key.startswith("hf_"):
-        return "huggingface"
-    else:
-        return "unknown"
 
-def generate_manga_panel(prompt: str, api_key: str = None, style_preset: str = "Manga / Anime Style") -> bytes:
+
+def generate_manga_panel(prompt: str, api_key: str = None, style_preset: str = "Manga / Anime Style", model_id: str = "gemini-2.5-flash-image") -> bytes:
     """
-    Generates manga panel artwork using Gemini API (Nano Banana 2: gemini-2.5-flash-image).
+    Generates manga panel artwork using Gemini API.
     Includes automatic prompt enhancement and robust error handling with zero UI crashes.
     """
     effective_key = api_key or os.environ.get("GEMINI_API_KEY")
@@ -81,7 +79,7 @@ def generate_manga_panel(prompt: str, api_key: str = None, style_preset: str = "
 
     try:
         response = client.models.generate_content(
-            model='gemini-2.5-flash-image',
+            model=model_id,
             contents=[enhanced_prompt],
             config=types.GenerateContentConfig(
                 response_modalities=['TEXT', 'IMAGE']
@@ -279,10 +277,127 @@ def _generate_fallback_image_asset(step, prompt: str, seed: int, model: str) -> 
         metadata={"image_path": img_path, "prompt": prompt, "seed": seed, "provenance": manifest}
     )
 
+def _extract_input_image_path(step, step_params: dict) -> str | None:
+    """Extracts local image file path from upstream step assets or step params."""
+    step_inputs = getattr(step, "inputs", []) or []
+    if step_inputs:
+        for inp in step_inputs:
+            if hasattr(inp, "metadata") and isinstance(inp.metadata, dict):
+                img_path = inp.metadata.get("image_path")
+                if img_path and os.path.exists(img_path):
+                    return img_path
+            if hasattr(inp, "url") and str(inp.url).startswith("file://"):
+                clean_path = str(inp.url).replace("file://", "")
+                if os.path.exists(clean_path) and any(clean_path.lower().endswith(ext) for ext in [".png", ".jpg", ".jpeg", ".webp"]):
+                    return clean_path
+            if isinstance(inp, dict):
+                meta = inp.get("metadata") or {}
+                img_path = meta.get("image_path") or inp.get("image_path")
+                if img_path and os.path.exists(img_path):
+                    return img_path
+
+    if step_params and isinstance(step_params, dict):
+        for key in ("image_path", "input_image", "input_image_path"):
+            val = step_params.get(key)
+            if val and isinstance(val, str) and os.path.exists(val):
+                return val
+
+    return None
+
+def _create_mock_mp4_video(video_path: str, prompt: str, input_image_path: str = None) -> None:
+    """
+    Generates a valid MP4 video file on disk.
+    Tries OpenCV (cv2) frame animation first; falls back to raw valid MP4 binary container pattern if cv2 is missing or fails.
+    """
+    try:
+        import cv2
+        import numpy as np
+
+        if input_image_path and os.path.exists(input_image_path):
+            base_img = Image.open(input_image_path).convert("RGB").resize((1024, 1024))
+        else:
+            base_img = draw_judge_manga_panel(prompt)
+
+        base_np = np.array(base_img)
+        fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+        out = cv2.VideoWriter(video_path, fourcc, 24.0, (1024, 1024))
+
+        if out.isOpened():
+            for frame_idx in range(48):
+                scale = 1.0 + (frame_idx / 48.0) * 0.05
+                h, w, _ = base_np.shape
+                nh, nw = int(h * scale), int(w * scale)
+                resized = cv2.resize(base_np, (nw, nh))
+                crop_y = (nh - h) // 2
+                crop_x = (nw - w) // 2
+                frame = resized[crop_y:crop_y+h, crop_x:crop_x+w]
+                out.write(cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))
+            out.release()
+            if os.path.exists(video_path) and os.path.getsize(video_path) > 0:
+                return
+    except Exception as e:
+        logger.warning(f"OpenCV MP4 rendering failed or unavailable ({e}). Using raw valid MP4 fallback header.")
+
+    minimal_mp4_bytes = (
+        bytes.fromhex(
+            "000000206674797069736f6d0000020069736f6d69736f32617663316d703431"
+            "0000000866726565"
+            "000000406d646174"
+        )
+        + b"\x00" * 48
+        + bytes.fromhex(
+            "0000006c6d6f6f76000000646d766864000000000000000000000000000003e8"
+            "000003e800010000010000000000000000000000000100000000000000000000"
+            "0000000000010000000000000000000000000000800000000000000000000000"
+            "0000000000000002"
+        )
+    )
+    with open(video_path, "wb") as f:
+        f.write(minimal_mp4_bytes)
+
+def _generate_fallback_video_asset(step, prompt: str, seed: int, model: str, input_image_path: str = None) -> Asset:
+    temp_dir = tempfile.gettempdir()
+    video_path = os.path.join(temp_dir, f"video_render_{int(time.time())}_{random.randint(1000, 9999)}.mp4")
+    _create_mock_mp4_video(video_path, prompt=prompt, input_image_path=input_image_path)
+    manifest = provenance_engine.create_manifest(
+        prompt=prompt,
+        seed=seed,
+        model_id=model,
+        timestamp=time.time()
+    )
+    return Asset(
+        url=f"file://{video_path}",
+        media_type="video/mp4",
+        metadata={
+            "video_path": video_path,
+            "prompt": prompt,
+            "seed": seed,
+            "provenance": manifest,
+            "provider": "simulation_video_generator",
+            "fps": 24,
+            "duration_sec": 2.0,
+            "input_image_path": input_image_path,
+        }
+    )
+
 def _generate_fallback_text_asset(step, prompt: str) -> Asset:
+    step_params = getattr(step, "params", {}) or {}
+    node_type = str(step_params.get("node_type", ""))
+    is_expander = "expand" in prompt.lower() or "promptexpander" in node_type.lower() or "creative prompt" in prompt.lower()
+
     if step.inputs and len(step.inputs) > 0 and getattr(step.inputs[0], "metadata", None):
         input_asset = step.inputs[0]
-        source_text = input_asset.metadata.get("text", "")
+        source_text = input_asset.metadata.get("text", "") or input_asset.metadata.get("prompt", "")
+        if is_expander or "expand" in prompt.lower():
+            expanded_text = (
+                f"{source_text or prompt}, ultra-detailed keyframe, 8k resolution, cinematic volumetric lighting, "
+                f"masterpiece composition, dramatic camera angle, photorealistic depth of field"
+            )
+            return Asset(
+                url="data:text/plain;charset=utf-8,",
+                media_type="text/plain",
+                metadata={"text": expanded_text}
+            )
         mock_en = (
             "\"--An error? No way, that's impossible!\"\n"
             "I shouted in the dark corner of the guild hall, staring intently at the ancient pages of the spellbook. "
@@ -306,7 +421,17 @@ def _generate_fallback_text_asset(step, prompt: str) -> Asset:
             metadata={"text": mock_en}
         )
     else:
-        if "Translate" in prompt or "translate" in prompt:
+        if is_expander:
+            expanded_text = (
+                f"{prompt}, ultra-detailed keyframe, 8k resolution, cinematic volumetric lighting, "
+                f"masterpiece composition, dramatic camera angle, photorealistic depth of field"
+            )
+            return Asset(
+                url="data:text/plain;charset=utf-8,",
+                media_type="text/plain",
+                metadata={"text": expanded_text}
+            )
+        elif "Translate" in prompt or "translate" in prompt:
             if "Japanese into natural English" in prompt or "to English" in prompt:
                 mock_text = "[SIMULATED TRANSLATION]: This is a demo English translation."
             else:
@@ -330,6 +455,10 @@ def _generate_fallback_text_asset(step, prompt: str) -> Asset:
 def _generate_fallback_audio_asset(step, prompt: str, seed: int, model: str) -> Asset:
     mod_lower = model.lower()
     prompt_lower = prompt.lower()
+    step_params = getattr(step, "params", {}) or {}
+    speakers = step_params.get("speakers") or {"Speaker_1": "Default_Male", "Speaker_2": "Default_Female"}
+    dialogue_lines = step_params.get("dialogue_lines") or step_params.get("dialogue_script") or step_params.get("dialogue") or []
+
     if "transcribe" in prompt_lower or "recognition" in prompt_lower or "whisper" in mod_lower:
         demo_transcript = (
             "In this scene, Sora discovers that the ancient magic circles are compiled code. "
@@ -348,10 +477,18 @@ def _generate_fallback_audio_asset(step, prompt: str, seed: int, model: str) -> 
         )
     else:
         audio_path, manifest = generate_mock_wav(prompt=prompt, seed=seed, model_id=model)
+        metadata = {
+            "audio_path": audio_path,
+            "prompt": prompt,
+            "seed": seed,
+            "provenance": manifest,
+            "speakers": speakers,
+            "dialogue_lines": dialogue_lines
+        }
         return Asset(
             url=f"file://{audio_path}",
             media_type="audio/wav",
-            metadata={"audio_path": audio_path, "prompt": prompt, "seed": seed, "provenance": manifest}
+            metadata=metadata
         )
 
 class HuggingFaceProvider(SyncProvider):
@@ -373,13 +510,18 @@ class HuggingFaceProvider(SyncProvider):
         modality_val = modality_raw.value if hasattr(modality_raw, 'value') else str(modality_raw)
         modality_val = str(modality_val).lower().strip()
 
-        # Resolve API keys for different backends
-        gemini_key = os.environ.get("GEMINI_API_KEY") or (token if token.startswith("AIzaSy") else "")
-        hf_key = token if not token.startswith("AIzaSy") else ""
+        # Resolve API keys for different backends dynamically based on requested model
+        gemini_key = os.environ.get("GEMINI_API_KEY")
+        hf_key = os.environ.get("HF_TOKEN")
+        if token:
+            if "gemini" in model.lower():
+                gemini_key = gemini_key or token
+            else:
+                hf_key = hf_key or token
 
         # DEMO / SIMULATION MODE (No token configured)
-        if modality_val == "image" and not gemini_key:
-            logger.error("RuntimeError: gemini_key is empty for image modality. Falling back to simulation.")
+        if modality_val == "image" and not gemini_key and not hf_key:
+            logger.error("RuntimeError: API key is empty for image modality. Falling back to simulation.")
             step.assets.append(_generate_fallback_image_asset(step, prompt, seed, model))
             step.status = "completed"
             return step
@@ -389,6 +531,9 @@ class HuggingFaceProvider(SyncProvider):
                 step.assets.append(_generate_fallback_text_asset(step, prompt))
             elif modality_val == "audio":
                 step.assets.append(_generate_fallback_audio_asset(step, prompt, seed, model))
+            elif modality_val == "video":
+                input_img = _extract_input_image_path(step, step_params)
+                step.assets.append(_generate_fallback_video_asset(step, prompt, seed, model, input_image_path=input_img))
             else:
                 step.assets.append(_generate_fallback_text_asset(step, prompt))
             step.status = "completed"
@@ -403,16 +548,27 @@ class HuggingFaceProvider(SyncProvider):
                 img_bytes = None
                 used_provider = "simulation"
 
-                # ── Tier 1: Gemini 2.5 Flash Image (BYOK - Gemini API Key required) ──
-                if gemini_key:
+                # ── Tier 1: User-configured API (Gemini or Hugging Face) ──
+                if "gemini" in model.lower() and gemini_key:
                     try:
-                        img_bytes = generate_manga_panel(prompt=prompt, api_key=gemini_key)
-                        used_provider = "gemini-2.5-flash-image"
-                        logger.info("[Image] Tier 1 Gemini API: SUCCESS")
+                        img_bytes = generate_manga_panel(prompt=prompt, api_key=gemini_key, model_id=model)
+                        used_provider = model
+                        logger.info(f"[Image] Tier 1 Gemini API ({model}): SUCCESS")
                     except Exception as g_err:
                         logger.warning(f"[Image] Tier 1 Gemini failed: {g_err}. Trying Pollinations.AI fallback.")
+                elif "gemini" not in model.lower() and hf_key:
+                    try:
+                        response = requests.post(_hf_url(model), headers={"Authorization": f"Bearer {hf_key}"}, json={"inputs": prompt}, timeout=45)
+                        if response.status_code == 200:
+                            img_bytes = response.content
+                            used_provider = model
+                            logger.info(f"[Image] Tier 1 HF API ({model}): SUCCESS")
+                        else:
+                            logger.warning(f"[Image] Tier 1 HF failed: {response.status_code}. Trying Pollinations.AI fallback.")
+                    except Exception as hf_err:
+                        logger.warning(f"[Image] Tier 1 HF failed: {hf_err}. Trying Pollinations.AI fallback.")
                 else:
-                    logger.info("[Image] No Gemini key — skipping Tier 1, going to Pollinations.AI.")
+                    logger.info("[Image] No valid key for model — skipping Tier 1, going to Pollinations.AI.")
 
                 # ── Tier 2: Pollinations.AI (Free, no key required) ──
                 if img_bytes is None:
@@ -464,14 +620,30 @@ class HuggingFaceProvider(SyncProvider):
 
             elif modality_val == "text" or "qwen" in model.lower() or "instruct" in model.lower():
                 final_prompt = prompt
+                node_type = str(step_params.get("node_type", ""))
+                is_expander = "expand" in prompt.lower() or "promptexpander" in node_type.lower() or "creative prompt" in prompt.lower()
+
                 if step.inputs and len(step.inputs) > 0 and getattr(step.inputs[0], "metadata", None):
-                    source_text = step.inputs[0].metadata.get("text", "")
+                    source_text = step.inputs[0].metadata.get("text", "") or step.inputs[0].metadata.get("prompt", "")
                     if source_text:
-                        final_prompt = (
-                            f"Translate the following text into natural, expressive, and engaging English. "
-                            f"Preserve the emotional weight, formatting, and character speech style:\n\n"
-                            f"{source_text}"
-                        )
+                        if is_expander:
+                            final_prompt = (
+                                f"Expand the following core user concept into a detailed, evocative prompt for AI generative video/image models. "
+                                f"Include lighting, composition, mood, color palette, camera motion, and visual details. Output ONLY the expanded prompt:\n\n"
+                                f"{source_text}"
+                            )
+                        else:
+                            final_prompt = (
+                                f"Translate the following text into natural, expressive, and engaging English. "
+                                f"Preserve the emotional weight, formatting, and character speech style:\n\n"
+                                f"{source_text}"
+                            )
+                elif is_expander:
+                    final_prompt = (
+                        f"Expand the following core user concept into a detailed, evocative prompt for AI generative video/image models. "
+                        f"Include lighting, composition, mood, color palette, camera motion, and visual details. Output ONLY the expanded prompt:\n\n"
+                        f"{prompt}"
+                    )
 
                 payload = {
                     "inputs": f"<|im_start|>user\n{final_prompt}<|im_end|>\n<|im_start|>assistant\n",
@@ -511,6 +683,47 @@ class HuggingFaceProvider(SyncProvider):
                     err_msg = response.text if response else "No response"
                     logger.warning(f"HF Text API call failed (status {response.status_code if response else 'None'}): {err_msg}. Using simulation fallback.")
                     step.assets.append(_generate_fallback_text_asset(step, prompt))
+
+            elif modality_val == "video" or "cogvideo" in model.lower() or "animatediff" in model.lower():
+                input_image_path = _extract_input_image_path(step, step_params)
+                video_bytes = None
+                if hf_key:
+                    try:
+                        import base64
+                        payload = {"inputs": prompt}
+                        if input_image_path and os.path.exists(input_image_path):
+                            with open(input_image_path, "rb") as f:
+                                payload["image"] = base64.b64encode(f.read()).decode("utf-8")
+
+                        response = requests.post(endpoint, headers=headers, json=payload, timeout=90)
+                        if response.status_code == 200 and response.content:
+                            video_bytes = response.content
+                            logger.info(f"[Video] Tier 1 HF API ({model}): SUCCESS")
+                    except Exception as v_err:
+                        logger.warning(f"[Video] Tier 1 HF API failed: {v_err}. Falling back to simulation.")
+
+                if video_bytes:
+                    temp_dir = tempfile.gettempdir()
+                    video_path = os.path.join(temp_dir, f"video_render_{int(time.time())}_{random.randint(1000, 9999)}.mp4")
+                    with open(video_path, "wb") as vf:
+                        vf.write(video_bytes)
+                    manifest = provenance_engine.create_manifest(
+                        prompt=prompt, seed=seed, model_id=model, timestamp=time.time()
+                    )
+                    step.assets.append(Asset(
+                        url=f"file://{video_path}",
+                        media_type="video/mp4",
+                        metadata={
+                            "video_path": video_path,
+                            "prompt": prompt,
+                            "seed": seed,
+                            "provenance": manifest,
+                            "provider": model,
+                            "input_image_path": input_image_path,
+                        }
+                    ))
+                else:
+                    step.assets.append(_generate_fallback_video_asset(step, prompt, seed, model, input_image_path=input_image_path))
 
             elif modality_val == "audio" or "whisper" in model.lower() or "musicgen" in model.lower():
                 is_whisper = "transcribe" in prompt.lower() or "recognition" in prompt.lower() or "whisper" in model.lower()
@@ -591,10 +804,19 @@ class HuggingFaceProvider(SyncProvider):
                             timestamp=time.time()
                         )
                         provenance_engine.inject_wav_provenance(response.content, manifest, output_path=audio_path)
+                        speakers = step_params.get("speakers") or {"Speaker_1": "Default_Male", "Speaker_2": "Default_Female"}
+                        dialogue_lines = step_params.get("dialogue_lines") or step_params.get("dialogue_script") or step_params.get("dialogue") or []
                         step.assets.append(Asset(
                             url=f"file://{audio_path}",
                             media_type="audio/wav",
-                            metadata={"audio_path": audio_path, "prompt": prompt, "seed": seed, "provenance": manifest}
+                            metadata={
+                                "audio_path": audio_path,
+                                "prompt": prompt,
+                                "seed": seed,
+                                "provenance": manifest,
+                                "speakers": speakers,
+                                "dialogue_lines": dialogue_lines
+                            }
                         ))
                     else:
                         logger.warning("HF Audio generation failed. Using simulation fallback.")
@@ -607,6 +829,9 @@ class HuggingFaceProvider(SyncProvider):
                     step.assets.append(_generate_fallback_image_asset(step, prompt, seed, model))
                 elif modality_val == "audio":
                     step.assets.append(_generate_fallback_audio_asset(step, prompt, seed, model))
+                elif modality_val == "video":
+                    input_img = _extract_input_image_path(step, step_params)
+                    step.assets.append(_generate_fallback_video_asset(step, prompt, seed, model, input_image_path=input_img))
                 else:
                     step.assets.append(_generate_fallback_text_asset(step, prompt))
 
@@ -616,6 +841,9 @@ class HuggingFaceProvider(SyncProvider):
                 step.assets.append(_generate_fallback_image_asset(step, prompt, seed, model))
             elif modality_val == "audio":
                 step.assets.append(_generate_fallback_audio_asset(step, prompt, seed, model))
+            elif modality_val == "video":
+                input_img = _extract_input_image_path(step, step_params)
+                step.assets.append(_generate_fallback_video_asset(step, prompt, seed, model, input_image_path=input_img))
             else:
                 step.assets.append(_generate_fallback_text_asset(step, prompt))
 
@@ -626,6 +854,9 @@ class HuggingFaceProvider(SyncProvider):
                 step.assets.append(_generate_fallback_image_asset(step, prompt, seed, model))
             elif modality_val == "audio":
                 step.assets.append(_generate_fallback_audio_asset(step, prompt, seed, model))
+            elif modality_val == "video":
+                input_img = _extract_input_image_path(step, step_params)
+                step.assets.append(_generate_fallback_video_asset(step, prompt, seed, model, input_image_path=input_img))
             else:
                 step.assets.append(_generate_fallback_text_asset(step, prompt))
 

@@ -52,19 +52,21 @@
 | **Ephemeral AI output** — generated media disappears, no durable storage | Backblaze B2 content-addressed vault with SHA-256 deduplication & presigned CDN URLs |
 | **Unverifiable AI content** — deepfake risk, no authenticity proof | C2PA cryptographic provenance — every asset gets a verifiable SHA-256 + HMAC-SHA256 certificate |
 
-### Studio Workspaces (9 Tabs)
+### Studio Workspaces (9 Tabs + FastAPI REST API Backend)
 
-| Tab | Workspace | Core Capabilities |
+| Tab / Server | Workspace | Core Capabilities |
 |---|---|---|
 | 🎨 | **Manga & Comic Studio** | AI panel generation (Gemini → Pollinations fallback), colorization, speech bubble OCR, storyboard reel |
-| 📖 | **Light Novel Factory** | Scene writing, JP→EN localization, audio dramatization, EPUB/PDF export |
+| 📖 | **Light Novel Factory** | Scene writing, JP→EN localization, interactive prose reader view, audio dramatization, EPUB/PDF export |
 | 🎙️ | **Whisper Subtitle Hub** | Audio transcription → SRT/VTT/JSON, multi-language translation, reading-pace optimizer |
 | 🤖 | **Agent Continuity Loop** | Autonomous `ThresholdEvaluator` quality loops with auto-retry |
 | ⚡ | **ComfyUI Workflow Studio** | Visual pipeline builder with graph topology export |
-| 🗄️ | **Backblaze B2 Vault** | Browse, stream, download, tag, ZIP-archive, and webhook-dispatch B2 assets |
-| 🛡️ | **Security & Provenance** | C2PA tamper audits, authenticity certificates, RBAC workspace manager |
+| 🗄️ | **Backblaze B2 Vault & Gallery** | B2 Cloud Media Gallery, presigned CDN streams, spatial time-travel versioning, ZIP-archive, and webhooks |
+| 🛡️ | **Security & Provenance** | 5-Try Rate Limit Guard, cryptographic sandbox, C2PA tamper audits, RBAC workspace manager |
 | 📊 | **Analytics & System Health** | Telemetry, cost estimator, storage utilization, model benchmark chart |
 | 🔒 | **Code Inspector** | Live dependency scanner, pip conflict detector |
+| ⚡ | **FastAPI REST API Server** | Production OpenAPI `/docs` endpoints for headless programmatic integration (`api_server.py`) |
+
 
 ---
 
@@ -235,11 +237,23 @@ Every generated asset touches B2 — images, audio, subtitles, C2PA certs, run m
 
 ```python
 # services/orchestrator.py — Genblaze pipeline construction
-pipeline = Pipeline(provider=HuggingFaceProvider(api_key=gemini_key))
-pipeline.add_step(StepType.GENERATE, modality=Modality.IMAGE, prompt=panel_prompt)
-pipeline.add_step(StepType.GENERATE, modality=Modality.TEXT,  prompt=novel_prompt)
-pipeline.add_evaluator(ThresholdEvaluator(threshold=0.75, retry_limit=3))
-result = pipeline.execute()
+provider = HuggingFaceProvider(api_key=gemini_key)
+pipeline = Pipeline("manga-novel-chain")
+pipeline.step(
+    provider=provider,
+    model="gemini-2.5-flash-image",
+    prompt=panel_prompt,
+    modality=Modality.IMAGE,
+    step_type=StepType.GENERATE
+)
+pipeline.step(
+    provider=provider,
+    model="Qwen/Qwen2.5-7B-Instruct",
+    prompt=novel_prompt,
+    modality=Modality.TEXT,
+    step_type=StepType.GENERATE
+)
+result = pipeline.run()
 ```
 
 - Custom `SyncProvider` routes jobs to the right backend per modality
@@ -341,20 +355,26 @@ pip install -r requirements.txt
 cp .streamlit/secrets.toml.template .streamlit/secrets.toml
 # Edit .streamlit/secrets.toml with your keys
 
-# 5. Launch the studio
+# 5. Launch the Studio Web App
 streamlit run app.py
+
+# 6. (Optional) Launch the Production FastAPI REST API Backend Server
+python3 api_server.py
+# OpenAPI Interactive Swagger Docs available at: http://localhost:8000/docs
 ```
 
-### System Requirements
+### System Requirements & Components
 
-| Package | Purpose | Auto-installed via |
+| Package / File | Purpose | Auto-installed / Entrypoint |
 |---|---|---|
+| `app.py` | Interactive Web Dashboard (9 Workspaces) | `streamlit run app.py` |
+| `api_server.py` | Production FastAPI REST API Backend | `python3 api_server.py` |
 | `graphviz` | Lineage tree rendering | `packages.txt` |
-| `ffmpeg` | Audio processing | `packages.txt` |
-| `google-genai` | Gemini 2.5 Flash Image | `requirements.txt` |
-| `b2sdk` | Backblaze B2 operations | `requirements.txt` |
+| `google-genai` | Universal SDK for Gemini 2.5 Flash | `requirements.txt` |
+| `b2sdk` | Backblaze B2 Vault & Gallery CDN | `requirements.txt` |
+| `fastapi` & `uvicorn` | REST API Server Engine | `requirements.txt` |
 | `genblaze` | Pipeline orchestration | `requirements.txt` (from GitHub) |
-| `streamlit` | Studio web app | `requirements.txt` |
+
 
 ---
 

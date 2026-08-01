@@ -20,7 +20,7 @@ def evaluate_continuity(result, master_layout_prompt) -> float:
     """
     image_prompts = []
     for step in result.run.steps:
-        if step.model == "black-forest-labs/FLUX.1-schnell" and step.status in ("completed", "succeeded"):
+        if step.modality == "image" and step.status in ("completed", "succeeded"):
             if step.assets:
                 image_prompts.append(step.assets[0].metadata.get("prompt", ""))
                 

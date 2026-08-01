@@ -1012,6 +1012,60 @@ pre code, .stCodeBlock code { font-family: 'JetBrains Mono','Fira Code',monospac
 ::selection { background: rgba(168,85,247,0.32); color: #fff; }
 
 /* ═══════════════════════════════════════════════════
+   TOAST NOTIFICATIONS — Holographic Floating Panels
+═══════════════════════════════════════════════════ */
+[data-testid="stToast"] {
+    background: rgba(12,8,28,0.85) !important;
+    border: 1px solid rgba(124,58,237,0.4) !important;
+    border-radius: var(--rlg) !important;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 0 25px rgba(124,58,237,0.2) !important;
+    backdrop-filter: blur(20px) !important;
+    color: var(--txt) !important;
+    font-family: 'Space Grotesk', sans-serif !important;
+}
+
+/* ═══════════════════════════════════════════════════
+   TOOLTIPS — Neon Glow
+═══════════════════════════════════════════════════ */
+[data-testid="stTooltipContent"] {
+    background: rgba(8,4,20,0.95) !important;
+    border: 1px solid rgba(168,85,247,0.5) !important;
+    border-radius: 8px !important;
+    color: #e9d5ff !important;
+    font-family: 'Inter', sans-serif !important;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.6), 0 0 15px rgba(168,85,247,0.3) !important;
+    backdrop-filter: blur(10px) !important;
+}
+
+/* ═══════════════════════════════════════════════════
+   SLIDERS — Custom Neon Tracks
+═══════════════════════════════════════════════════ */
+[data-testid="stSlider"] div[role="slider"] {
+    background: var(--txt) !important;
+    box-shadow: 0 0 15px var(--p2), 0 0 5px #fff !important;
+    border: 2px solid var(--p2) !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+[data-testid="stSlider"] div[role="slider"]:hover {
+    transform: scale(1.15) !important;
+    box-shadow: 0 0 25px var(--p2), 0 0 10px #fff !important;
+}
+[data-testid="stSlider"] [data-baseweb="slider"] > div:first-child > div:first-child {
+    background: linear-gradient(90deg, var(--p), var(--a)) !important;
+}
+
+/* ═══════════════════════════════════════════════════
+   MODAL / DIALOG — Glass Overlay
+═══════════════════════════════════════════════════ */
+div[role="dialog"] {
+    background: rgba(10,5,24,0.75) !important;
+    border: 1px solid rgba(168,85,247,0.3) !important;
+    border-radius: 24px !important;
+    backdrop-filter: blur(30px) !important;
+    box-shadow: 0 25px 80px rgba(0,0,0,0.8), 0 0 40px rgba(124,58,237,0.15) !important;
+}
+
+/* ═══════════════════════════════════════════════════
    RESPONSIVE
 ═══════════════════════════════════════════════════ */
 @media (max-width: 768px) {
@@ -1062,32 +1116,42 @@ if raw_token.strip():
 
 has_byok = bool(raw_token.strip() or gemini_secret)
 
-# Absolute Rate-Limit Protection (10 Free Tries Limit)
+# Absolute Rate-Limit Protection (5 Free Tries Limit)
 st.sidebar.markdown("---")
-st.sidebar.subheader("⏳ Rate Limit Guard")
+st.sidebar.subheader("⏳ Rate Limit & Usage Guard")
 tries_used = st.session_state["tries_used"]
 
-if has_byok:
-    st.sidebar.success("🟢 BYOK Active: Unlimited Tries")
-    st.sidebar.caption(f"Used this session: {tries_used} generation(s)")
-else:
-    remaining = max(0, 10 - tries_used)
-    st.sidebar.warning(f"🟡 Studio Free Tier: {remaining}/10 Left")
-    progress = min(tries_used / 10, 1.0)
+has_user_byok = bool(raw_token.strip())
+
+if has_user_byok:
+    st.sidebar.success("🔑 Custom BYOK Key Active")
+    st.sidebar.caption(f"Session Usage: {tries_used} generation(s) processed.")
+elif gemini_secret:
+    st.sidebar.info("🔒 Default Secrets Key Active")
+    remaining = max(0, 5 - tries_used)
+    st.sidebar.caption(f"Free Tier Tries: {remaining}/5 Left (Session: {tries_used})")
+    progress = min(tries_used / 5.0, 1.0)
     st.sidebar.progress(progress)
-    st.sidebar.write(f"Tries Used: **{tries_used} / 10**")
-    if tries_used >= 10:
+else:
+    remaining = max(0, 5 - tries_used)
+    st.sidebar.warning(f"🟡 Studio Free Tier: {remaining}/5 Left")
+    progress = min(tries_used / 5.0, 1.0)
+    st.sidebar.progress(progress)
+    st.sidebar.write(f"Tries Used: **{tries_used} / 5**")
+    if tries_used >= 5:
         st.sidebar.error(
-            "❌ Free tries exhausted! Enter a Gemini API Key to enable unlimited generations."
+            "❌ Free tier limit reached (5/5)! Enter a Gemini API Key in the sidebar to continue."
         )
+
+
 
 
 # API Key Guide
 with st.sidebar.expander("🔑 API Key Setup Guide", expanded=False):
-    st.markdown("""**🍌 Gemini API Key** (for Best Image Quality)
+    st.markdown("""**🍌 Image Provider API Key** (for Best Image Quality)
 - Get free key: [Google AI Studio](https://aistudio.google.com/)
-- Key format: `AIzaSy...`
-- Powers: `gemini-2.5-flash-image` manga panels
+- Key format: Any valid API key
+- Powers: Dynamic image generation models
 
 **🌸 Pollinations.AI** (Free fallback — no key needed!)
 - Automatic Tier 2 fallback when no Gemini key is set
@@ -1244,10 +1308,22 @@ with st.sidebar.expander("🛠 Dev Tools", expanded=False):
         else:
             st.write("Please paste logs first.")
 
+# Formal AI Generated Content Disclaimer Notice (rendered on sidebar across all tabs)
+st.sidebar.markdown("---")
+st.sidebar.markdown(
+    """
+    <div style="background: rgba(12,8,28,0.65); border: 1px solid rgba(244,63,94,0.3); border-radius: 14px; padding: 1rem; margin-top: 1rem; font-size: 0.76rem; color: #cbd5e1; line-height: 1.5; backdrop-filter: blur(10px);">
+        <strong style="color: #fb7185; font-size: 0.82rem;">⚠️ Formal AI Content Disclaimer</strong><br>
+        Content produced by GenMedia Studio is generated by artificial intelligence models. AI outputs may contain inaccuracies, hallucinations, or unexpected artistic variations. Independent verification is recommended for critical decisions.
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
 
 # Rate limit evaluation helper
 def verify_rate_limit():
-    if not has_byok and st.session_state["tries_used"] >= 10:
+    if not has_byok and st.session_state["tries_used"] >= 5:
         if not st.session_state.get("rate_limit_event_fired"):
             pendo_track(
                 "rate_limit_reached",
@@ -1258,10 +1334,11 @@ def verify_rate_limit():
             )
             st.session_state["rate_limit_event_fired"] = True
         st.error(
-            "⚠️ Rate limit of 10 free tries reached! Enter your **Gemini API Key** or **HF Token** in the sidebar to enable unlimited generations."
+            "⚠️ Free tier rate limit reached (5/5 tries used)! Enter your **Gemini API Key** or **HF Token** in the sidebar to continue generating."
         )
         return False
     return True
+
 
 
 # ----------------- MAIN STUDIO CONTAINER -----------------
@@ -1358,7 +1435,7 @@ with tab1:
         manga_model = st.text_input(
             "Image Model / Engine",
             value="gemini-2.5-flash-image",
-            help="Image generation engine. Use 'gemini-2.5-flash-image' (requires Gemini API Key). Gemini keys start with 'AIzaSy'.",
+            help="Image generation engine. Supports dynamically routed API keys.",
         )
 
         manga_prompt = st.text_area(
@@ -1390,17 +1467,16 @@ with tab1:
         }
 
         # Inform about the 3-tier image generation cascade
-        gemini_key_configured = bool(get_secret("GEMINI_API_KEY") or (raw_token.strip() and raw_token.strip().startswith("AIzaSy")))
+        gemini_key_configured = bool(get_secret("GEMINI_API_KEY") or raw_token.strip())
         if not gemini_key_configured:
             st.info(
-                "🌸 **No Gemini Key detected — using Pollinations.AI (free fallback).**\n\n"
+                "🌸 **No API Key detected — using Pollinations.AI (free fallback).**\n\n"
                 "Image panels will be generated via [Pollinations.AI](https://pollinations.ai) (FLUX model, no key required). "
-                "For best quality, add your `GEMINI_API_KEY` (`AIzaSy...`) in the sidebar → "
-                "[Get free key](https://aistudio.google.com/).\n\n"
-                "**Generation cascade:** 🍌 Gemini → 🌸 Pollinations.AI → 🎨 Demo Placeholder"
+                "For best quality, add your `GEMINI_API_KEY` in the sidebar.\n\n"
+                "**Generation cascade:** 🍌 Tier 1 → 🌸 Pollinations.AI → 🎨 Demo Placeholder"
             )
 
-        is_disabled = not has_byok and tries_used >= 10
+        is_disabled = not has_byok and tries_used >= 5
 
         if st.button(
             "🚀 Compile Manga Panel",
@@ -1448,9 +1524,8 @@ with tab1:
                         err_str = str(res_path)
                         if "GEMINI_API_KEY" in err_str or "APIKey" in err_str or "api_key" in err_str.lower() or "missing" in err_str.lower():
                             st.warning(
-                                "🔑 **This error is API Key related.** Image generation requires a Gemini API Key. "
-                                "Add `GEMINI_API_KEY` (format: `AIzaSy...`) in the sidebar. "
-                                "Get a free key at [Google AI Studio](https://aistudio.google.com/)."
+                                "🔑 **This error is API Key related.** Image generation requires an API Key. "
+                                "Add your key in the sidebar. "
                             )
                         elif "quota" in err_str.lower() or "rate" in err_str.lower() or "429" in err_str:
                             st.warning(
@@ -1460,9 +1535,8 @@ with tab1:
 
         if is_disabled:
             st.info(
-                "💡 **Free Tier Active**: You have 10 total free tries. For **image generation**, add your "
-                "**Gemini API Key** (`AIzaSy...`) to the sidebar. For **text/audio** features, add your "
-                "**HF Token** (`hf_...`). Both can be entered in the sidebar under 🔑 Gemini API Auth."
+                "💡 **Free Tier Active**: You have 5 total free tries. For **image generation**, add your "
+                "**API Key** to the sidebar. Both can be entered in the sidebar under API Auth."
             )
 
     with col2:
@@ -1624,7 +1698,7 @@ with tab2:
                 key="ln_tone_slider",
             )
 
-            is_disabled_ln = not has_byok and tries_used >= 10
+            is_disabled_ln = not has_byok and tries_used >= 5
 
             if st.button(
                 "✍️ Write Japanese Scene",
@@ -1653,6 +1727,8 @@ with tab2:
                         if ok:
                             st.session_state["light_novel_jp"] = jp_res
                             st.session_state["light_novel_en"] = en_res
+                            st.session_state["ln_jp_out"] = jp_res
+                            st.session_state["ln_en_out"] = en_res
                             secure_increment_tries(2)
                             pendo_track(
                                 "novel_scene_generated",
@@ -1688,50 +1764,96 @@ with tab2:
         with col2:
             st.subheader("Light Novel Compilation Displays")
 
-            # Responsive CSS Grid Layout for side-by-side Manga/Novel comparisons
-            st.markdown('<div class="comparison-grid">', unsafe_allow_html=True)
+            jp_text = st.session_state.get("light_novel_jp", "")
+            jp_html = jp_text.replace("\n", "<br>") if jp_text else ""
 
-            # Column JP
-            st.markdown('<div class="glass-card-neon-purple">', unsafe_allow_html=True)
-            st.markdown(
-                "<h4 style='margin-top:0;'>🇯🇵 Japanese Original Original Text</h4>",
-                unsafe_allow_html=True,
-            )
-            st.session_state["light_novel_jp"] = st.text_area(
-                "Japanese Output Frame",
-                value=st.session_state["light_novel_jp"],
-                height=250,
-                key="ln_jp_out",
-                label_visibility="collapsed",
-            )
-            st.session_state["light_novel_jp_filename"] = st.text_input(
-                "B2 Japanese Text Filename",
-                value=st.session_state["light_novel_jp_filename"],
-                key="ln_jp_filename_input",
-            )
-            st.markdown("</div>", unsafe_allow_html=True)
+            en_text = st.session_state.get("light_novel_en", "")
+            en_html = en_text.replace("\n", "<br>") if en_text else ""
 
-            # Column EN
-            st.markdown('<div class="glass-card-neon-pink">', unsafe_allow_html=True)
-            st.markdown(
-                "<h4 style='margin-top:0;'>🇺🇸 English Translation Frame</h4>",
-                unsafe_allow_html=True,
-            )
-            st.session_state["light_novel_en"] = st.text_area(
-                "English Output Frame",
-                value=st.session_state["light_novel_en"],
-                height=250,
-                key="ln_en_out",
-                label_visibility="collapsed",
-            )
-            st.session_state["light_novel_en_filename"] = st.text_input(
-                "B2 English Text Filename",
-                value=st.session_state["light_novel_en_filename"],
-                key="ln_en_filename_input",
-            )
-            st.markdown("</div>", unsafe_allow_html=True)
+            if jp_text or en_text:
+                reader_tab_jp, reader_tab_en, reader_tab_edit = st.tabs([
+                    "🇯🇵 Japanese Reader View",
+                    "🇺🇸 English Reader View",
+                    "📝 Raw Text Editor"
+                ])
+                
+                with reader_tab_jp:
+                    if jp_text:
+                        st.markdown(
+                            f"""
+                            <div class="glass-card-neon-purple" style="padding: 1.8rem; font-family: 'Hiragino Mincho ProN', 'Yu Mincho', serif; font-size: 1.15rem; line-height: 2.2; color: #f8fafc; max-height: 450px; overflow-y: auto;">
+                                {jp_html}
+                            </div>
+                            """,
+                            unsafe_allow_html=True
+                        )
+                        st.download_button(
+                            "📥 Download Japanese (.txt)",
+                            data=jp_text,
+                            file_name=st.session_state["light_novel_jp_filename"],
+                            mime="text/plain;charset=utf-8",
+                            key="dl_ln_jp_btn"
+                        )
+                    else:
+                        st.info("No Japanese scene text available.")
 
-            st.markdown("</div>", unsafe_allow_html=True)
+                with reader_tab_en:
+                    if en_text:
+                        st.markdown(
+                            f"""
+                            <div class="glass-card-neon-pink" style="padding: 1.8rem; font-family: 'Georgia', 'Merriweather', serif; font-size: 1.05rem; line-height: 1.9; color: #f1f5f9; max-height: 450px; overflow-y: auto;">
+                                {en_html}
+                            </div>
+                            """,
+                            unsafe_allow_html=True
+                        )
+                        st.download_button(
+                            "📥 Download English (.txt)",
+                            data=en_text,
+                            file_name=st.session_state["light_novel_en_filename"],
+                            mime="text/plain;charset=utf-8",
+                            key="dl_ln_en_btn"
+                        )
+                    else:
+                        st.info("No English translation text available.")
+
+                with reader_tab_edit:
+                    st.markdown('<div class="comparison-grid">', unsafe_allow_html=True)
+                    
+                    st.markdown('<div class="glass-card-neon-purple">', unsafe_allow_html=True)
+                    st.markdown("<h4 style='margin-top:0;'>🇯🇵 Japanese Text Frame</h4>", unsafe_allow_html=True)
+                    st.session_state["light_novel_jp"] = st.text_area(
+                        "Japanese Output Frame",
+                        value=st.session_state.get("light_novel_jp", ""),
+                        height=250,
+                        key="ln_jp_out",
+                        label_visibility="collapsed",
+                    )
+                    st.session_state["light_novel_jp_filename"] = st.text_input(
+                        "B2 Japanese Text Filename",
+                        value=st.session_state["light_novel_jp_filename"],
+                        key="ln_jp_filename_input",
+                    )
+                    st.markdown("</div>", unsafe_allow_html=True)
+
+                    st.markdown('<div class="glass-card-neon-pink">', unsafe_allow_html=True)
+                    st.markdown("<h4 style='margin-top:0;'>🇺🇸 English Text Frame</h4>", unsafe_allow_html=True)
+                    st.session_state["light_novel_en"] = st.text_area(
+                        "English Output Frame",
+                        value=st.session_state.get("light_novel_en", ""),
+                        height=250,
+                        key="ln_en_out",
+                        label_visibility="collapsed",
+                    )
+                    st.session_state["light_novel_en_filename"] = st.text_input(
+                        "B2 English Text Filename",
+                        value=st.session_state["light_novel_en_filename"],
+                        key="ln_en_filename_input",
+                    )
+                    st.markdown("</div>", unsafe_allow_html=True)
+                    st.markdown("</div>", unsafe_allow_html=True)
+            else:
+                st.info("💡 **No Light Novel scene compiled yet.** Enter a story title & concept on the left, then click **'✍️ Write Japanese Scene'** to generate!")
 
     with ln_tabs[1]:
         st.subheader("🔄 Direct Cross-Translation Console")
@@ -1874,7 +1996,7 @@ with tab3:
             key="whisper_demo_checkbox",
         )
 
-        is_disabled_whisper = not has_byok and tries_used >= 10
+        is_disabled_whisper = not has_byok and tries_used >= 5
 
         if st.button(
             "🎙️ Process Speech-To-Text",
@@ -2064,7 +2186,7 @@ with tab4:
 
         st.markdown("---")
 
-        is_disabled_agent = not has_byok and tries_used >= 10
+        is_disabled_agent = not has_byok and tries_used >= 5
 
         # We will initialize defaults if not set in state
         default_img_prompts = [
@@ -3498,6 +3620,55 @@ with tab6:
                                 st.error(f"❌ {msg_wh}")
 
             st.markdown("</div>", unsafe_allow_html=True)
+            
+            # ═════════════════════════════════════════════════════════════
+            # HYPER GOOD FEATURE: B2 CLOUD MEDIA GALLERY & STREAMING HUB
+            # ═════════════════════════════════════════════════════════════
+            st.markdown("---")
+            st.markdown('<div class="section-header">🎬 B2 Cloud Media Gallery & Streaming Hub</div>', unsafe_allow_html=True)
+            st.write("Browse, stream, and interact with all media assets stored securely in your Backblaze B2 Vault. Uses authenticated CDN streaming links.")
+            
+            if "b2_gallery_items" not in st.session_state:
+                st.session_state["b2_gallery_items"] = []
+
+            if st.button("🔄 Refresh Media Gallery from B2", key="refresh_b2_gallery_btn", use_container_width=True):
+                with st.spinner("Fetching signed CDN URLs from Backblaze B2..."):
+                    try:
+                        from services.vault import get_b2_vault_gallery
+                        ok_g, msg_g, gallery_items = get_b2_vault_gallery(b2_id, b2_key, b2_bucket, limit=100)
+                    except ImportError:
+                        ok_g, msg_g, gallery_items = False, "get_b2_vault_gallery function not found in vault.py", []
+                        
+                    if not ok_g:
+                        st.error(f"Failed to fetch gallery: {msg_g}")
+                    elif not gallery_items:
+                        st.info("No media assets found in this bucket.")
+                        st.session_state["b2_gallery_items"] = []
+                    else:
+                        st.success(f"Successfully loaded {len(gallery_items)} assets from B2 Vault.")
+                        st.session_state["b2_gallery_items"] = gallery_items
+
+            gallery_items = st.session_state.get("b2_gallery_items", [])
+            if gallery_items:
+                # Render Masonry/Grid Gallery
+                cols = st.columns(3)
+                for idx, item in enumerate(gallery_items):
+                    with cols[idx % 3]:
+                        st.markdown('<div class="glass-card-neon-blue" style="padding: 1rem; height: 100%;">', unsafe_allow_html=True)
+                        st.markdown(f'<h4 style="margin: 0; font-size: 0.9rem; word-break: break-all;">{item["file_name"]}</h4>', unsafe_allow_html=True)
+                        st.caption(f'Size: {item["size_kb"]:.1f} KB | Type: {item["asset_type"].upper()}')
+                        
+                        if item["asset_type"] == "image":
+                            st.image(item["stream_url"], use_container_width=True)
+                        elif item["asset_type"] == "audio":
+                            st.audio(item["stream_url"])
+                        elif item["asset_type"] == "video":
+                            st.video(item["stream_url"])
+                        else:
+                            st.markdown(f'📥 **[Direct CDN Stream Link]({item["stream_url"]})**')
+                            
+                        st.markdown('</div>', unsafe_allow_html=True)
+            # ═════════════════════════════════════════════════════════════
 
 # ==================== TAB 7: SECURITY & PROVENANCE CENTER ====================
 with tab7:
