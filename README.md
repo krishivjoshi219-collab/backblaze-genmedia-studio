@@ -17,7 +17,11 @@
 ### 🔗 Live Production URL (No Login Required)
 ## **[https://backblaze-genmedia-studio-yq7ghbwrivfgb3ws3xdtta.streamlit.app/](https://backblaze-genmedia-studio-yq7ghbwrivfgb3ws3xdtta.streamlit.app/)**
 
-> No API key required for demo mode — all 9 studio tabs are fully explorable with simulation data.
+### 🎥 Official 2.5-Minute Video Walkthrough & Demo
+[![Backblaze GenMedia Studio Demo Video](https://img.youtube.com/vi/srEvMxTmuxQ/maxresdefault.jpg)](https://youtu.be/srEvMxTmuxQ)  
+▶️ **[Watch Full Video Walkthrough on YouTube (https://youtu.be/srEvMxTmuxQ)](https://youtu.be/srEvMxTmuxQ)**
+
+> No API key required for demo mode — all 9 studio tabs are fully explorable with simulation data.  
 > Bring your own `GEMINI_API_KEY` (free at [aistudio.google.com](https://aistudio.google.com)) for real AI image generation.
 
 </div>

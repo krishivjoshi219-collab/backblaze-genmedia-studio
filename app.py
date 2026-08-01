@@ -1305,8 +1305,8 @@ with st.sidebar.expander("🛠 Dev Tools", expanded=False):
             st.write(signals)
             st.markdown("**Parsed Requirements:**")
             st.write(parsed)
-        else:
-            st.write("Please paste logs first.")
+with st.sidebar.expander("🎬 Hackathon Demo Video", expanded=False):
+    st.video("https://youtu.be/srEvMxTmuxQ")
 
 # Formal AI Generated Content Disclaimer Notice (rendered on sidebar across all tabs)
 st.sidebar.markdown("---")
@@ -1362,6 +1362,11 @@ st.markdown(
 """,
     unsafe_allow_html=True,
 )
+
+with st.expander("🎬 Watch 2.5-Minute Official Video Walkthrough & Feature Demo", expanded=False):
+    st.video("https://youtu.be/srEvMxTmuxQ")
+    st.caption("Official Devpost Hackathon submission video — 2.5 minutes featuring all 9 studio tabs, Backblaze B2 vault, and Genblaze orchestration.")
+
 
 
 # Define Main Application Workspaces
