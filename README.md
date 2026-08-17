@@ -544,7 +544,7 @@ python3 api_server.py
 | **Live App** | [https://backblaze-genmedia-studio-yq7ghbwrivfgb3ws3xdtta.streamlit.app/](https://backblaze-genmedia-studio-yq7ghbwrivfgb3ws3xdtta.streamlit.app/) |
 | **Genblaze SDK Feedback** | [https://github.com/backblaze-labs/genblaze/issues](https://github.com/backblaze-labs/genblaze/issues) |
 | **Backblaze B2 Signup** | [https://www.backblaze.com/cloud-storage](https://www.backblaze.com/cloud-storage?utm_source=github&utm_medium=referral&utm_campaign=genhackathon) |
-| **License** | Open Access — No formal restrictions. Free for Backblaze Hackathon evaluation. |
+| **License** | [MIT](./LICENSE) |
 | **Security** | API keys dynamically scrubbed by `TokenScrubber`. No secrets committed to git. |
 
 ---
